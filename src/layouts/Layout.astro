@@ -1,0 +1,67 @@
+---
+import { ClientRouter } from "astro:transitions";
+// Supports weights 400-800
+import "@fontsource-variable/baloo-2";
+import Menu from "../components/Menu";
+import { Icon } from "astro-icon/components";
+interface Props {
+	title: string;
+}
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="robots" content="*, index" />
+		<meta name="keywords" content="astro, practica de jsx y react" />
+		<meta
+			name="description"
+			content="Pagina para practicar react y peticiones a anime con jsx"
+		/>
+		<ClientRouter transition:animate="slide" />
+		<title>Rick and Morty - {title}</title>
+		<meta
+			name="description"
+			content="Rick and Morty pagina para ver información de sus personajes, episodios, locaciones y mas..."
+		/>
+		<meta name="author" content="Larry Ceballos" />
+		<meta name="theme-color" content="#000000" />
+		<meta name="robots" content="index, follow" />
+	</head>
+	<body class="dark:bg-gray-900 bg-gray-700">
+		<header class="bg-indigo-200/50">
+			<div class="flex justify-between px-8 items-center">
+				<img
+					src="/rick-logo.svg"
+					alt="logo de mi pagina web"
+					class="h-24 p-2"
+				/>
+
+				<h1 class="text-5xl font-extrabold dark:text-slate-50">
+					Universo de Rick and Morty
+				</h1>
+				<Menu client:visible />
+			</div>
+		</header>
+		<main>
+			<slot />
+		</main>
+	</body>
+</html>
+
+<style is:global>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		font-family: "Baloo 2 Variable", system-ui;
+	}
+	*::selection {
+		background-color: burlywood;
+		color: rgb(111, 117, 204);
+	}
+</style>
