@@ -7,7 +7,9 @@ import icon from 'astro-icon';
 
 
 
-import cloudflare from '@astrojs/cloudflare';
+
+import vercel from '@astrojs/vercel';
+
 
 
 
@@ -15,6 +17,8 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   integrations: [tailwind(), preact({compat:true}), icon()],
   output:"server",
-  adapter: cloudflare(),
-    site: 'https://github.com/larry1sf/rick-and-morty',
+  adapter: vercel({
+    imageService: true,
+    devImageService: 'sharp',
+  }),
 });

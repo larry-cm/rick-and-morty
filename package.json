@@ -1,19 +1,20 @@
 {
   "name": "rick-and-morty",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-      "deploy": "gh-pages -d dist"
+    "pre":" vercel deploy --prebuil",
+    "prod":"vercel --prod"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.2.1",
-    "@astrojs/preact": "4.0.3",
+    "@astrojs/preact": "4.0.4",
     "@astrojs/tailwind": "6.0.0",
-    "@fontsource-variable/baloo-2": "5.1.0",
+    "@astrojs/vercel": "^8.0.5",
+    "@fontsource-variable/baloo-2": "5.1.1",
     "@midudev/tailwind-animations": "^0.1.0",
     "astro": "5.2.3",
     "astro-icon": "1.1.5",
@@ -25,8 +26,5 @@
     "extends": [
       "./node_module/standard/eslintrc.json"
     ]
-  },
-  "devDependencies": {
-    "gh-pages": "^6.3.0"
   }
 }
