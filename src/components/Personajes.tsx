@@ -33,12 +33,15 @@ export default function Personajes (){
     }
     return (
         <>
-        <div class="snap-x snap-mandatory overflow-y-hidden bg-slate-50 h-96 min-w-full flex space-x-4 px-1">
+        <div class="snap-x snap-mandatory overflow-y-hidden bg-slate-50 h-96 min-w-full flex space-x-4 relative ">
+
+       
+
         {
             results.map(
                 ({image,name,gender,status,species,type,origin,location,episode,url},index) => (
                 <>
-                <div id={`${index+1}`} class="group snap-center relative block bg-black">
+                <div id={`${index+1}`} class="group snap-center relative block bg-black z-10">
                     <img
                         alt={name}
                         src={image}
@@ -70,21 +73,17 @@ export default function Personajes (){
                 </>
             ))
         }
-
         </div>
-
-        <div class="flex justify-center mt-10">
-            <div class="inline-flex items-center justify-center rounded-sm bg-gray-800 py-1 text-white">
-                <a
-                    href={`#${page <=4    ? 1 : page }`}
+        <a
+                    href={`#${ page <= 4 ? 1 : page }`}
                     onClick={()=>{
                         if(page > 3)setPage(prev => prev - 3)
                     }}
-                    class="inline-flex size-8 items-center justify-center rtl:rotate-180">
+                    class=" inline-flex size-8 scale-[1.6] items-center justify-center rtl:rotate-180 absolute left-14 bg-gray-700/80 shadow-md shadow-white/25 border border-white/25 rounded-full top-[50%] lg:top-[45%] z-20 hover:scale-[1.7] transition-all">
                     <span class="sr-only">Prev Page</span>
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="size-3"
+                            class="size-3 dark:text-white"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                         >
@@ -94,25 +93,16 @@ export default function Personajes (){
                                 clip-rule="evenodd"></path>
                     </svg>
                 </a>
-
-                <span class="h-6 w-px bg-white/25" aria-hidden="true"></span>
-
-                <div>
-                    <span class="text-xs px-4"> 1/2</span>
-                </div>
-
-                <span class="h-6 w-px bg-white/25" aria-hidden="true"></span>
-
-                <a
+        <a
                     href={`#${page < 19 ? page + 2: 20 }`}
                     onClick={()=>{
                         if(page < 19)setPage(prev => prev + 3)
                     }}
-                    class="inline-flex size-8 items-center justify-center rtl:rotate-180">
+                    class="inline-flex size-8 scale-[1.6] items-center justify-center rtl:rotate-180 absolute right-14 bg-gray-700/80 shadow-md shadow-white/25 border border-white/25 rounded-full top-[50%] lg:top-[45%] z-20">
                     <span class="sr-only">Next Page</span>
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="size-3"
+                            class="size-3 dark:text-white "
                             viewBox="0 0 20 20"
                             fill="currentColor">
                             <path
@@ -122,9 +112,6 @@ export default function Personajes (){
                                 </path>
                     </svg>
                 </a>
-            </div>
-        </div>
-        
         </>
     )
 }
