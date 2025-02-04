@@ -15,5 +15,6 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   integrations: [tailwind(), preact({compat:true}), icon()],
   output:"server",
-  adapter: cloudflare()
+  adapter: cloudflare(),
+    site: 'https://github.com/larry1sf/rick-and-morty',
 });
