@@ -33,7 +33,7 @@ export default function Personajes (){
     }
     return (
         <>
-        <div class="snap-x snap-mandatory overflow-y-hidden bg-slate-50 h-96 min-w-full flex space-x-4 relative ">
+        <div class="snap-x snap-mandatory overflow-y-hidden sm:overflow-hidden bg-gray-800/25 h-96 min-w-full flex space-x-4 relative ">
 
        
 
@@ -41,14 +41,15 @@ export default function Personajes (){
             results.map(
                 ({image,name,gender,status,species,type,origin,location,episode,url},index) => (
                 <>
-                <div id={`${index+1}`} class="group snap-center relative block bg-black z-10">
+                <div id={`${index+1}`} class="group snap-center relative block bg-black z-10 ">
                     <img
+                        loading={index < 4 ? "eager" : "lazy"}
                         alt={name}
                         src={image}
                         class="absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50"
                     />
 
-                    <div class="relative p-4 sm:p-6 lg:p-8 w-[28rem] flex flex-col h-full justify-between">
+                    <div class="relative p-4 sm:p-6 lg:p-8 flex flex-col w-64 sm:w-80 md:w-96 h-full justify-between ">
                         <div class=" ">
                             <p class="text-sm font-medium uppercase tracking-widest bg-gradient-to-r from bg-fuchsia-400 to-pink-500 bg-clip-text text-transparent ">{qrSpecies(species)}</p>
 
@@ -65,7 +66,7 @@ export default function Personajes (){
                                 <p>Se vio por ultima vez en {location?.name}</p>
                                 <p class="truncate">Transitando por los episodios {qrEpisodes(episode)}</p>
                             <div class="flex justify-end">
-                                <a class="mt-8 hover:underline font-semibold decoration-2 hover:animate-jiggle underline-offset-2" href={url}>Ver mas...</a>
+                                <a class="mt-1 hover:underline font-semibold decoration-2 hover:animate-jiggle underline-offset-2" href={url}>Ver mas...</a>
                             </div>
                         </div>
                     </div>
@@ -75,11 +76,11 @@ export default function Personajes (){
         }
         </div>
         <a
-                    href={`#${ page <= 4 ? 1 : page }`}
+                    href={`#${ page === 1 ? page : page - 1 }`}
                     onClick={()=>{
-                        if(page > 3)setPage(prev => prev - 3)
+                        if(page > 1)setPage(prev => prev - 1)
                     }}
-                    class=" inline-flex size-8 scale-[1.6] items-center justify-center rtl:rotate-180 absolute left-14 bg-gray-700/80 shadow-md shadow-white/25 border border-white/25 rounded-full top-[50%] lg:top-[45%] z-20 hover:scale-[1.7] transition-all">
+                    class="hidden sm:inline-flex size-8 scale-[1.6] items-center justify-center rtl:rotate-180 absolute left-14 bg-gray-700/80 shadow-md shadow-white/25 border border-white/25 rounded-full top-[65%] sm:top-[55%]  z-20 hover:scale-[1.7] transition-all">
                     <span class="sr-only">Prev Page</span>
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -94,11 +95,11 @@ export default function Personajes (){
                     </svg>
                 </a>
         <a
-                    href={`#${page < 19 ? page + 2: 20 }`}
+                    href={`#${page === 20 ? page : page + 1}`}
                     onClick={()=>{
-                        if(page < 19)setPage(prev => prev + 3)
+                        if(page < 20)setPage(prev => prev + 1)
                     }}
-                    class="inline-flex size-8 scale-[1.6] items-center justify-center rtl:rotate-180 absolute right-14 bg-gray-700/80 shadow-md shadow-white/25 border border-white/25 rounded-full top-[50%] lg:top-[45%] z-20">
+                    class="hidden sm:inline-flex size-8 scale-[1.6] items-center justify-center rtl:rotate-180 absolute right-14 bg-gray-700/80 shadow-md shadow-white/25 border border-white/25 rounded-full top-[65%] sm:top-[55%]  z-20">
                     <span class="sr-only">Next Page</span>
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
