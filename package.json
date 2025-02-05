@@ -16,6 +16,7 @@
     "@astrojs/vercel": "^8.0.4",
     "@fontsource-variable/baloo-2": "5.1.1",
     "@midudev/tailwind-animations": "^0.1.0",
+    "@react-hook/media-query": "^1.1.1",
     "astro": "5.2.3",
     "astro-icon": "1.1.5",
     "preact": "10.25.3",

@@ -1,6 +1,8 @@
-import { useState } from "preact/hooks";
+import { useState ,useEffect} from "preact/hooks";
 import { fetchApi } from "../services/fetch";
-import type { APICharacter, Gender, Result, Species, Status } from "../types/Api";
+import { useMediaQuery } from "@react-hook/media-query";
+
+import type { APICharacter, Gender, Species, Status } from "../types/Api";
 const {characters} = await fetchApi();
 
 const data = await fetch(characters)
@@ -8,8 +10,12 @@ const {results} = await data.json() as APICharacter
 export default function Personajes (){
 
     const [page,setPage] = useState(1)
-
-
+    
+    
+    const [verMediaquery,setVerMediaquery] = useState(false)
+    useEffect(()=>{
+    setVerMediaquery(true)
+    },[])
 
 
     const qrGender = (gender:Gender) => {
@@ -31,16 +37,17 @@ export default function Personajes (){
     const qrEpisodes = (episode:string[])=>{
         return episode.map(ep =>ep.replaceAll("https://rickandmortyapi.com/api/episode/","")).join(",")
     }
+
+
+    const matches = verMediaquery ? useMediaQuery('only screen and (min-width: 700px)') : false
     return (
         <>
+        {matches ? "media mayor a 500":"media menor a 500"}
         <div class="snap-x snap-mandatory overflow-y-hidden sm:overflow-hidden bg-gray-800/25 h-96 min-w-full flex space-x-4 relative ">
-
-       
 
         {
             results.map(
                 ({image,name,gender,status,species,type,origin,location,episode,url},index) => (
-                <>
                 <div id={`${index+1}`} class="group snap-center relative block bg-black z-10 ">
                     <img
                         loading={index < 4 ? "eager" : "lazy"}
@@ -71,7 +78,6 @@ export default function Personajes (){
                         </div>
                     </div>
                 </div>
-                </>
             ))
         }
         </div>
