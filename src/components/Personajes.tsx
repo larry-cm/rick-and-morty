@@ -2,7 +2,8 @@ import { useState ,useEffect} from "preact/hooks";
 import { fetchApi } from "../services/fetch";
 import { useMediaQuery } from "@react-hook/media-query";
 
-import type { APICharacter, Gender, Species, Status } from "../types/Api";
+import type { APICharacter} from "../types/Api";
+import Images from "./Images.astro";
 const {characters} = await fetchApi();
 
 const data = await fetch(characters)
@@ -18,71 +19,23 @@ export default function Personajes (){
     },[])
 
 
-    const qrGender = (gender:Gender) => {
-        return resumenSw(gender,["Male","Female"],["masculino","femenino"])
-    }
-    const qrAlive = (alive:Status)=>{
-        return resumenSw(alive,["Alive","Dead"],["con vida","muerto"])
-    }
-    const qrSpecies = (specie:Species)=>{
-        return resumenSw(specie,["Alien","Human"],["Alienigena","Humano"])
-    }
-    const resumenSw = (vMirar:string,cMirar:string[],textReturn:string[])=>{
-        switch(vMirar){
-                    case cMirar[0] : return textReturn[0]
-                    case cMirar[1] : return textReturn[1]
-                    default : return "Desconocido"
-                }
-        }
-    const qrEpisodes = (episode:string[])=>{
-        return episode.map(ep =>ep.replaceAll("https://rickandmortyapi.com/api/episode/","")).join(",")
-    }
-
 
     const matches = verMediaquery ? useMediaQuery('only screen and (min-width: 700px)') : false
     return (
         <>
-        {matches ? "media mayor a 500":"media menor a 500"}
+        {matches ? page === 1 ? page : page - 3:page === 1 ? page : page - 1}
         <div class="snap-x snap-mandatory overflow-y-hidden sm:overflow-hidden bg-gray-800/25 h-96 min-w-full flex space-x-4 relative ">
 
         {
-            results.map(
-                ({image,name,gender,status,species,type,origin,location,episode,url},index) => (
-                <div id={`${index+1}`} class="group snap-center relative block bg-black z-10 ">
-                    <img
-                        loading={index < 4 ? "eager" : "lazy"}
-                        alt={name}
-                        src={image}
-                        class="absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50"
-                    />
-
-                    <div class="relative p-4 sm:p-6 lg:p-8 flex flex-col w-64 sm:w-80 md:w-96 h-full justify-between ">
-                        <div class=" ">
-                            <p class="text-sm font-medium uppercase tracking-widest bg-gradient-to-r from bg-fuchsia-400 to-pink-500 bg-clip-text text-transparent ">{qrSpecies(species)}</p>
-
-                            <p class="text-xl font-bold text-white sm:text-2xl">{name}</p>
-                        </div>
-                        <div
-                            class="translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 text-sm text-[.95rem] text-white"
-                        >
-                                <p>Actualmente el personaje se encuentra {qrAlive(status)}</p>
-                                <p>Este personaje es de sexo {qrGender(gender)}</p>
-                                {/* traducir esta parte  */}
-                                <p>Lugar de nacimiento del personaje {origin?.name}</p>
-                                {/* traducir esta parte  */}
-                                <p>Se vio por ultima vez en {location?.name}</p>
-                                <p class="truncate">Transitando por los episodios {qrEpisodes(episode)}</p>
-                            <div class="flex justify-end">
-                                <a class="mt-1 hover:underline font-semibold decoration-2 hover:animate-jiggle underline-offset-2" href={url}>Ver mas...</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ))
+            results.map((person,index) => (
+                <Images
+                {...person} index={index}/>
+            )
+        )
         }
         </div>
         <a
-                    href={`#${ page === 1 ? page : page - 1 }`}
+                    href={`#${matches ? page === 1 ? page : page - 3:page === 1 ? page : page - 1}`}
                     onClick={()=>{
                         if(page > 1)setPage(prev => prev - 1)
                     }}
@@ -101,7 +54,7 @@ export default function Personajes (){
                     </svg>
                 </a>
         <a
-                    href={`#${page === 20 ? page : page + 1}`}
+                    href={`#${matches ? page === 20 ? page : page + 3:page === 20 ? page : page + 1}`}
                     onClick={()=>{
                         if(page < 20)setPage(prev => prev + 1)
                     }}

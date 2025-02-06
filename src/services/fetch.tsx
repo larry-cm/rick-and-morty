@@ -5,6 +5,6 @@ export async function fetchApi() {
         const data = await fetch("https://rickandmortyapi.com/api") 
     return await data.json() as ApiInitial
     } catch (error) {
-        throw new Error("error manjado pero no solucionado "+error)
+        throw new Error("Error de conexion "+error)
     }
 }
