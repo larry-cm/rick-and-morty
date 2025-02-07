@@ -21,4 +21,4 @@ export default defineConfig({
     imageService: true,
     devImageService: 'sharp',
   }),
-});c
+});

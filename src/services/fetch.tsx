@@ -2,9 +2,9 @@ import type { ApiInitial } from "../types/Api";
 
 export async function fetchApi() {
     try {
-        const data = await fetch("https://rickandmortyapi.com/api") 
-    return await data.json() as ApiInitial
+        const data = await fetch("https://rickandmortyapi.com/api")
+        return await data.json() as ApiInitial
     } catch (error) {
-        throw new Error("Error de conexion "+error)
+        throw new Error("Error de conexión " + error)
     }
 }
