@@ -56,18 +56,33 @@ export default function Personajes() {
     const newMatchLg = matches && matchesLg ? true : false
 
     const cambioPage = ({ sumar }: MediaQueryTypes) => {
+        // console.log(page, matches, matchesLg);
+        if (newMatchLg && sumar && (page + 4 < 20)) setPage(page + 4)
+        if (!newMatchLg && sumar && (page + 3 < 20)) setPage(page => page + 3)
         
-        console.log(page, matches, matchesLg);
-        if (newMatchLg && sumar && (page + 6 < 20)) {
-             setPage(page + 6)
-         }
-        else if (!newMatchLg && sumar && (page + 4 < 20) ){
-            setPage( page + 4)
-        }
+        if( !newMatchLg && !sumar){
+            if(page - 3 >= 1) setPage(page - 3)
+            else setPage( page => page -3)
+                 
+            }
+        if( newMatchLg && !sumar && ( page - 4 > 1)) setPage( page - 4)
+        
+        const mayor = page > 1 ? true : false
+        console.log( !newMatchLg && sumar && (page - 3 >= 1));
+
+        
+    }
+    const viewPage = ({sumar}:{sumar:boolean})=>{
+        // if(newMatchLg && sumar && ( page + 4 < 20)) return page + 4
+        // if (!newMatchLg && sumar && (page + 2 < 20)) return page + 2
+
+        // if( newMatchLg && !sumar && ( page - 4 > 1)) return page - 4
+        // if( !newMatchLg && !sumar && ( page - 2 > 1)) return page - 2
+        // else return 1
     }
     return (
         <div class="relative">
-            {/* {mediaQuery(matches, page)} */}
+            {page+" ,"  +newMatchLg}
             <div class="snap-x snap-proximity overflow-y-hidden sm:overflow-hidden sm bg-gray-800/25 h-96 min-w-full flex space-x-4 relative ">
 
                 {
@@ -77,7 +92,7 @@ export default function Personajes() {
             <Botones
                 svg={svg1}
                 ruteFunc={page}
-                onClickFunc={() => cambioPage}
+                onClickFunc={() => cambioPage({sumar:false})}
                 clase=" left-8"
                 text="Página previa" />
             <Botones
