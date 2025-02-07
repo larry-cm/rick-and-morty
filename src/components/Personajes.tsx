@@ -33,6 +33,8 @@ const svg2 = <svg
         clip-rule="evenodd">
     </path>
 </svg>
+
+
 interface MediaQueryTypes {
     mat?: boolean | undefined
     mat2?: boolean | undefined
@@ -40,28 +42,28 @@ interface MediaQueryTypes {
 }
 
 
-
-
 export default function Personajes() {
 
     const [page, setPage] = useState(1)
-
     const [verMediaquery, setVerMediaquery] = useState(false)
+
     useEffect(() => {
         setVerMediaquery(true)
-    }, [])
+    }, [page])
 
     const matches = verMediaquery ? useMediaQuery('only screen and (min-width: 900px)') : false
     const matchesLg = verMediaquery ? useMediaQuery('only screen and (min-width: 1200px)') : false
+    const newMatchLg = matches && matchesLg ? true : false
 
     const cambioPage = ({ sumar }: MediaQueryTypes) => {
+        
         console.log(page, matches, matchesLg);
-
-        // if (sumar) {
-        //     setPage(page + 1)
-        // } else {
-        //     setPage(page - 1)
-        // }
+        if (newMatchLg && sumar && (page + 6 < 20)) {
+             setPage(page + 6)
+         }
+        else if (!newMatchLg && sumar && (page + 4 < 20) ){
+            setPage( page + 4)
+        }
     }
     return (
         <div class="relative">
