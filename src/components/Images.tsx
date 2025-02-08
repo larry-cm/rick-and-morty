@@ -29,6 +29,15 @@ const qrEpisodes = (episode: string[]) => {
         )
         .join(",");
 };
+const IconGender = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2"> <path d="M11 11m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path> <path d="M19 3l-5 5"></path> <path d="M15 3h4v4"></path> <path d="M11 16v6"></path> <path d="M8 19h6"></path> </svg>
+
+const IconStatus = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2">
+    <path d="M3 12h4.5l1.5 -6l4 12l2 -9l1.5 3h4.5"></path>
+</svg>
+
+const IconStatus2 = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2"> <path d="M12 4c4.418 0 8 3.358 8 7.5c0 1.901 -.755 3.637 -2 4.96l0 2.54a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1v-2.54c-1.245 -1.322 -2 -3.058 -2 -4.96c0 -4.142 3.582 -7.5 8 -7.5z"></path> <path d="M10 17v3"></path> <path d="M14 17v3"></path> <path d="M9 11m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path> <path d="M15 11m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path> </svg>
+
+const IconStatus3 = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2"> <path d="M8 8a3.5 3 0 0 1 3.5 -3h1a3.5 3 0 0 1 3.5 3a3 3 0 0 1 -2 3a3 4 0 0 0 -2 4"></path> <path d="M12 19l0 .01"></path> </svg>
 export default function Images(
     { image,
         name,
@@ -40,6 +49,18 @@ export default function Images(
         episode,
         url,
         index }: ImagesTypes) {
+
+    const verStado = () => {
+        switch (qrAlive(status)) {
+            case "muerto":
+                return <>{qrAlive(status)} {IconStatus2}</>;
+            case "con vida":
+                return <>{qrAlive(status)}  {IconStatus}</>;
+            default:
+                return <>{qrAlive(status)} {IconStatus3}</>
+        }
+
+    }
     return (
 
 
@@ -54,30 +75,49 @@ export default function Images(
             <div
                 class="relative p-4 sm:p-6 lg:p-8 flex flex-col w-64 sm:w-80 md:w-96 h-full justify-between"
             >
-                <div class="">
-                    <p
-                        class="text-sm font-medium uppercase tracking-widest bg-gradient-to-r from bg-fuchsia-400 to-pink-500 bg-clip-text text-transparent"
-                    >
-                        {qrSpecies(species)}
-                    </p>
+                <div class="flex">
+                    <div class="basis-2/3">
 
-                    <p class="text-xl font-bold text-white sm:text-2xl">{name}</p>
+                        <p
+                            class={`text-sm font-medium uppercase tracking-widest bg-gradient-to-r from  bg-clip-text text-transparent ${qrGender(gender) === "masculino" ? "from-blue-500 to-blue-700 group-hover:from-blue-400 group-hover:to-blue-600" : "from-pink-500 to-pink-700 group-hover:from-pink-400 group-hover:to-pink-600"}`}
+                        >
+                            {qrSpecies(species)}
+                        </p>
+
+                        <p class="text-xl font-bold text-white sm:text-2xl">{name}</p>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <span class="text-xs font-semibold text-white bg-black bg-opacity-50 rounded-full px-2 py-1 transition-all basis-1/3 h-[1.9rem]  place-items-center  justify-around flex capitalize opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 ">
+                            {qrGender(gender)} {IconGender}
+                        </span>
+                        <span class="text-xs font-semibold text-white bg-black bg-opacity-50 rounded-full px-2 py-1 transition-all basis-1/3 h-[1.9rem]  place-items-center  justify-around flex capitalize opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 ">
+                            {verStado()}
+                        </span>
+
+                    </div>
                 </div>
                 <div
                     class="translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 text-sm text-[.95rem] text-white"
                 >
-                    <p>Actualmente el personaje se encuentra {qrAlive(status)}</p>
-                    <p>Este personaje es de sexo {qrGender(gender)}</p>
+
+                    <em class="font-bold text-2xl text-slate-200 tracking-widest not-italic text-center">
+                        {/* traducir esta parte  */}
+                        Se vio por ultima vez en {location?.name}
+                    </em>
+
+
                     {/* traducir esta parte  */}
-                    <p>Lugar de nacimiento del personaje {origin?.name}</p>
-                    {/* traducir esta parte  */}
-                    <p>Se vio por ultima vez en {location?.name}</p>
-                    <p class="truncate">
-                        Transitando por los episodios {qrEpisodes(episode)}
-                    </p>
+                    <div class="text-base font-medium text-slate-300">
+                        <p >Lugar de nacimiento del personaje {origin?.name}</p>
+
+                        <p class="truncate">
+                            Transitando por los episodios {qrEpisodes(episode)}
+                        </p>
+
+                    </div>
                     <div class="flex justify-end">
                         <a
-                            class="mt-1 hover:underline font-semibold decoration-2 hover:animate-jiggle underline-offset-2"
+                            class="mt-1 hover:underline font-semibold decoration-2 hover:animate-jiggle underline-offset-2 px-2 basis-1/3"
                             href={url}>Ver mas...</a>
                     </div>
                 </div>

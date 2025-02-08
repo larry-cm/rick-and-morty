@@ -13,7 +13,7 @@ const { results } = await data.json() as APICharacter
 
 const svg1 = <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="size-10  dark:text-white"
+    class="size-10  dark:text-slate-700"
     viewBox="0 0 20 20"
     fill="currentColor"
 >
@@ -24,7 +24,7 @@ const svg1 = <svg
 </svg>
 const svg2 = <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="size-10  dark:text-white "
+    class="size-10  dark:text-slate-700 "
     viewBox="0 0 20 20"
     fill="currentColor">
     <path
@@ -43,47 +43,49 @@ interface MediaQueryTypes {
 
 
 export default function Personajes() {
-
-    const [page, setPage] = useState(1)
     const [verMediaquery, setVerMediaquery] = useState(false)
+    const matches = verMediaquery ? useMediaQuery('only screen and (min-width: 900px)') : false
+    const matchesLg = verMediaquery ? useMediaQuery('only screen and (min-width: 1200px)') : false
+
+    const [page, setPage] = useState(() => {
+        if (matchesLg) return 5
+        if (matches) return 2
+        else return 1
+    })
+
 
     useEffect(() => {
         setVerMediaquery(true)
     }, [page])
 
-    const matches = verMediaquery ? useMediaQuery('only screen and (min-width: 900px)') : false
-    const matchesLg = verMediaquery ? useMediaQuery('only screen and (min-width: 1200px)') : false
-    const newMatchLg = matches && matchesLg ? true : false
+
 
     const cambioPage = ({ sumar }: MediaQueryTypes) => {
-        // console.log(page, matches, matchesLg);
-        if (newMatchLg && sumar && (page + 4 < 20)) setPage(page + 4)
-        if (!newMatchLg && sumar && (page + 3 < 20)) setPage(page => page + 3)
-        
-        if( !newMatchLg && !sumar){
-            if(page - 3 >= 1) setPage(page - 3)
-            else setPage( page => page -3)
-                 
+        if (matchesLg) {
+            if (sumar) {
+                if (page + 5 <= 20) setPage(page => page === 1 ? page + 9 : page + 5)
+                if (page + 5 >= 21) setPage(1)
             }
-        if( newMatchLg && !sumar && ( page - 4 > 1)) setPage( page - 4)
-        
-        const mayor = page > 1 ? true : false
-        console.log( !newMatchLg && sumar && (page - 3 >= 1));
-
-        
+            if (!sumar) {
+                if (page - 5 >= 0) setPage(page => page === 5 ? 1 : page - 5)
+                if (page - 5 <= -1) setPage(20)
+            }
+        }
+        else if (matches) {
+            if (sumar) {
+                if (page + 3 <= 20) setPage(page => page === 1 ? page + 4 : page + 3)
+                if (page + 3 >= 21) setPage(1)
+            }
+            if (!sumar) {
+                if (page - 3 >= -1) setPage(page => page === 2 ? 1 : page - 3)
+                if (page - 3 <= -2) setPage(20)
+            }
+        }
     }
-    const viewPage = ({sumar}:{sumar:boolean})=>{
-        // if(newMatchLg && sumar && ( page + 4 < 20)) return page + 4
-        // if (!newMatchLg && sumar && (page + 2 < 20)) return page + 2
 
-        // if( newMatchLg && !sumar && ( page - 4 > 1)) return page - 4
-        // if( !newMatchLg && !sumar && ( page - 2 > 1)) return page - 2
-        // else return 1
-    }
     return (
         <div class="relative">
-            {page+" ,"  +newMatchLg}
-            <div class="snap-x snap-proximity overflow-y-hidden sm:overflow-hidden sm bg-gray-800/25 h-96 min-w-full flex space-x-4 relative ">
+            <div class="snap-x snap-mandatory overflow-y-hidden sm:overflow-hidden sm bg-gray-800/25 h-96 min-w-full flex space-x-4 relative ">
 
                 {
                     results.map((person, index) => <Images {...person} index={index} />)
@@ -92,7 +94,7 @@ export default function Personajes() {
             <Botones
                 svg={svg1}
                 ruteFunc={page}
-                onClickFunc={() => cambioPage({sumar:false})}
+                onClickFunc={() => cambioPage({ sumar: false })}
                 clase=" left-8"
                 text="Página previa" />
             <Botones
