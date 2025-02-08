@@ -12,18 +12,38 @@ import Layout from "../layouts/Layout.astro";
             hasta episodios.
         </p>
 
-        <section class="my-8">
-            <h2 class="dark:text-slate-300/90 font-semibold sm:text-2xl mb-4">
-                Personajes Mas Populares
-            </h2>
-            <Personajes client:visible />
-            <div>
-                <a
-                    href="ver-mas"
-                    class="font-semibold text-lg dark:text-white py-2 px-4 flex place-content-center max-w-full sm:max-w-sm bg-gray-800 my-4 ms-auto gap-2 rounded-lg border border-white/25 shadow-md"
-                    >Ver mas personajes</a
+        <article class="space-y-4 mt-8">
+            <section class="">
+                <h2
+                    class="dark:text-slate-300/90 font-semibold sm:text-2xl mb-4"
                 >
-            </div>
-        </section>
+                    Personajes Mas Populares
+                </h2>
+                <Personajes client:visible />
+                <div>
+                    <a
+                        href="ver-mas"
+                        class="font-semibold text-lg dark:text-white py-2 px-4 flex place-content-center max-w-full sm:max-w-sm bg-gray-800 my-4 ms-auto gap-2 rounded-lg border border-white/25 shadow-md"
+                        >Ver mas personajes</a
+                    >
+                </div>
+            </section>
+            <!-- parte de prueba -->
+            <section>
+                <h2
+                    class="dark:text-slate-300/90 font-semibold sm:text-2xl mb-4"
+                >
+                    Temporadas y Episodios
+                </h2>
+                <Personajes client:visible />
+                <div>
+                    <a
+                        href="ver-mas"
+                        class="font-semibold text-lg dark:text-white py-2 px-4 flex place-content-center max-w-full sm:max-w-sm bg-gray-800 my-4 ms-auto gap-2 rounded-lg border border-white/25 shadow-md"
+                        >Ver mas Temporadas</a
+                    >
+                </div>
+            </section>
+        </article>
     </div>
 </Layout>

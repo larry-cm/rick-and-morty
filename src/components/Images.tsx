@@ -100,14 +100,14 @@ export default function Images(
                     class="translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 text-sm text-[.95rem] text-white"
                 >
 
-                    <em class="font-bold text-2xl text-slate-200 tracking-widest not-italic text-center">
+                    <em class="font-bold text-xl text-slate-200 tracking-widest not-italic text-center">
                         {/* traducir esta parte  */}
                         Se vio por ultima vez en {location?.name}
                     </em>
 
 
                     {/* traducir esta parte  */}
-                    <div class="text-base font-medium text-slate-300">
+                    <div class="text-lg font-medium text-slate-300">
                         <p >Lugar de nacimiento del personaje {origin?.name}</p>
 
                         <p class="truncate">

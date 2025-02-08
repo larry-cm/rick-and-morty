@@ -5,15 +5,15 @@ import { useMediaQuery } from "@react-hook/media-query";
 import type { APICharacter } from "../types/Api";
 import Images from "./Images";
 import Botones from "./Botones";
-const { characters } = await fetchApi();
 
+const { characters } = await fetchApi();
 const data = await fetch(characters)
 const { results } = await data.json() as APICharacter
 
 
 const svg1 = <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="size-10  dark:text-slate-700"
+    class="size-10  dark:text-gray-800"
     viewBox="0 0 20 20"
     fill="currentColor"
 >
@@ -24,7 +24,7 @@ const svg1 = <svg
 </svg>
 const svg2 = <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="size-10  dark:text-slate-700 "
+    class="size-10  dark:text-gray-800 "
     viewBox="0 0 20 20"
     fill="currentColor">
     <path
@@ -48,40 +48,42 @@ export default function Personajes() {
     const matchesLg = verMediaquery ? useMediaQuery('only screen and (min-width: 1200px)') : false
 
     const [page, setPage] = useState(() => {
-        if (matchesLg) return 5
-        if (matches) return 2
+        if (matchesLg) return 1
         else return 1
     })
 
 
     useEffect(() => {
         setVerMediaquery(true)
+
     }, [page])
 
 
 
+
     const cambioPage = ({ sumar }: MediaQueryTypes) => {
-        if (matchesLg) {
-            if (sumar) {
-                if (page + 5 <= 20) setPage(page => page === 1 ? page + 9 : page + 5)
-                if (page + 5 >= 21) setPage(1)
-            }
-            if (!sumar) {
-                if (page - 5 >= 0) setPage(page => page === 5 ? 1 : page - 5)
-                if (page - 5 <= -1) setPage(20)
-            }
+        const increment = matchesLg ? 3 : 2;
+        const maxPage = 20;
+
+        if (sumar) {
+            setPage(page => {
+                const newPage = page + increment;
+                if (newPage >= maxPage) {
+                    return page === 1 ? page + 5 : maxPage;
+                }
+                return newPage;
+            });
+            if (page === maxPage) setPage(1);
+        } else {
+            setPage(page => {
+                const newPage = page - increment;
+                if (newPage <= 0) {
+                    return maxPage;
+                }
+                return newPage;
+            });
         }
-        else if (matches) {
-            if (sumar) {
-                if (page + 3 <= 20) setPage(page => page === 1 ? page + 4 : page + 3)
-                if (page + 3 >= 21) setPage(1)
-            }
-            if (!sumar) {
-                if (page - 3 >= -1) setPage(page => page === 2 ? 1 : page - 3)
-                if (page - 3 <= -2) setPage(20)
-            }
-        }
-    }
+    };
 
     return (
         <div class="relative">
