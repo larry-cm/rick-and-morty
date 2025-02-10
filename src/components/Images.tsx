@@ -1,19 +1,20 @@
 import type { Gender, Species, Status, Result } from "../types/Api"
 
 import { IconGender, svgVivo, svgMuerto, svgDesconocido } from "@/icons/imagesIcons"
+
 interface ImagesTypes extends Result {
     index: number;
     vOptions?: boolean;
 }
 const qrGender = (gender: Gender) => {
     return resumenSw(gender, ["Male", "Female"], ["masculino", "femenino"]);
-};
+}
 const qrAlive = (alive: Status) => {
     return resumenSw(alive, ["Alive", "Dead"], ["con vida", "muerto"]);
-};
+}
 const qrSpecies = (specie: Species) => {
     return resumenSw(specie, ["Alien", "Human"], ["Alienígena", "Humano"]);
-};
+}
 const qrUnknown = (txt: string) => {
     return resumenSw(txt, [""])
 }
@@ -26,15 +27,14 @@ const resumenSw = (vMirar: string, textReturn: string[], cMirar?: string[]) => {
         default:
             return "Desconocido";
     }
-};
+}
 const qrEpisodes = (episode: string[]) => {
     return episode
         .map((ep) =>
             ep.replaceAll("https://rickandmortyapi.com/api/episode/", ""),
         )
         .join(",");
-};
-
+}
 const qrBg = (genero: Gender) => {
     switch (genero) {
         case "Female": return "from-pink-500 to-pink-700 group-hover:from-pink-400 group-hover:to-pink-600"
