@@ -1,0 +1,20 @@
+---
+import type { GetStaticPaths } from "astro";
+export const prerender = true;
+import Layout from "@/layouts/Layout.astro";
+import { fetchApi } from "@/services/fetch";
+export async function getStaticPaths() {
+    const { results } = await fetchApi("character");
+    // return [{ params: { id: "personaje-1" } }];
+    return results.map((char) => {
+        return {
+            params: { id: `personaje-${char.id}` },
+            props: { char },
+        };
+    });
+}
+const { char } = Astro.props;
+const { name, id } = char;
+---
+
+<Layout title={`Información de ${name} con el id ${id}`} />

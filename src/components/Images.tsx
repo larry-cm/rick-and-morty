@@ -1,7 +1,9 @@
-import Image from "astro/components/Image.astro"
-import type { Gender, Species, Status, Location, Result } from "../types/Api"
+import type { Gender, Species, Status, Result } from "../types/Api"
+
+import { IconGender, svgVivo, svgMuerto, svgDesconocido } from "@/icons/imagesIcons"
 interface ImagesTypes extends Result {
     index: number;
+    vOptions?: boolean;
 }
 const qrGender = (gender: Gender) => {
     return resumenSw(gender, ["Male", "Female"], ["masculino", "femenino"]);
@@ -12,11 +14,14 @@ const qrAlive = (alive: Status) => {
 const qrSpecies = (specie: Species) => {
     return resumenSw(specie, ["Alien", "Human"], ["Alienígena", "Humano"]);
 };
-const resumenSw = (vMirar: string, cMirar: string[], textReturn: string[]) => {
+const qrUnknown = (txt: string) => {
+    return resumenSw(txt, [""])
+}
+const resumenSw = (vMirar: string, textReturn: string[], cMirar?: string[]) => {
     switch (vMirar) {
-        case cMirar[0]:
+        case cMirar && cMirar[0]:
             return textReturn[0];
-        case cMirar[1]:
+        case cMirar && cMirar[1]:
             return textReturn[1];
         default:
             return "Desconocido";
@@ -29,17 +34,18 @@ const qrEpisodes = (episode: string[]) => {
         )
         .join(",");
 };
-const IconGender = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2"> <path d="M11 11m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path> <path d="M19 3l-5 5"></path> <path d="M15 3h4v4"></path> <path d="M11 16v6"></path> <path d="M8 19h6"></path> </svg>
 
-const IconStatus = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2">
-    <path d="M3 12h4.5l1.5 -6l4 12l2 -9l1.5 3h4.5"></path>
-</svg>
-
-const IconStatus2 = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2"> <path d="M12 4c4.418 0 8 3.358 8 7.5c0 1.901 -.755 3.637 -2 4.96l0 2.54a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1v-2.54c-1.245 -1.322 -2 -3.058 -2 -4.96c0 -4.142 3.582 -7.5 8 -7.5z"></path> <path d="M10 17v3"></path> <path d="M14 17v3"></path> <path d="M9 11m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path> <path d="M15 11m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path> </svg>
-
-const IconStatus3 = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2"> <path d="M8 8a3.5 3 0 0 1 3.5 -3h1a3.5 3 0 0 1 3.5 3a3 3 0 0 1 -2 3a3 4 0 0 0 -2 4"></path> <path d="M12 19l0 .01"></path> </svg>
+const qrBg = (genero: Gender) => {
+    switch (genero) {
+        case "Female": return "from-pink-500 to-pink-700 group-hover:from-pink-400 group-hover:to-pink-600"
+        case "Male": return "from-blue-500 to-blue-700 group-hover:from-blue-400 group-hover:to-blue-600"
+        default: return "from-slate-300 to-slate-500 group-hover:from-slate-200 group-hover:to-slate-400 "
+    }
+}
 export default function Images(
-    { image,
+    {
+        id,
+        image,
         name,
         gender,
         status,
@@ -48,23 +54,25 @@ export default function Images(
         location,
         episode,
         url,
-        index }: ImagesTypes) {
+        index,
+        vOptions }: ImagesTypes) {
 
-    const verStado = () => {
+    const verEstado = () => {
         switch (qrAlive(status)) {
             case "muerto":
-                return <>{qrAlive(status)} {IconStatus2}</>;
+                return <>{qrAlive(status)} {svgMuerto}</>;
             case "con vida":
-                return <>{qrAlive(status)}  {IconStatus}</>;
+                return <>{qrAlive(status)}  {svgVivo}</>;
             default:
-                return <>{qrAlive(status)} {IconStatus3}</>
+                return <>{qrAlive(status)} {svgDesconocido}</>
         }
 
     }
+
     return (
 
 
-        <div id={`${index + 1}`} class="group snap-center relative block bg-black z-10 ">
+        <div id={`${index + 1}`} class="group snap-center relative block bg-black rounded-md z-10 ">
             <img
                 loading={index < 4 ? "eager" : "lazy"}
                 alt={name}
@@ -73,56 +81,62 @@ export default function Images(
             />
 
             <div
-                class="relative p-4 sm:p-6 lg:p-8 flex flex-col w-64 sm:w-80 md:w-96 h-full justify-between"
+                class={`relative p-4 sm:p-6 lg:p-8 flex flex-col w-64  justify-between ${vOptions ? " w-full h-96" : " sm:w-80 md:w-96 h-full"}`}
             >
-                <div class="flex">
-                    <div class="basis-2/3">
+                <div class="flex space-x-4">
+                    <div class={` ${vOptions ? "w-full" : "basis-2/3"}`}>
 
                         <p
-                            class={`text-sm font-medium uppercase tracking-widest bg-gradient-to-r from  bg-clip-text text-transparent ${qrGender(gender) === "masculino" ? "from-blue-500 to-blue-700 group-hover:from-blue-400 group-hover:to-blue-600" : "from-pink-500 to-pink-700 group-hover:from-pink-400 group-hover:to-pink-600"}`}
+                            class={`text-sm font-semibold uppercase tracking-wider sm:tracking-widest bg-gradient-to-r from  bg-clip-text text-transparent ${qrBg(gender)}`}
                         >
                             {qrSpecies(species)}
                         </p>
 
                         <p class="text-xl font-bold text-white sm:text-2xl">{name}</p>
                     </div>
-                    <div class="flex flex-col space-y-2">
-                        <span class="text-xs font-semibold text-white bg-black bg-opacity-50 rounded-full px-2 py-1 transition-all basis-1/3 h-[1.9rem]  place-items-center  justify-around flex capitalize opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 ">
+                    <div class={`flex flex-col space-y-4 sm:space-y-2 ${vOptions ? "hidden" : ""}`}>
+                        <span class="text-xs font-semibold text-white bg-black bg-opacity-50 rounded-full px-2 py-.5 sm:py-1 transition-all  h-[1.9rem]  place-items-center  justify-around flex capitalize opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 ">
                             {qrGender(gender)} {IconGender}
                         </span>
-                        <span class="text-xs font-semibold text-white bg-black bg-opacity-50 rounded-full px-2 py-1 transition-all basis-1/3 h-[1.9rem]  place-items-center  justify-around flex capitalize opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 ">
-                            {verStado()}
+                        <span class="text-xs font-semibold text-white bg-black bg-opacity-50 rounded-full px-2 py-.5 sm:py-1 transition-all  h-[1.9rem]  place-items-center  justify-around flex capitalize opacity-0 translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 ">
+                            {verEstado()}
                         </span>
 
                     </div>
                 </div>
                 <div
-                    class="translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 text-sm text-[.95rem] text-white"
+                    class={`translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 text-sm text-[.95rem] text-white ${vOptions ? "max-w-max " : ""}`}
                 >
 
-                    <em class="font-bold text-xl text-slate-200 tracking-widest not-italic text-center">
+                    <em class={`max-w-28 font-bold text-xl text-slate-200 tracking-widest not-italic text-center ${vOptions ? "hidden" : ""}`}>
                         {/* traducir esta parte  */}
                         Se vio por ultima vez en {location?.name}
                     </em>
 
 
                     {/* traducir esta parte  */}
-                    <div class="text-lg font-medium text-slate-300">
-                        <p >Lugar de nacimiento del personaje {origin?.name}</p>
+                    <div class="text-base sm:text-lg font-medium text-slate-300">
+                        <p >Lugar de nacimiento de el personaje {qrUnknown(origin?.name)}</p>
 
-                        <p class="truncate">
+                        <p class={`truncate ${vOptions ? "hidden" : ""}`}>
                             Transitando por los episodios {qrEpisodes(episode)}
                         </p>
 
                     </div>
-                    <div class="flex justify-end">
-                        <a
-                            class="mt-1 hover:underline font-semibold decoration-2 hover:animate-jiggle underline-offset-2 px-2 basis-1/3"
-                            href={url}>Ver mas...</a>
-                    </div>
+                    {vOptions ? (
+                        <a href={`personajes/personaje-${id}`} class={`mt-3 ms-auto w-max text-end block  font-medium *: bg-gradient-to-t px-2 py-1 rounded-md border border-zinc-400 
+                            ${qrBg(gender)} ${gender === "unknown" ? "text-slate-900" : ""}`}>Ir ahora</a>
+
+                    ) : (
+                        <div class={`flex justify-end`}>
+                            <a
+                                class="mt-1 hover:underline font-semibold decoration-2 hover:animate-jiggle underline-offset-2 px-2 basis-1/3"
+                                href={`personajes/personaje-${id}`}>Ver mas...</a>
+                        </div>
+                    )}
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
 
     )
 }

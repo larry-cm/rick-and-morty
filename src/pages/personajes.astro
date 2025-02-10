@@ -1,0 +1,27 @@
+---
+import Images from "@/components/Images";
+import Layout from "@/layouts/Layout.astro";
+import { fetchApi } from "@/services/fetch";
+const { info, results } = await fetchApi("character");
+---
+
+<Layout title="Lista de personajes de rick and morty completa">
+    <section class="mt-8">
+        <h3
+            class="text-lg font-bold text-center sm:text-3xl dark:text-slate-200"
+        >
+            Puedes ver todos los personajes con una mas corta descripción en
+            esta pagina
+        </h3>
+
+        <div
+            class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4"
+        >
+            {
+                results.map((personaje) => (
+                    <Images {...personaje} index={personaje.id} vOptions />
+                ))
+            }
+        </div>
+    </section>
+</Layout>

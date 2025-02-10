@@ -1,19 +1,25 @@
 import { useState, useEffect } from "preact/hooks";
-import { fetchApi } from "../services/fetch";
 import { useMediaQuery } from "@react-hook/media-query";
 
-import type { APICharacter } from "../types/Api";
-import Images from "./Images";
-import Botones from "./Botones";
+import type { APICharacter } from "@/types/Api";
+import { fetchApi } from "@/services/fetch";
 
-const { characters } = await fetchApi();
-const data = await fetch(characters)
-const { results } = await data.json() as APICharacter
+import Images from "@/components/Images";
+import Botones from "@/components/Botones";
+
+
+const { results } = await fetchApi("character");
+
+
+interface MediaQueryTypes {
+    mat?: boolean | undefined
+    mat2?: boolean | undefined
+    next?: boolean | undefined
+}
 
 
 const svg1 = <svg
-    xmlns="http://www.w3.org/2000/svg"
-    class="size-10  dark:text-gray-800"
+    class="size-10  "
     viewBox="0 0 20 20"
     fill="currentColor"
 >
@@ -23,8 +29,7 @@ const svg1 = <svg
         clip-rule="evenodd"></path>
 </svg>
 const svg2 = <svg
-    xmlns="http://www.w3.org/2000/svg"
-    class="size-10  dark:text-gray-800 "
+    class="size-10   "
     viewBox="0 0 20 20"
     fill="currentColor">
     <path
@@ -35,16 +40,8 @@ const svg2 = <svg
 </svg>
 
 
-interface MediaQueryTypes {
-    mat?: boolean | undefined
-    mat2?: boolean | undefined
-    sumar?: boolean | undefined
-}
-
-
 export default function Personajes() {
     const [verMediaquery, setVerMediaquery] = useState(false)
-    const matches = verMediaquery ? useMediaQuery('only screen and (min-width: 900px)') : false
     const matchesLg = verMediaquery ? useMediaQuery('only screen and (min-width: 1200px)') : false
 
     const [page, setPage] = useState(() => {
@@ -52,20 +49,16 @@ export default function Personajes() {
         else return 1
     })
 
-
     useEffect(() => {
         setVerMediaquery(true)
 
     }, [page])
 
-
-
-
-    const cambioPage = ({ sumar }: MediaQueryTypes) => {
+    const cambioPage = ({ next }: MediaQueryTypes) => {
         const increment = matchesLg ? 3 : 2;
         const maxPage = 20;
 
-        if (sumar) {
+        if (next) {
             setPage(page => {
                 const newPage = page + increment;
                 if (newPage >= maxPage) {
@@ -90,19 +83,19 @@ export default function Personajes() {
             <div class="snap-x snap-mandatory overflow-y-hidden sm:overflow-hidden sm bg-gray-800/25 h-96 min-w-full flex space-x-4 relative ">
 
                 {
-                    results.map((person, index) => <Images {...person} index={index} />)
+                    results.map((person) => <Images {...person} index={person.id - 1} />)
                 }
             </div>
             <Botones
                 svg={svg1}
                 ruteFunc={page}
-                onClickFunc={() => cambioPage({ sumar: false })}
+                onClickFunc={() => cambioPage({ next: false })}
                 clase=" left-8"
                 text="Página previa" />
             <Botones
                 svg={svg2}
                 ruteFunc={page}
-                onClickFunc={() => cambioPage({ sumar: true })}
+                onClickFunc={() => cambioPage({ next: true })}
                 clase=" right-8"
                 text="Siguiente página" />
 

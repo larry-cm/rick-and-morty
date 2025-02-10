@@ -1,49 +1,35 @@
 ---
-import Personajes from "../components/Personajes";
-import Layout from "../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
+import Personajes from "@/components/Personajes";
 ---
 
 <Layout title="Pagina de inicio">
-    <div class="px-8 flex justify-start flex-col">
-        <p
-            class="text-base sm:text-3xl font-bold text-center dark:text-slate-100 mt-8"
+    <div class="flex flex-col justify-start px-4 mt-8">
+        <h2
+            class="text-lg font-bold text-center sm:text-3xl dark:text-slate-100"
         >
             Nos basamos en diferentes secciones como personajes, ubicaciones y
             hasta episodios.
-        </p>
+        </h2>
 
-        <article class="space-y-4 mt-8">
+        <article class="mt-8 space-y-4">
             <section class="">
                 <h2
-                    class="dark:text-slate-300/90 font-semibold sm:text-2xl mb-4"
+                    class="mb-4 font-semibold dark:text-slate-300/90 sm:text-2xl"
                 >
                     Personajes Mas Populares
                 </h2>
                 <Personajes client:visible />
                 <div>
                     <a
-                        href="ver-mas"
-                        class="font-semibold text-lg dark:text-white py-2 px-4 flex place-content-center max-w-full sm:max-w-sm bg-gray-800 my-4 ms-auto gap-2 rounded-lg border border-white/25 shadow-md"
+                        href="personajes"
+                        class="flex max-w-full gap-2 px-4 py-2 my-4 text-lg font-semibold bg-gray-800 border rounded-lg shadow-md dark:text-white place-content-center sm:max-w-sm ms-auto border-white/25"
                         >Ver mas personajes</a
                     >
                 </div>
             </section>
+
             <!-- parte de prueba -->
-            <section>
-                <h2
-                    class="dark:text-slate-300/90 font-semibold sm:text-2xl mb-4"
-                >
-                    Temporadas y Episodios
-                </h2>
-                <Personajes client:visible />
-                <div>
-                    <a
-                        href="ver-mas"
-                        class="font-semibold text-lg dark:text-white py-2 px-4 flex place-content-center max-w-full sm:max-w-sm bg-gray-800 my-4 ms-auto gap-2 rounded-lg border border-white/25 shadow-md"
-                        >Ver mas Temporadas</a
-                    >
-                </div>
-            </section>
         </article>
     </div>
 </Layout>
