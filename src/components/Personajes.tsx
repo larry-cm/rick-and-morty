@@ -61,7 +61,7 @@ export default function Personajes() {
                 }
             </div>
 
-            <div class="flex  w-full justify-between *:text-center text-start">
+            <div class="flex  w-full justify-between *:text-center text-start text-slate-200">
                 <div class="gap-2 px-4 py-2 my-4 text-lg font-medium bg-gray-800 border rounded-lg shadow-md dark:text-white place-content-center sm:max-w-sm border-white/25 sm:flex hidden">
 
                     <Botones ruteFunc={page} onClickFunc={() => cambioPage({ next: false })} text="Página previa" />
