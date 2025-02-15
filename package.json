@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "pre": " vercel deploy --prebuil",
+    "pre": " vercel deploy --prebuilt",
     "prod": "vercel --prod"
   },
   "dependencies": {
