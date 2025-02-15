@@ -42,6 +42,7 @@ const svg2 = <svg
 
 export default function Personajes() {
     const [verMediaquery, setVerMediaquery] = useState(false)
+    const matchesMd = verMediaquery ? useMediaQuery('only screen and (min-width: 700px)') : false
     const matchesLg = verMediaquery ? useMediaQuery('only screen and (min-width: 1200px)') : false
 
     const [page, setPage] = useState(() => {
@@ -51,25 +52,24 @@ export default function Personajes() {
 
     useEffect(() => {
         setVerMediaquery(true)
-
     }, [page])
 
     const cambioPage = ({ next }: MediaQueryTypes) => {
-        const increment = matchesLg ? 3 : 2;
+        const increment = matchesLg && 4;
+        const incrementMd = matchesMd ? 2 : 0;
+        const viewLow = incrementMd && increment ? increment : incrementMd
         const maxPage = 20;
-
+        console.log(page);
+        
         if (next) {
             setPage(page => {
-                const newPage = page + increment;
-                if (newPage >= maxPage) {
-                    return page === 1 ? page + 5 : maxPage;
-                }
-                return newPage;
+                const newPage = page + viewLow;
+                return  (page === 1 && increment) ? page + 5 : newPage;
             });
-            if (page === maxPage) setPage(1);
+            if (page >= maxPage - 2) setPage(1)
         } else {
             setPage(page => {
-                const newPage = page - increment;
+                const newPage = page - viewLow;
                 if (newPage <= 0) {
                     return maxPage;
                 }
