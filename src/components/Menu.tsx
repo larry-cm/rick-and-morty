@@ -1,12 +1,11 @@
 import { useState } from "preact/hooks"
 import ItemsMenu from "@/components/ItemsMenu";
 
-export default function Menu() {
+export default function Menu({ isPersonajePage }: { isPersonajePage?: boolean }) {
   const [vAni, setViewAnime] = useState(false)
 
   const handleClick = () => {
-    if (vAni) setViewAnime(false)
-    else setViewAnime(true)
+    vAni ? setViewAnime(false) : setViewAnime(true)
   }
 
 
@@ -15,7 +14,7 @@ export default function Menu() {
     <>
 
       <button
-        onFocusOut={() => { vAni && setViewAnime(false) }}
+        onFocusOut={() => { vAni && setTimeout(() => setViewAnime(false), 200) }}
         onClick={handleClick}
         class={` font-medium hidden transition-transform min-w-min h-max p-2  sm:flex flex-row items-center justify-center bg-gray-800 gap-2 rounded-lg shadow-md border border-zinc-400 text-white sm:relative `}
       >
@@ -36,7 +35,7 @@ export default function Menu() {
       <div
         class={`absolute hidden shadow-lg min-w-max sm:max-w-6xl sm:top-[80%] sm:right-8 h-max p-2 bg-gray-800 border border-white/25 rounded-lg sm:flex sm:flex-col gap-2 text-white ${!vAni ? "animate-fade-out hidden *:hidden " : "animate-fade-in  "} `}
       >
-        <ItemsMenu />
+        <ItemsMenu isPersonajePage={isPersonajePage} />
 
       </div>
     </>
