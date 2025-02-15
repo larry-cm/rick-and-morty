@@ -1,22 +1,21 @@
-import { useState, useEffect } from "preact/hooks"
+import { useState } from "preact/hooks"
 import ItemsMenu from "@/components/ItemsMenu";
+
 export default function Menu() {
-  const [vAni, setvAni] = useState(false)
+  const [vAni, setViewAnime] = useState(false)
 
   const handleClick = () => {
-    if (vAni) setTimeout(() => setvAni(false), 200)
-    else setvAni(true)
+    if (vAni) setViewAnime(false)
+    else setViewAnime(true)
   }
 
-  useEffect(() => {
-    () => { removeEventListener('mouseleave', handleClick) }
-  }, [])
+
   return (
 
     <>
 
       <button
-        onFocusOut={handleClick}
+        onFocusOut={() => { vAni && setViewAnime(false) }}
         onClick={handleClick}
         class={` font-medium hidden transition-transform min-w-min h-max p-2  sm:flex flex-row items-center justify-center bg-gray-800 gap-2 rounded-lg shadow-md border border-zinc-400 text-white sm:relative `}
       >
@@ -35,7 +34,7 @@ export default function Menu() {
 
       {/* menu desplegable */}
       <div
-        class={`absolute hidden shadow-lg min-w-max sm:max-w-6xl sm:top-[80%] sm:right-8 h-max p-2 bg-gray-800 border border-white/25 rounded-lg sm:flex sm:flex-col gap-2 ${!vAni ? "animate-fade-out invisible " : "animate-fade-in visible "} `}
+        class={`absolute hidden shadow-lg min-w-max sm:max-w-6xl sm:top-[80%] sm:right-8 h-max p-2 bg-gray-800 border border-white/25 rounded-lg sm:flex sm:flex-col gap-2 text-white ${!vAni ? "animate-fade-out hidden *:hidden " : "animate-fade-in  "} `}
       >
         <ItemsMenu />
 
