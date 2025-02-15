@@ -11,11 +11,11 @@ function MiniItem({ children, ruta }: { children: ComponentChildren, ruta: strin
     </a>
   )
 }
-export default function ItemsMenu({ isPersonajePage }: { isPersonajePage?: boolean }) {
+export default function ItemsMenu() {
   return (
     <>
 
-      <MiniItem ruta={`${isPersonajePage ? 'personajes' : "/personajes"}`}>
+      <MiniItem ruta='/personajes'>
         <Persons />
         <p>Personajes</p>
       </MiniItem>

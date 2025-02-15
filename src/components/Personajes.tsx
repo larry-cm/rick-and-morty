@@ -30,8 +30,8 @@ export default function Personajes() {
     }, [])
 
     const cambioPage = ({ next }: MediaQueryTypes) => {
-        const increment = matchesLg && 4;
-        const incrementMd = matchesMd ? 3 : 0;
+        const increment = matchesLg && 3;
+        const incrementMd = matchesMd ? 2 : 0;
         const viewLow = incrementMd && increment ? increment : incrementMd
         const maxPage = 20;
 
@@ -47,22 +47,22 @@ export default function Personajes() {
                 const newPage = page - viewLow;
                 if (page === 1) return maxPage;
                 if (newPage <= 1) return 1
-                return newPage + 1;
+                return newPage;
             });
         }
     };
 
     return (
-        <div >
+        <div class='space-y-4 mb-4'>
             <div class="snap-x snap-mandatory overflow-y-hidden sm:overflow-hidden sm bg-gray-800/25 h-96 min-w-full flex space-x-4 relative ">
 
                 {
-                    results.map((person) => <Images {...person} index={person.id - 1} />)
+                    results.map((person, i) => <Images {...person} index={i} />)
                 }
             </div>
 
-            <div class="flex  w-full justify-between *:text-center text-start text-slate-200">
-                <div class="gap-2 px-4 py-2 my-4 text-lg font-medium bg-gray-800 border rounded-lg shadow-md dark:text-white place-content-center sm:max-w-sm border-white/25 sm:flex hidden">
+            <div class="flex  w-full justify-between *-my-auto *:text-center text-start text-slate-200">
+                <div class="gap-2 px-4 py-1.5  text-lg font-medium bg-gray-800 border rounded-lg shadow-md dark:text-white place-content-center sm:max-w-sm border-white/25 sm:flex hidden">
 
                     <Botones ruteFunc={page} onClickFunc={() => cambioPage({ next: false })} text="Página previa" />
                     <Botones ruteFunc={page} onClickFunc={() => cambioPage({ next: true })} text="Siguiente página" clase />
@@ -71,7 +71,7 @@ export default function Personajes() {
 
                 <a
                     href="personajes"
-                    class="flex gap-2 px-4 py-2 my-4 text-lg font-medium bg-gray-800 border rounded-lg shadow-md dark:text-white place-content-center sm:max-w-sm border-white/25"
+                    class="flex gap-2 px-4 py-1.5 text-lg font-medium bg-gray-800 border rounded-lg shadow-md dark:text-white place-content-center sm:max-w-sm border-white/25"
                 >
                     Ver mas personajes
                 </a>

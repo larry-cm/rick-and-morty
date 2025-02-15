@@ -1,8 +1,8 @@
 ---
-import type { GetStaticPaths } from "astro";
 export const prerender = true;
 import Layout from "@/layouts/Layout.astro";
 import { fetchApi } from "@/services/fetch";
+
 export async function getStaticPaths() {
     const { results } = await fetchApi("character");
     // return [{ params: { id: "personaje-1" } }];
@@ -14,7 +14,19 @@ export async function getStaticPaths() {
     });
 }
 const { char } = Astro.props;
-const { name, id } = char;
+const { name, id, image, url } = char;
+
+const slug = name.toLowerCase().replace(" ", "-");
+console.log();
 ---
 
-<Layout title={`Información de ${name} con el id ${id}`} />
+<Layout title={`Información de ${name} con el id ${id}`}>
+    <h1>{name}</h1>
+    <div>
+        <img
+            src={image}
+            alt={`personaje-${id}`}
+            transition:name={`imagen-${slug}`}
+        />
+    </div>
+</Layout>

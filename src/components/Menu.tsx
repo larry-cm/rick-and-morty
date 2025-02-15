@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks"
 import ItemsMenu from "@/components/ItemsMenu";
 
-export default function Menu({ isPersonajePage }: { isPersonajePage?: boolean }) {
+export default function Menu() {
   const [vAni, setViewAnime] = useState(false)
 
   const handleClick = () => {
@@ -16,12 +16,11 @@ export default function Menu({ isPersonajePage }: { isPersonajePage?: boolean })
       <button
         onFocusOut={() => { vAni && setTimeout(() => setViewAnime(false), 200) }}
         onClick={handleClick}
-        class={` font-medium hidden transition-transform min-w-min h-max p-2  sm:flex flex-row items-center justify-center bg-gray-800 gap-2 rounded-lg shadow-md border border-zinc-400 text-white sm:relative `}
+        class={` font-medium hidden transition-transform min-w-min h-max py-1.5 px-4 sm:flex flex-row items-center gap-1  bg-gray-800 rounded-lg shadow-md border border-zinc-400 text-white sm:relative `}
       >
         <span class="hidden sm:block"> Menu </span>
         <svg
-          class={` ${vAni ? "sm:rotate-180 rotate-[270deg] " : "rotate-180 sm:rotate-90"} min-w-[24px] transition-transform duration-500 size-[22px]`}
-          xmlns="http://www.w3.org/2000/svg"
+          class={` ${vAni ? "sm:rotate-180 rotate-[270deg] " : "rotate-180 sm:rotate-90"} min-w-[24px] transition-transform duration-500 `}
           viewBox="0 0 24 24"
         >
           <path
@@ -35,7 +34,7 @@ export default function Menu({ isPersonajePage }: { isPersonajePage?: boolean })
       <div
         class={`absolute hidden shadow-lg min-w-max sm:max-w-6xl sm:top-[80%] sm:right-8 h-max p-2 bg-gray-800 border border-white/25 rounded-lg sm:flex sm:flex-col gap-2 text-white ${!vAni ? "animate-fade-out hidden *:hidden " : "animate-fade-in  "} `}
       >
-        <ItemsMenu isPersonajePage={isPersonajePage} />
+        <ItemsMenu />
 
       </div>
     </>

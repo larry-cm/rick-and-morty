@@ -2,7 +2,8 @@
 import Images from "@/components/Images";
 import Layout from "@/layouts/Layout.astro";
 import { fetchApi } from "@/services/fetch";
-const { info, results } = await fetchApi("character");
+const { results } = await fetchApi("character");
+const slugged = (txt: string) => txt.toLowerCase().replace(" ", "-");
 ---
 
 <Layout title="Lista de personajes de rick and morty completa">
@@ -18,8 +19,22 @@ const { info, results } = await fetchApi("character");
             class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4"
         >
             {
-                results.map((personaje) => (
-                    <Images {...personaje} index={personaje.id} vOptions />
+                results.map((personaje, i) => (
+                    <Images
+                        transition:name={`imagen-${slugged(personaje.name)}`}
+                        {...personaje}
+                        vOptions
+                    >
+                        <img
+                            loading={i < 10 ? "eager" : "lazy"}
+                            width="200"
+                            height="200"
+                            alt={personaje.name}
+                            src={personaje.image ?? "/rick-logo.svg"}
+                            transition:name={`imagen-${slugged(personaje.name)}`}
+                            class="rounded-md absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50"
+                        />
+                    </Images>
                 ))
             }
         </div>
