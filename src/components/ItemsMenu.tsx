@@ -4,7 +4,7 @@ import type { ComponentChildren } from "preact"
 function MiniItem({ children, ruta }: { children: ComponentChildren, ruta: string }) {
   return (
     <a href={ruta ?? "personajes"}
-      class="flex flex-row gap-1 items-center text-white hover:bg-gray-600/20 p-2 rounded-lg min-w-max text-sm"
+      class="flex flex-row gap-1 items-center text-white hover:bg-gray-600/20 p-2 rounded-lg   min-w-max text-sm"
     >
 
       {children}
