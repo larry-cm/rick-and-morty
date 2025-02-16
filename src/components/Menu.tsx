@@ -30,9 +30,9 @@ export default function Menu() {
         </svg>
       </button>
 
-      {/* menu desplegable */}
+      {/* menu desplegable falta por arreglar bien la animacion*/}
       <div
-        class={`absolute hidden shadow-lg min-w-max sm:max-w-6xl sm:top-[80%] sm:right-8 h-max p-2 bg-gray-800 border border-white/25 rounded-lg sm:flex sm:flex-col gap-2 text-white ${!vAni ? "animate-fade-out hidden *:hidden " : "animate-fade-in  "} `}
+        class={`absolute hidden shadow-lg min-w-max sm:max-w-6xl sm:top-[80%] sm:right-8 h-max p-2 bg-gray-800 border border-white/25 rounded-lg sm:flex sm:flex-col gap-2 text-white ${!vAni ? "animate-fade-out invisible" : "animate-fade-in  "} `}
       >
         <ItemsMenu />
 
