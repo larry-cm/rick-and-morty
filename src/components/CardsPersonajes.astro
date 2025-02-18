@@ -1,0 +1,96 @@
+---
+import { Icon } from "astro-icon/components";
+import Image from "astro/components/Image.astro";
+interface Props {
+    id: number;
+}
+const { id } = Astro.props;
+---
+
+<div
+    class="text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg size-full flex flex-col p-3"
+>
+    <Image
+        width="500"
+        height="500"
+        loading="lazy"
+        src="/fondo-rick.svg"
+        alt="imagen de relleno"
+        class="rounded-xl object-cover"
+    />
+    {/* main image */}
+    <div class="flex mt-4">
+        <div class="*:*:*:text-base w-3/4 icons-cards">
+            {/* title image */}
+            <strong class="font-medium text-lg mb-2"
+                >Nombre del personaje</strong
+            >
+            {/* desc image */}
+            <div
+                class="space-y-1 flex flex-col *:space-x-2 *:flex *:items-center"
+            >
+                <div>
+                    <i>
+                        <Icon name="vida" />
+                    </i>
+                    <span> vivo</span>
+                </div>
+                <div>
+                    <i>
+                        <Icon name="alien" />
+                    </i>
+                    <span>Humano</span>
+                </div>
+                <div>
+                    <i>
+                        <Icon name="planeta" />
+                    </i>
+                    <span>Tierra</span>
+                </div>
+            </div>
+        </div>
+        {/* favoritos */}
+        <label
+            for={`favorito-card-${id}`}
+            class="flex w-1/4 flex-row-reverse pt-0 h-fit"
+        >
+            <input
+                type="checkbox"
+                name="favorito-id-#"
+                class="sr-only peer"
+                id={`favorito-card-${id}`}
+            />
+            <div class="peer-checked:*:text-red-600 h-fit">
+                <span class="sr-only">icono de favorito</span>
+
+                <Icon
+                    name="corazon"
+                    class="text-sky-400 size-5 cursor-pointer"
+                />
+            </div>
+        </label>
+    </div>
+    {/* footer image */}
+    <div class="flex flex-row-reverse w-full">
+        <a
+            href="#mas"
+            title="saber mas sobre ..."
+            class="flex items-center py-1.5 px-4 rounded-3xl transition-all hover:shadow-md shadow-slate-800 space-x-2 bg-black/40 hover:bg-sky-400 text-slate-300 hover:text-slate-700 font-medium"
+        >
+            <i>
+                <Icon name="info" class="size-5" />
+            </i>
+            <span>Ver mas...</span>
+        </a>
+    </div>
+</div>
+<style>
+    .icons-cards div i svg {
+        height: 20px;
+        width: 20px;
+        @media (max-width: 650px) {
+            width: 18px;
+            height: 18px;
+        }
+    }
+</style>

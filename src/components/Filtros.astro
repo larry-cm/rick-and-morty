@@ -1,0 +1,94 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<form class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <div class="ps-0 flex w-full group lg:w-3/4">
+        <input
+            type="text"
+            name="search"
+            autocomplete="on"
+            id="search"
+            placeholder="Personajes. localizaciones, episodios y mucho más..."
+            class="border-none rounded-tl-3xl ps-4 h-9 rounded-bl-3xl transition-all bg-slate-500/50 group-hover:bg-slate-500/80 focus-visible:outline-none w-5/6 placeholder:text-slate-300 placeholder:font-medium"
+        />
+        <label
+            for="search"
+            class="w-1/6 cursor-pointer flex items-center justify-center rounded-tr-3xl rounded-br-3xl bg-slate-500/50 group-hover:bg-slate-500/80 p-1.5 transition-all"
+        >
+            <span class="sr-only">Lupa de busqueda de los filtros</span>
+            <Icon name="lupa" class="size-5" /></label
+        >
+    </div>
+    <div
+        id="filtros"
+        class="flex flex-col md:flex-row md:items-center lg:justify-end lg:space-x-4 gap-y-2 md:gap-y-0 md:space-x-2 relative w-full"
+    >
+        <legend class="text-nowrap relative top-1/2">Filtrar por :</legend>
+        <fieldset
+            class="flex flex-wrap lg:flex-nowrap gap-y-2 gap-x-2 icons-cards *:*:cursor-pointer *:*:transition-all"
+        >
+            <div>
+                <input
+                    type="radio"
+                    name="filtrado"
+                    checked
+                    class="sr-only peer/persona"
+                    id="personajes"
+                />
+                <label
+                    for="personajes"
+                    class="flex items-center space-x-2 px-4 py-1.5 bg-slate-500/50 hover:bg-slate-500/80 rounded-3xl peer-checked/persona:bg-sky-400/90"
+                >
+                    <i><Icon name="personaje" class="text-base" /></i>
+                    <span>Personajes</span>
+                </label>
+            </div>
+            <div>
+                <input
+                    type="radio"
+                    name="filtrado"
+                    class="sr-only peer/persona"
+                    id="episodios"
+                />
+                <label
+                    for="episodios"
+                    class="flex items-center space-x-2 px-4 py-1.5 bg-slate-500/50 hover:bg-slate-500/80 rounded-3xl peer-checked/persona:bg-sky-400/90"
+                >
+                    <i><Icon name="episodios" class="text-base" /></i>
+                    <span>Episodios</span>
+                </label>
+            </div>
+            <div>
+                <input
+                    type="radio"
+                    name="filtrado"
+                    class="sr-only peer/persona"
+                    id="localizaciones"
+                />
+                <label
+                    for="localizaciones"
+                    class="flex items-center space-x-2 px-4 py-1.5 bg-slate-500/50 hover:bg-slate-500/80 rounded-3xl peer-checked/persona:bg-sky-400/90"
+                >
+                    <i><Icon name="planeta" class="text-base" /></i>
+                    <span>Localizaciones</span>
+                </label>
+            </div>
+        </fieldset>
+    </div>
+</form>
+<style>
+    @media (max-width: 792px) {
+        #filtros {
+            align-items: start;
+        }
+    }
+    .icons-cards div i svg {
+        height: 20px;
+        width: 20px;
+        @media (max-width: 650px) {
+            width: 18px;
+            height: 18px;
+        }
+    }
+</style>
