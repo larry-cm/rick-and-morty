@@ -3,17 +3,23 @@ import { defineConfig } from 'astro/config';
 
 import icon from 'astro-icon';
 import tailwind from '@astrojs/tailwind';
-import preact from '@astrojs/preact';
 
 import vercel from '@astrojs/vercel';
 
 
+import react from '@astrojs/react';
+
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), preact({compat:true}), icon()],
+  integrations: [tailwind(), icon(), react()],
   output:"server",
   adapter: vercel({
     imageService: true,
     devImageService: 'sharp',
   }),
+  image:{
+    domains:['https://rickandmortyapi.com/api/character/avatar/'],
+    remotePatterns:[{protocol:'https',hostname:'rickandmortyapi.com'}]
+  }
 });

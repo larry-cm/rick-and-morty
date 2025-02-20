@@ -1,89 +1,52 @@
 ---
 import CardsEpisodios from "@/components/CardsEpisodios.astro";
 import CardsPersonajes from "@/components/CardsPersonajes.astro";
-import Filtros from "@/components/Filtros.astro";
+import CardsUbicaciones from "@/components/CardsUbicaciones.astro";
+import Filtros from "@/components/Filtros";
 import Landing from "@/components/Landing.astro";
-import MainArea from "@/components/MainArea.astro";
 import Layout from "@/layouts/Layout.astro";
-import { Icon } from "astro-icon/components";
+import MainArea from "@/components/MainArea.astro";
+import { fetchApi } from "@/services/fetch";
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8];
+const { results: personajes } = await fetchApi("character");
 ---
 
 <Layout title="Pagina de inicio">
     <Landing slot="banner" />
-    <section slot="main" class="w-full space-y-14 mt-14">
-        <Filtros />
+    <section slot="main" class="w-full space-y-14 mt-7 pt-7">
+        <Filtros client:load />
         <MainArea>
             <div
                 class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4"
             >
-                {cards?.map((e, i) => <CardsPersonajes id={i} />)}
+                {
+                    personajes?.map(
+                        ({ id, name, status, species, location, image }) => (
+                            <CardsPersonajes
+                                id={id}
+                                name={name}
+                                status={status}
+                                species={species}
+                                location={location}
+                                image={image}
+                            />
+                        ),
+                    )
+                }
             </div>
         </MainArea>
         <MainArea title="Episodios">
             <div
                 class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4"
             >
-                {[1, 2, 3, 4]?.map((e, i) => <CardsEpisodios id={i} />)}
+                {[1, 2, 3, 4, 5, 6]?.map((e, i) => <CardsEpisodios id={i} />)}
             </div>
         </MainArea>
         <MainArea title="Locaciones">
             <div
                 class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-4"
             >
-                {
-                    [1, 2, 3, 4]?.map((e, id) => (
-                        <div class="bg-slate-500/50 hover:bg-slate-500/80  rounded-lg size-full flex flex-col h-fit p-3 relative mt-8 ">
-                            <picture class="-top-9 min-[332px]:left-1/3 max-[332px]:left-[40%]  absolute">
-                                <Icon
-                                    name="planeta"
-                                    class="size-14  "
-                                    fill="white"
-                                />
-                            </picture>
-                            <div class="pt-4  text-center">
-                                <strong class="font-semibold truncate block  text-lg">
-                                    Titulo del planeta
-                                </strong>
-                                <span class="font-medium  text-sky-400">
-                                    Ubicación del planeta
-                                </span>
-                                <a
-                                    class="flex items-center py-1.5 px-4 rounded-3xl transition-all hover:shadow-md shadow-slate-800 space-x-2 bg-black/40 hover:bg-sky-400 text-slate-300 hover:text-slate-700 min-w-8 max-w-32 my-4 mx-auto font-medium"
-                                    href="#saber-mas-locaciones"
-                                    title="saber mas sobre la ubicación"
-                                >
-                                    <i>
-                                        <Icon name="info" class="size-4" />
-                                    </i>
-                                    <span>Ver mas...</span>
-                                </a>
-                                <div class="w-full flex justify-center">
-                                    <input
-                                        type="checkbox"
-                                        name=""
-                                        class="sr-ony peer hidden"
-                                        id={`favoritas-ubicaciones-${id}`}
-                                    />
-                                    <label
-                                        class="peer-checked:*:text-red-500"
-                                        for={`favoritas-ubicaciones-${id}`}
-                                    >
-                                        <span class="sr-only">
-                                            icono del corazón para ubicaciones
-                                            favoritos
-                                        </span>
-                                        <Icon
-                                            name="corazon"
-                                            class="text-sky-500 size-5 cursor-pointer"
-                                        />
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                }
+                {[1, 2, 3, 4]?.map((e, i) => <CardsUbicaciones id={i} />)}
             </div>
         </MainArea>
     </section>
