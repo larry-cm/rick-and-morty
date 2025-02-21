@@ -1,4 +1,4 @@
-import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from "assets/Icons";
+import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from "@/assets/Icons";
 import React, { useState, type JSX } from "react";
 interface TypeLabels {
     valor: string
@@ -32,10 +32,12 @@ const Labels = ({ valor, id, children, manejoEstado }: TypeLabels) => {
 }
 
 export default function Filtros(): JSX.Element {
-    const [filtroSelected, setFiltroSelected] = useState<string>('sa')
+    const [filtroSelected, setFiltroSelected] = useState<string>('todos')
     const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFiltroSelected(event.target.value)
     }
+
+
     return (
         <>
             <form className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -63,7 +65,6 @@ export default function Filtros(): JSX.Element {
                     <fieldset
                         className="flex flex-wrap lg:flex-nowrap gap-3 icons-cards *:*:cursor-pointer *:*:transition-all"
                     >
-
                         <Labels valor="todos" id="todas-opciones" manejoEstado={{ filtroSelected, handleFilter }}>
                             <>
                                 <i><IcoTodos className="size-5" /></i>
@@ -88,11 +89,9 @@ export default function Filtros(): JSX.Element {
                                 <span>Localizaciones</span>
                             </>
                         </Labels>
-
                     </fieldset>
                 </div>
             </form>
-
         </>
     );
 }
