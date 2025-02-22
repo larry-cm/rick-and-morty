@@ -1,8 +1,8 @@
 import { IcoTodos } from "@/assets/Icons";
 
-export default function MainArea({ title, children }: { title: string, children: React.ReactNode }) {
+export default function MainArea({ title, widthGrid, children }: { title: string, widthGrid: string, children: React.ReactNode }) {
     return (
-        <article>
+        <section>
             <div className="flex space-x-4 sm:space-x-8 mb-8">
                 <h2 className="font-bold text-3xl">{title ?? "Personajes"}</h2>
 
@@ -14,7 +14,13 @@ export default function MainArea({ title, children }: { title: string, children:
                     <span>Ver todos</span>
                 </button>
             </div>
-            {children}
-        </article>
+            <div
+                className={`grid ${widthGrid ?? "grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"} gap-4`}
+            >
+                {
+                    children
+                }
+            </div>
+        </section>
     );
 }

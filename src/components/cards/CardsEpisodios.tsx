@@ -1,5 +1,6 @@
 import { IcoCorazon, IcoEpisodios } from "@/assets/Icons";
-import BtnVerMas from "@/components/cards/BtnVerMas";
+import BtnVerMas from "@/components/BtnVerMas";
+import { BtnFavoritos } from "../BtnFavoritos";
 
 interface Props {
     id: number;
@@ -23,23 +24,7 @@ const CardsEpisodios: React.FC<Props> = ({ id, name, episode }) => {
             <div className="flex items-center justify-between space-x-2">
                 <BtnVerMas name={`el capitulo ${episode}`} />
                 <div className="w-fit">
-                    <input
-                        type="checkbox"
-                        name=""
-                        className="sr-ony peer hidden"
-                        id={`favoritos-episodios-${id}`}
-                    />
-                    <label
-                        className="peer-checked:*:text-red-500"
-                        htmlFor={`favoritos-episodios-${id}`}
-                    >
-                        <span className="sr-only">
-                            icono del corazón para episodios favoritos
-                        </span>
-                        <IcoCorazon
-                            className="text-sky-500 size-5 cursor-pointer"
-                        />
-                    </label>
+                    <BtnFavoritos id={id} labelId="episode-card" widthClase="w-full" />
                 </div>
             </div>
         </div>

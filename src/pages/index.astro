@@ -4,12 +4,6 @@ import Filtros from "@/components/Filtros";
 import Landing from "@/components/Landing.astro";
 import Layout from "@/layouts/Layout.astro";
 import { fetchApi } from "@/services/fetch";
-import {
-    SectionPersonaje,
-    SectionEpisodios,
-    SectionUbicacion,
-} from "@/components/sections/sections";
-import { sectionEpisode, sectionPerson, sectionUbi } from "@/const/secciones";
 
 const { results: personajes } = (await fetchApi("character")) as APICharacter;
 const { results: episodios } = (await fetchApi("episode")) as APIEpisode;
@@ -18,10 +12,12 @@ const { results: ubicaciones } = (await fetchApi("location")) as APILocation;
 
 <Layout title="Pagina de inicio">
     <Landing slot="banner" />
-    <section slot="main" class="w-full space-y-14 mt-7 pt-7">
-        <Filtros client:load />
-        <SectionPersonaje title={sectionPerson} personajes={personajes} />
-        <SectionEpisodios title={sectionEpisode} episodios={episodios} />
-        <SectionUbicacion title={sectionUbi} ubicaciones={ubicaciones} />
+    <section slot="main" class="w-full mt-7 pt-7 *:space-y-14">
+        <Filtros
+            personajes={personajes}
+            episodios={episodios}
+            ubicaciones={ubicaciones}
+            client:visible
+        />
     </section>
 </Layout>

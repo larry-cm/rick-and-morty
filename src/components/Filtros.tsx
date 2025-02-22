@@ -1,51 +1,183 @@
 import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from "@/assets/Icons";
-import React, { useState, type JSX } from "react";
-interface TypeLabels {
-    valor: string
-    id: string
-    children: JSX.Element
-    manejoEstado: {
-        filtroSelected: string
-        handleFilter: React.ChangeEventHandler<HTMLInputElement>
-    }
+import { sectionEpisode, sectionPerson, sectionUbi } from "@/const/secciones";
+import React, { useEffect, useState, type JSX } from "react";
+import CardsEpisodios from "@/components/cards/CardsEpisodios";
+import CardsPersonajes from "@/components/cards/CardsPersonajes";
+import CardsUbicaciones from "@/components/cards/CardsUbicaciones";
+import Labels from "@/components/sections/Labels";
+import MainArea from "@/components/sections/MainArea"
+import { NotFound } from "@/components/NotFound";
+import type { Result, ResultEpisode, ResultLocation } from "@/types/Api";
+interface GroupResults extends Result {
+    dimension: string
 }
-const Labels = ({ valor, id, children, manejoEstado }: TypeLabels) => {
-    return (
-        <div>
-            <input
-                type="radio"
-                name="filtrado"
-                value={valor}
-                checked={manejoEstado.filtroSelected === valor}
-                onChange={manejoEstado.handleFilter}
-                className="sr-only peer/persona"
-                id={id}
-            />
-            <label
-                htmlFor={id}
-                className="flex items-center space-x-2 px-4 py-1.5 bg-slate-500/50 hover:bg-slate-500/80 text-slate-100/90  hover:text-slate-300 peer-checked/persona:text-slate-800 rounded-3xl peer-checked/persona:bg-sky-400/90"
-            >
-                {children}
-            </label>
-        </div>
-    )
+const widthClases = {
+    grande: "grid-cols-[repeat(auto-fill,minmax(200px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]",
+    mediano: "grid-cols-[repeat(auto-fill,minmax(200px,1fr))]",
+    pequeño: "grid-cols-[repeat(auto-fill,minmax(130px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]"
 }
+export default function Filtros({ personajes, episodios, ubicaciones }: { personajes: Result[], episodios: ResultEpisode[], ubicaciones: ResultLocation[] }): JSX.Element {
+    const [filtroSelected, setFiltroSelected] = useState<string>("todos")
+    const [searchFilter, setSearchFilter] = useState<string>('')
 
-export default function Filtros(): JSX.Element {
-    const [filtroSelected, setFiltroSelected] = useState<string>('todos')
     const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFiltroSelected(event.target.value)
     }
+    const handlerSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 
+        setSearchFilter(() => {
+            if (event.target.value.trim() !== undefined) return event.target.value
+            return ''
+        })
+    }
+
+    const FilterCollection = (collection: Result[] | ResultEpisode[] | ResultLocation[]): GroupResults[] => {
+        if (collection.length > 0) {
+            return (collection as GroupResults[])
+                .filter((element) => element.name.toLocaleLowerCase().trim().includes(searchFilter.toLocaleLowerCase().trim()))
+        }
+        return [];
+    }
+
+    const DefaultNotFound = (collection: Result[] | ResultLocation[] | ResultEpisode[], code: (collection: GroupResults[]) => React.ReactNode[], fallback = <NotFound />) => {
+        return FilterCollection(collection as GroupResults[]).length > 0 ? code(collection as GroupResults[]) : fallback
+    }
+    const VistaFiltro = (filtroSelected: "todos" | "personajes" | "episodios" | "ubicaciones" | string) => {
+        switch (filtroSelected) {
+            case sectionPerson:
+                return <MainArea title={sectionPerson} widthGrid={widthClases.grande}>
+                    {
+                        DefaultNotFound(personajes, (personajes) =>
+                            personajes
+                                .map(
+                                    ({
+                                        id,
+                                        name,
+                                        status,
+                                        species,
+                                        origin,
+                                        image,
+                                    }) => (
+                                        <CardsPersonajes
+                                            id={id}
+                                            key={id}
+                                            name={name}
+                                            status={status}
+                                            species={species}
+                                            origin={origin}
+                                            image={image}
+                                        />
+                                    ),
+                                ))
+                    }
+                </MainArea>
+
+            case sectionEpisode:
+                return <MainArea title={sectionEpisode} widthGrid={widthClases.mediano}>
+                    {
+                        DefaultNotFound(episodios, (episodios) => episodios
+                            .map(({ id, name, episode }) => (
+                                <CardsEpisodios
+                                    id={id}
+                                    key={id}
+                                    name={name}
+                                    episode={episode.toString()}
+                                />
+                            )))
+                    }
+                </MainArea>
+
+            case sectionUbi:
+                return <MainArea title={sectionUbi} widthGrid={widthClases.pequeño}>
+                    {
+                        DefaultNotFound(ubicaciones, (ubicaciones) => ubicaciones.map(({ id, name, dimension }) => (
+                            <CardsUbicaciones
+                                id={id}
+                                key={id}
+                                name={name}
+                                dimension={dimension}
+                            />
+                        )))
+
+                    }
+                </MainArea>
+
+            default:
+                return <>
+
+                    {/* evaluar el que tenga mas elementos para ponerlo al bajo de las secciones de vista */}
+                    {/* es decir ir ordenándose en orden ascendente*/}
+
+
+                    {/* <MainArea title={sectionPerson} widthGrid={widthClases.grande}>
+                        {
+                            DefaultNotFound(personajes, (personajes) =>
+                                personajes
+                                    .map(
+                                        ({
+                                            id,
+                                            name,
+                                            status,
+                                            species,
+                                            origin,
+                                            image,
+                                        }) => (
+                                            <CardsPersonajes
+                                                id={id}
+                                                key={id}
+                                                name={name}
+                                                status={status}
+                                                species={species}
+                                                origin={origin}
+                                                image={image}
+                                            />
+                                        ),
+                                    ))
+                        }
+                    </MainArea>
+                    <MainArea title={sectionEpisode} widthGrid={widthClases.mediano}>
+                        {
+                            DefaultNotFound(episodios, (episodios) => episodios
+                                .map(({ id, name, episode }) => (
+                                    <CardsEpisodios
+                                        id={id}
+                                        key={id}
+                                        name={name}
+                                        episode={episode.toString()}
+                                    />
+                                )))
+                        }
+                    </MainArea>
+                    <MainArea title={sectionUbi} widthGrid={widthClases.pequeño}>
+                        {
+                            DefaultNotFound(ubicaciones, (ubicaciones) => ubicaciones.map(({ id, name, dimension }) => (
+                                <CardsUbicaciones
+                                    id={id}
+                                    key={id}
+                                    name={name}
+                                    dimension={dimension}
+                                />
+                            )))
+
+                        }
+                    </MainArea> */}
+                </>
+        }
+    }
+
+
+
+    // useEffect()
 
     return (
         <>
-            <form className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <form className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-14">
                 <div className="ps-0 flex w-full group lg:w-3/4">
                     <input
                         type="text"
                         name="search"
                         autoComplete="on"
+                        onChange={handlerSearch}
                         id="search"
                         placeholder="Personajes. localizaciones, episodios y mucho más..."
                         className="border-none rounded-tl-3xl ps-4 h-9 rounded-bl-3xl transition-all bg-slate-500/50 group-hover:bg-slate-500/80 outline-none focus-visible:bg-slate-500/80 group-hover:placeholder:text-slate-300 peer w-[90%] placeholder:text-slate-100/90 placeholder:font-medium"
@@ -71,19 +203,19 @@ export default function Filtros(): JSX.Element {
                                 <span>Todos</span>
                             </>
                         </Labels>
-                        <Labels valor="personajes" id="personajes" manejoEstado={{ filtroSelected, handleFilter }}>
+                        <Labels valor={sectionPerson} id={sectionPerson} manejoEstado={{ filtroSelected, handleFilter }}>
                             <>
                                 <i><IcoPersonaje className="size-5" /></i>
                                 <span>Personajes</span>
                             </>
                         </Labels>
-                        <Labels valor="episodios" id="episodios" manejoEstado={{ filtroSelected, handleFilter }}>
+                        <Labels valor={sectionEpisode} id={sectionEpisode} manejoEstado={{ filtroSelected, handleFilter }}>
                             <>
                                 <i><IcoEpisodios className="size-5" /></i>
                                 <span>Episodios</span>
                             </>
                         </Labels>
-                        <Labels valor="localizaciones" id="localizaciones" manejoEstado={{ filtroSelected, handleFilter }}>
+                        <Labels valor={sectionUbi} id={sectionUbi} manejoEstado={{ filtroSelected, handleFilter }}>
                             <>
                                 <i><IcoPlaneta className="size-5" /></i>
                                 <span>Localizaciones</span>
@@ -92,6 +224,10 @@ export default function Filtros(): JSX.Element {
                     </fieldset>
                 </div>
             </form>
+            <>
+
+                {VistaFiltro(filtroSelected)}
+            </>
         </>
     );
 }

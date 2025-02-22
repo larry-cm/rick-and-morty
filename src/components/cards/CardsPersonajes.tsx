@@ -1,35 +1,36 @@
 import type { Location } from "@/types/Api";
-import BtnVerMas from "@/components/cards/BtnVerMas";
+import BtnVerMas from "@/components/BtnVerMas";
 import { IcoVida, IcoAlien, IcoPlaneta, IcoCorazon } from "@/assets/Icons";
+import { BtnFavoritos } from "../BtnFavoritos";
 
 interface Props {
     id: number;
     name: string;
     status: string;
     species: string;
-    location: Location;
+    origin: Location;
     image: string;
 }
-
+const Desconocidos = (ori: string, text: string) => ori === 'unknown' ? `${text} desconocido` : ori
 export default function CardsPersonajes({
     id,
     name,
     status,
     species,
-    location,
+    origin,
     image: rutaImg
 }: Props) {
     return (
-        <article
-            className="text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg size-full flex flex-col p-3"
+        <div
+            className="text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-4/5  sm:size-full mx-auto sm:mx-0 flex flex-col p-3"
         >
             <img
                 width={500}
                 height={500}
                 loading="lazy"
-                src={rutaImg}
+                src={rutaImg ?? '/public/rick-logo.svg'}
                 alt="imagen de relleno"
-                className="rounded-xl object-cover"
+                className="rounded-xl object-cover "
             />
             <div className="min-h-44 max-h-52 flex flex-col justify-between">
                 {/* main image */}
@@ -43,15 +44,15 @@ export default function CardsPersonajes({
                             {name ?? "Nombre del personaje"}
                         </strong>
                         {/* desc image */}
-                        <section
+                        <div
                             className="space-y-1 flex flex-col *:space-x-2 *:flex *:items-center text-slate-100/90"
                         >
                             <div>
                                 <i>
-                                    <IcoVida />
+                                    <IcoVida className='size-5' />
                                 </i>
-                                <span title={status ?? "estado del personaje"}>
-                                    {status ?? "estado del personaje"}
+                                <span title={Desconocidos(status, "Estado") ?? "estado del personaje"}>
+                                    {Desconocidos(status, "Estado") ?? "estado del personaje"}
                                 </span>
                             </div>
                             <div>
@@ -64,41 +65,25 @@ export default function CardsPersonajes({
                             </div>
                             <div>
                                 <i>
-                                    <IcoPlaneta />
+                                    <IcoPlaneta className='size-5' />
                                 </i>
                                 <span
                                     className="truncate"
-                                    title={location?.name ?? "Tierra"}
+                                    title={Desconocidos(origin?.name, 'Planeta') ?? "Tierra"}
                                 >
-                                    {location?.name ?? "Tierra"}
+                                    {Desconocidos(origin?.name, 'Planeta') ?? "Tierra"}
                                 </span>
                             </div>
-                        </section>
+                        </div>
                     </div>
                     {/* favoritos */}
-                    <label
-                        htmlFor={`favorito-card-${id}`}
-                        className="flex w-1/4 flex-row-reverse pt-0 h-fit"
-                    >
-                        <input
-                            type="checkbox"
-                            name="favorito-id-#"
-                            className="sr-only peer"
-                            id={`favorito-card-${id}`}
-                        />
-                        <div className="peer-checked:*:text-red-600 h-fit">
-                            <span className="sr-only">icono de favorito</span>
-                            <IcoCorazon
-                                className="text-sky-400 size-5 cursor-pointer"
-                            />
-                        </div>
-                    </label>
+                    <BtnFavoritos id={id} labelId="person-card" />
                 </div>
                 {/* footer image */}
                 <div className="flex flex-row-reverse w-full">
                     <BtnVerMas name={name} color />
                 </div>
             </div>
-        </article>
+        </div>
     );
 }

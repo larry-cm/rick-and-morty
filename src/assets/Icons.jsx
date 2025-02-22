@@ -48,8 +48,8 @@ export const IcoInfo = (props) => (
         />
     </svg>
 );
-export const IcoVida = () => (
-    <svg width="14" height="12" className="size-5" fill="none"><path fill="#BFDE42" d="M14 6a.5.5 0 0 1-.5.5h-1.691l-2.361 4.724A.5.5 0 0 1 9 11.5h-.025a.5.5 0 0 1-.442-.321L4.959 1.798 2.955 6.207A.5.5 0 0 1 2.5 6.5h-2a.5.5 0 0 1 0-1h1.678L4.545.293a.5.5 0 0 1 .923.029l3.594 9.437 1.99-3.981A.5.5 0 0 1 11.5 5.5h2a.5.5 0 0 1 .5.5" /></svg>
+export const IcoVida = (props) => (
+    <svg {...props} fill="none"><path fill="#BFDE42" d="M14 6a.5.5 0 0 1-.5.5h-1.691l-2.361 4.724A.5.5 0 0 1 9 11.5h-.025a.5.5 0 0 1-.442-.321L4.959 1.798 2.955 6.207A.5.5 0 0 1 2.5 6.5h-2a.5.5 0 0 1 0-1h1.678L4.545.293a.5.5 0 0 1 .923.029l3.594 9.437 1.99-3.981A.5.5 0 0 1 11.5 5.5h2a.5.5 0 0 1 .5.5" /></svg>
 )
 
 export const IcoAlien = (props) => (
@@ -70,3 +70,20 @@ export const IcoCorazon = (props) => (
         />
     </svg>
 );
+export const IcoNotFound = (props) => {
+    return (
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            {...props}
+        >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M20 13v-4a2 2 0 0 0 -2 -2h-12a2 2 0 0 0 -2 2v5a2 2 0 0 0 2 2h7" />
+            <path d="M22 22l-5 -5" />
+            <path d="M17 22l5 -5" />
+        </svg>
+    )
+}
