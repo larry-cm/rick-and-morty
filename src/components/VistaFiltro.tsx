@@ -26,7 +26,7 @@ function Orden({ hijosInitial, searchFilterInitial, viewFilterInitial }: { hijos
     })
 
     const arraySorted = arraySon.sort((a, b) => b.length - a.length)
-    console.log(arraySorted)
+    // console.log(arraySorted)
     return arraySorted.map((section: { context: string }) => (viewFilterInitial[section.context as keyof typeof viewFilterInitial]))
 }
 

@@ -6,15 +6,16 @@ interface GroupResults extends Result {
 
 export const FilterCollection = (collection: Result[] | ResultEpisode[] | ResultLocation[], searchFilter: string): GroupResults[] => {
     if (collection.length > 0) {
-        let collectionUnify = collection
+        return collection
             .filter(e => e.name.toLocaleLowerCase().trim().match(searchFilter)) as GroupResults[]
-        let collectionAllUnified: GroupResults[] = []
-        for (const i of searchFilter) {
-            collectionAllUnified = collection
-                .filter(e => e.name.toLocaleLowerCase().trim().includes(i)) as GroupResults[]
-        }
-        let keepSearch = collectionUnify.concat(collectionAllUnified)
-        return keepSearch.filter((e, i) => keepSearch.indexOf(e) === i)
+        // let collectionAllUnified: GroupResults[] = []
+        // for (const i of searchFilter) {
+        //     collectionAllUnified = collection
+        //         .filter(e => e.name.toLocaleLowerCase().trim().includes(i)) as GroupResults[]
+        // }
+        // let keepSearch = collectionUnify.concat(collectionAllUnified)
+        // let x = keepSearch.filter((e, i) => keepSearch.indexOf(e) === i)
+
     }
     return []
 }
