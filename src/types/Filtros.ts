@@ -2,6 +2,8 @@ import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
 
 export type FiltroSelected = 'todos' | 'personajes' | 'episodios' | 'ubicaciones' | string
 
+export type Collections = Result[] | ResultEpisode[] | ResultLocation[]
+
 export interface GroupResult extends Result {
   dimension: string
 }

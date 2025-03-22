@@ -1,20 +1,18 @@
-import type { Result, ResultEpisode, ResultLocation } from "@/types/Api"
+import { NotFound } from "@/components/NotFound"
+import type { Collections, GroupResult } from "@/types/Filtros"
+import type { JSX } from "react"
 
-interface GroupResults extends Result {
-    dimension: string
-}
+export const FilterCollection = (collection: Collections, searchFilter: string): GroupResult[] => {
+    const filterInclude = (collection: Collections, searchFilter: string) => collection.filter(e => e.name.toLowerCase().trim().match(searchFilter.toLowerCase()?.trim())) as GroupResult[]
 
-export const FilterCollection = (collection: Result[] | ResultEpisode[] | ResultLocation[], searchFilter: string): GroupResults[] => {
     if (collection.length > 0) {
-        let collectionUnify = collection
-            .filter(e => e.name.toLocaleLowerCase().trim().match(searchFilter.toLocaleLowerCase().trim())) as GroupResults[]
-        let collectionAllUnified: GroupResults[] = []
-        for (const i of searchFilter) {
-            collectionAllUnified = collection
-                .filter(e => e.name.toLocaleLowerCase().trim().includes(i.toLocaleLowerCase())) as GroupResults[]
-        }
-        let keepSearch = collectionUnify.concat(collectionAllUnified)
-        return keepSearch.filter((e, i) => keepSearch.indexOf(e) === i)
+        let collectionUnify = filterInclude(collection, searchFilter)
+        let collectionAllUnified: GroupResult[] = []
+
+        for (const letter of searchFilter) { collectionAllUnified = filterInclude(collection, letter) }
+        return collectionUnify.concat(collectionAllUnified).filter((e, i, m) => m.indexOf(e) === i)
     }
     return []
 }
+
+export const DefaultNotFound = (collection: Collections, searchFilterInitial: string, code: (collection: GroupResult[]) => JSX.Element[], fallback = <NotFound />) => FilterCollection(collection, searchFilterInitial).length !== 0 ? code(FilterCollection(collection, searchFilterInitial)) : fallback

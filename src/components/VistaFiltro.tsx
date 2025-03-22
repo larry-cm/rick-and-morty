@@ -1,12 +1,10 @@
 import { CardsEpisodios, CardsPersonajes, CardsUbicaciones } from '@components/cards/Cards'
-import { FilterCollection } from "@/services/filtrado"
-import { NotFound } from '@components/NotFound'
+import { DefaultNotFound, FilterCollection } from "@/services/filtrado"
 import { sections, widthClases } from "@/const/constantes"
 import MainArea from '@components/sections/MainArea'
 
-import type { FiltroSelected, GroupResult, RequestFilter } from "@/types/Filtros"
+import type { Collections, FiltroSelected, RequestFilter } from "@/types/Filtros"
 import type { JSX } from "react"
-import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
 
 const { person, episode, ubi, all } = sections
 
@@ -17,20 +15,30 @@ function Orden({ hijosInitial, searchFilterInitial, viewFilterInitial }: { hijos
 
     const arraySon = Object.values(hijosInitial)
     const arrayKeys = Object.keys(hijosInitial)
+    let arraySorted: any[] = []
 
     arraySon.forEach((_, i) => {
         arraySon[i]['context'] = arrayKeys[i]
+
         if (arraySon[i]['context'] === person && arraySon[i].length > 4) {
             console.log('deberían estar las imágenes arriba')
-        }
+            arraySorted = arraySon.slice(0, 1)
+            // let addEnd = arraySon
+            console.log(arraySon);
+            console.log(arraySon[i]);
+            arraySorted = arraySorted.concat(arraySon.slice(1, 3))
+            console.log(arraySorted);
+        } else arraySorted = arraySon.sort((a, b) => b.length - a.length)
+        console.log(arraySorted);
+
     })
 
-    const arraySorted = arraySon.sort((a, b) => b.length - a.length)
-    // console.log(arraySorted)
+
+
     return arraySorted.map((section: { context: string }) => (viewFilterInitial[section.context as keyof typeof viewFilterInitial]))
 }
 
-const DefaultNotFound = (collection: Result[] | ResultLocation[] | ResultEpisode[], searchFilterInitial: string, code: (collection: GroupResult[]) => JSX.Element[], fallback = <NotFound />) => FilterCollection(collection, searchFilterInitial).length !== 0 ? code(FilterCollection(collection, searchFilterInitial)) : fallback
+
 
 export default function VistaFiltro({ filtroSelected, searchFilterInitial, hijosInitial }: { filtroSelected: FiltroSelected, searchFilterInitial: string, hijosInitial: RequestFilter }) {
     const { personajes, episodios, ubicaciones } = hijosInitial
