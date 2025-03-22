@@ -9,17 +9,13 @@ export const FilterCollection = (collection: Result[] | ResultEpisode[] | Result
         let collectionUnify = collection
             .filter(e => e.name.toLocaleLowerCase().trim().match(searchFilter)) as GroupResults[]
         let collectionAllUnified: GroupResults[] = []
-        for (let i of searchFilter) {
+        for (const i of searchFilter) {
             collectionAllUnified = collection
-                .filter(e => e.name.toLocaleLowerCase().trim().match(i)) as GroupResults[]
+                .filter(e => e.name.toLocaleLowerCase().trim().includes(i)) as GroupResults[]
         }
         let keepSearch = collectionUnify.concat(collectionAllUnified)
 
-        return searchFilter.length !== 0
-            ?
-            keepSearch.filter((e, i) => keepSearch.indexOf(e) === i)
-            :
-            collectionUnify
+        return keepSearch.filter((e, i) => keepSearch.indexOf(e) === i)
     }
     return []
 }
