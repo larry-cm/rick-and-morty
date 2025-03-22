@@ -24,8 +24,9 @@ function Orden({ hijosInitial, searchFilterInitial, viewFilterInitial }: { hijos
             console.log('deberían estar las imágenes arriba')
         }
     })
-    const arraySorted = arraySon.sort((a, b) => b.length - a.length)
 
+    const arraySorted = arraySon.sort((a, b) => b.length - a.length)
+    console.log(arraySorted)
     return arraySorted.map((section: { context: string }) => (viewFilterInitial[section.context as keyof typeof viewFilterInitial]))
 }
 
@@ -35,7 +36,7 @@ export default function VistaFiltro({ filtroSelected, searchFilterInitial, hijos
     const { personajes, episodios, ubicaciones } = hijosInitial
     const viewFilter = {
         personajes: (
-            <MainArea title={person} widthGrid={widthClases.grande}>
+            <MainArea key={person} title={person} widthGrid={widthClases.grande}>
                 {DefaultNotFound(personajes, searchFilterInitial, (personajes) => personajes
                     .map(
                         ({
@@ -55,7 +56,7 @@ export default function VistaFiltro({ filtroSelected, searchFilterInitial, hijos
             </MainArea>
         ),
         episodios: (
-            <MainArea title={episode} widthGrid={widthClases.mediano}>
+            <MainArea key={episode} title={episode} widthGrid={widthClases.mediano}>
                 {DefaultNotFound(episodios, searchFilterInitial, (episodios) => episodios
                     .map(({ id, name, episode }) => (
                         <CardsEpisodios
@@ -67,7 +68,7 @@ export default function VistaFiltro({ filtroSelected, searchFilterInitial, hijos
             </MainArea>
         ),
         ubicaciones: (
-            <MainArea title={ubi} widthGrid={widthClases.pequeño}>
+            <MainArea key={ubi} title={ubi} widthGrid={widthClases.pequeño}>
                 {DefaultNotFound(ubicaciones, searchFilterInitial, (ubicaciones) => ubicaciones.map(({ id, name, dimension }) => (
                     <CardsUbicaciones
                         id={id}
