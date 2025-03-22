@@ -14,7 +14,6 @@ export const FilterCollection = (collection: Result[] | ResultEpisode[] | Result
                 .filter(e => e.name.toLocaleLowerCase().trim().includes(i)) as GroupResults[]
         }
         let keepSearch = collectionUnify.concat(collectionAllUnified)
-
         return keepSearch.filter((e, i) => keepSearch.indexOf(e) === i)
     }
     return []
