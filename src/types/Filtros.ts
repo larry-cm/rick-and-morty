@@ -2,14 +2,14 @@ import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
 
 export type FiltroSelected = 'todos' | 'personajes' | 'episodios' | 'ubicaciones' | string
 
-export type Collections = Result[] | ResultEpisode[] | ResultLocation[]
+type Context = {context?:string}
 
-export interface GroupResult extends Result {
-  dimension: string
-}
+export type Collections = Result[] & Context | ResultEpisode[] & Context | ResultLocation[] & Context
+
+export interface GroupResult extends Result {dimension: string}
 
 export interface RequestFilter {
   personajes: Result[]
-  episodios: ResultEpisode[] | GroupResult[]
-  ubicaciones: ResultLocation[] | GroupResult[]
+  episodios: ResultEpisode[] 
+  ubicaciones: ResultLocation[] 
 }

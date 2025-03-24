@@ -10,7 +10,7 @@ export const FilterCollection = (collection: Collections, searchFilter: string):
         let collectionAllUnified: GroupResult[] = []
 
         for (const letter of searchFilter) { collectionAllUnified = filterInclude(collection, letter) }
-        return collectionUnify.concat(collectionAllUnified).filter((e, i, m) => m.indexOf(e) === i)
+        return collectionUnify.concat(collectionAllUnified).filter((e, i, a) => a.indexOf(e) === i)
     }
     return []
 }

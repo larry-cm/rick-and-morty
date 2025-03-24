@@ -1,7 +1,7 @@
 import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from '@/assets/Icons'
 import { sections } from '@/const/constantes'
 import Labels from '@components/sections/Labels'
-import React, { useEffect, useState, type JSX } from 'react'
+import React, { useState, type JSX } from 'react'
 import type { FiltroSelected, RequestFilter } from '@/types/Filtros'
 import VistaFiltro from '@/components/VistaFiltro'
 
@@ -11,22 +11,15 @@ export default function Filtros({ personajes, episodios, ubicaciones }: RequestF
   const [filtroSelected, setFiltroSelected] = useState<FiltroSelected>(all)
   const [searchFilter, setSearchFilter] = useState<string>('')
 
-  const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFiltroSelected(event.target.value)
+  const handlerLocalStates = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.name !== 'filtrado') {
+      setSearchFilter(() => {
+        if (event.target.value.trim() !== undefined) return event.target.value
+        return ''
+      })
+    }
+    else setFiltroSelected(event.target.value)
   }
-
-  const handlerSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchFilter(() => {
-      if (event.target.value.trim() !== undefined) return event.target.value
-      return ''
-    })
-  }
-
-
-  useEffect(() => {
-    console.log(searchFilter)
-
-  }, [searchFilter])
 
   return (
     <>
@@ -36,7 +29,7 @@ export default function Filtros({ personajes, episodios, ubicaciones }: RequestF
             type='text'
             name='search'
             autoComplete='on'
-            onChange={handlerSearch}
+            onChange={handlerLocalStates}
             id='search'
             placeholder='Personajes. localizaciones, episodios y mucho más...'
             className='border-none rounded-tl-3xl ps-4 h-9 rounded-bl-3xl transition-all bg-slate-500/50 group-hover:bg-slate-500/80 outline-none focus-visible:bg-slate-500/80 group-hover:placeholder:text-slate-300 peer w-[90%] placeholder:text-slate-100/90 placeholder:font-medium'
@@ -57,25 +50,25 @@ export default function Filtros({ personajes, episodios, ubicaciones }: RequestF
           <fieldset
             className='flex flex-wrap lg:flex-nowrap gap-3 icons-cards *:*:cursor-pointer *:*:transition-all'
           >
-            <Labels valor='todos' id='todas-opciones' manejoEstado={{ filtroSelected, handleFilter }}>
+            <Labels id={all} manejoEstado={{ filtroSelected, handlerLocalStates }}>
               <>
                 <i><IcoTodos className='size-5' /></i>
                 <span>Todos</span>
               </>
             </Labels>
-            <Labels valor={person} id={person} manejoEstado={{ filtroSelected, handleFilter }}>
+            <Labels id={person} manejoEstado={{ filtroSelected, handlerLocalStates }}>
               <>
                 <i><IcoPersonaje className='size-5' /></i>
                 <span>Personajes</span>
               </>
             </Labels>
-            <Labels valor={episode} id={episode} manejoEstado={{ filtroSelected, handleFilter }}>
+            <Labels id={episode} manejoEstado={{ filtroSelected, handlerLocalStates }}>
               <>
                 <i><IcoEpisodios className='size-5' /></i>
                 <span>Episodios</span>
               </>
             </Labels>
-            <Labels valor={ubi} id={ubi} manejoEstado={{ filtroSelected, handleFilter }}>
+            <Labels id={ubi} manejoEstado={{ filtroSelected, handlerLocalStates }}>
               <>
                 <i><IcoPlaneta className='size-5' /></i>
                 <span>Localizaciones</span>

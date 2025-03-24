@@ -4,44 +4,16 @@ import { sections, widthClases } from "@/const/constantes"
 import MainArea from '@components/sections/MainArea'
 
 import type { Collections, FiltroSelected, RequestFilter } from "@/types/Filtros"
-import type { JSX } from "react"
+import { useEffect, useState } from "react"
+import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
 
 const { person, episode, ubi, all } = sections
 
-function Orden({ hijosInitial, searchFilterInitial, viewFilterInitial }: { hijosInitial: RequestFilter, searchFilterInitial: string, viewFilterInitial: { personajes: JSX.Element, episodios: JSX.Element, ubicaciones: JSX.Element } }) {
-    for (const x in hijosInitial) {
-        hijosInitial[x as keyof typeof hijosInitial] = FilterCollection(hijosInitial[x as keyof typeof hijosInitial], searchFilterInitial)
-    }
-
-    const arraySon = Object.values(hijosInitial)
-    const arrayKeys = Object.keys(hijosInitial)
-    let arraySorted: any[] = []
-
-    arraySon.forEach((_, i) => {
-        arraySon[i]['context'] = arrayKeys[i]
-
-        if (arraySon[i]['context'] === person && arraySon[i].length > 4) {
-            console.log('deberían estar las imágenes arriba')
-            arraySorted = arraySon.slice(0, 1)
-            // let addEnd = arraySon
-            console.log(arraySon);
-            console.log(arraySon[i]);
-            arraySorted = arraySorted.concat(arraySon.slice(1, 3))
-            console.log(arraySorted);
-        } else arraySorted = arraySon.sort((a, b) => b.length - a.length)
-        console.log(arraySorted);
-
-    })
-
-
-
-    return arraySorted.map((section: { context: string }) => (viewFilterInitial[section.context as keyof typeof viewFilterInitial]))
-}
-
-
-
 export default function VistaFiltro({ filtroSelected, searchFilterInitial, hijosInitial }: { filtroSelected: FiltroSelected, searchFilterInitial: string, hijosInitial: RequestFilter }) {
     const { personajes, episodios, ubicaciones } = hijosInitial
+    const [arraySorted, setArraySorted] = useState<Collections[]>([])
+    const [hijosState, setHijosState] = useState<RequestFilter>()
+
     const viewFilter = {
         personajes: (
             <MainArea key={person} title={person} widthGrid={widthClases.grande}>
@@ -88,15 +60,24 @@ export default function VistaFiltro({ filtroSelected, searchFilterInitial, hijos
         )
     }
 
-    if (filtroSelected === all) return (
-        < Orden
-            searchFilterInitial={searchFilterInitial}
-            viewFilterInitial={viewFilter}
-            hijosInitial={{
-                personajes,
-                episodios,
-                ubicaciones
-            }} />
-    )
+    useEffect(() => {
+        const hijosFiltered = { ...hijosInitial }
+        for (const x in hijosFiltered) {
+            hijosFiltered[x as keyof typeof hijosFiltered] = FilterCollection(hijosFiltered[x as keyof typeof hijosFiltered], searchFilterInitial) as unknown as Result[] & ResultEpisode[] & ResultLocation[]
+        }
+        setHijosState(hijosFiltered)
+    }, [searchFilterInitial])
+
+    useEffect(() => {
+        const hijosFiltered = { ...hijosState }
+        const arraySon: Collections[] = Object.values(hijosFiltered)
+        const arrayKeys: string[] = Object.keys(hijosFiltered)
+        arraySon.forEach((_, i) => arraySon[i].context = arrayKeys[i]); // poniéndoles contexto
+        arraySon[0]?.length >= 5 && arraySon[0]?.context === person
+            ? setArraySorted(arraySon?.slice(0, 1).concat(arraySon?.slice(1, 3)))
+            : setArraySorted(arraySon?.sort((a, b) => b?.length - a?.length))
+    }, [hijosState])
+
+    if (filtroSelected === all) return arraySorted.map((section) => (viewFilter[section.context as keyof typeof viewFilter]))
     return viewFilter[filtroSelected as keyof typeof viewFilter]
 }

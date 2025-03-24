@@ -1,23 +1,22 @@
 import { type JSX } from 'react'
 interface TypeLabels {
-  valor: string
   id: string
   children: JSX.Element
   manejoEstado: {
     filtroSelected: string
-    handleFilter: React.ChangeEventHandler<HTMLInputElement>
+    handlerLocalStates: React.ChangeEventHandler<HTMLInputElement>
   }
 }
 
-export default function Labels ({ valor, id, children, manejoEstado }: TypeLabels) {
+export default function Labels({ id, children, manejoEstado }: TypeLabels) {
   return (
     <div>
       <input
         type='radio'
         name='filtrado'
-        value={valor}
-        checked={manejoEstado.filtroSelected === valor}
-        onChange={manejoEstado.handleFilter}
+        value={id}
+        checked={manejoEstado.filtroSelected === id}
+        onChange={manejoEstado.handlerLocalStates}
         className='sr-only peer/persona'
         id={id}
       />
