@@ -1,28 +1,23 @@
 ---
+import type { APICharacter, APIEpisode, APILocation } from "@/types/Api";
+import Filtros from "@components/Filtros";
+import Landing from "@components/Landing.astro";
 import Layout from "@/layouts/Layout.astro";
-import Personajes from "@/components/Personajes";
+import { fetchApi } from "@services/fetch";
+
+const { results: personajes } = (await fetchApi("character")) as APICharacter;
+const { results: episodios } = (await fetchApi("episode")) as APIEpisode;
+const { results: ubicaciones } = (await fetchApi("location")) as APILocation;
 ---
 
 <Layout title="Pagina de inicio">
-    <div class="flex flex-col justify-start px-4 mt-8">
-        <h2
-            class="text-xl font-bold text-center text-white sm:text-3xl dark:text-slate-100"
-        >
-            Nos basamos en diferentes secciones como personajes, ubicaciones y
-            hasta episodios.
-        </h2>
-
-        <article class="mt-8 space-y-4">
-            <section class="">
-                <h2
-                    class="mb-4 font-semibold text-slate-200/90 dark:text-slate-300/90 text-2xl sm:text-3xl"
-                >
-                    Personajes Mas Populares
-                </h2>
-                <Personajes client:visible />
-            </section>
-
-            <!-- parte de prueba -->
-        </article>
-    </div>
+    <Landing slot="banner" />
+    <section slot="main" class="w-full mt-7 pt-1 *:space-y-14">
+        <Filtros
+            personajes={personajes}
+            episodios={episodios}
+            ubicaciones={ubicaciones}
+            client:visible
+        />
+    </section>
 </Layout>
