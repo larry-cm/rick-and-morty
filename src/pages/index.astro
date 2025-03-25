@@ -12,7 +12,7 @@ const { results: ubicaciones } = (await fetchApi("location")) as APILocation;
 
 <Layout title="Pagina de inicio">
     <Landing slot="banner" />
-    <section slot="main" class="w-full mt-7 pt-1 *:space-y-14">
+    <section slot="main" class="w-full mt-7 pt-4 *:space-y-14">
         <Filtros
             personajes={personajes}
             episodios={episodios}
