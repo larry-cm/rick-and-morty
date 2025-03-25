@@ -73,9 +73,9 @@ export default function VistaFiltro({ filtroSelected, searchFilterInitial, hijos
         const arraySon: Collections[] = Object.values(hijosFiltered)
         const arrayKeys: string[] = Object.keys(hijosFiltered)
         arraySon.forEach((_, i) => arraySon[i].context = arrayKeys[i]); // poniéndoles contexto
-        arraySon[0]?.length >= 5 && arraySon[0]?.context === person
-            ? setArraySorted(arraySon?.slice(0, 1).concat(arraySon?.slice(1, 3)))
-            : setArraySorted(arraySon?.sort((a, b) => b?.length - a?.length))
+        arraySon[0]?.length >= 1 && arraySon[0]?.context === person
+            ? setArraySorted(arraySon?.slice(0, 1).concat(arraySon?.slice(1, 3).sort((a, b) => a.length - b.length)))
+            : setArraySorted(arraySon?.sort((a, b) => a.length - b.length))
     }, [hijosState])
 
     if (filtroSelected === all) return arraySorted.map((section) => (viewFilter[section.context as keyof typeof viewFilter]))
