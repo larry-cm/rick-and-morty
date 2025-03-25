@@ -2,23 +2,21 @@ import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from '@/ass
 import { sections } from '@/const/constantes'
 import Labels from '@components/sections/Labels'
 import React, { useState, type JSX } from 'react'
-import type { FiltroSelected, RequestFilter } from '@/types/Filtros'
+import type { FiltroSelected } from '@/types/Filtros'
 import VistaFiltro from '@/components/VistaFiltro'
 
 const { person, episode, ubi, all } = sections
 
-export default function Filtros({ personajes, episodios, ubicaciones }: RequestFilter): JSX.Element {
+export default function Filtros(): JSX.Element {
   const [filtroSelected, setFiltroSelected] = useState<FiltroSelected>(all)
   const [searchFilter, setSearchFilter] = useState<string>('')
 
   const handlerLocalStates = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.name !== 'filtrado') {
-      setSearchFilter(() => {
-        if (event.target.value.trim() !== undefined) return event.target.value
-        return ''
-      })
+      setSearchFilter(event.target.value.trim())
+    } else {
+      setFiltroSelected(event.target.value)
     }
-    else setFiltroSelected(event.target.value)
   }
 
   return (
@@ -77,14 +75,12 @@ export default function Filtros({ personajes, episodios, ubicaciones }: RequestF
           </fieldset>
         </div>
       </form>
+
       <VistaFiltro
         filtroSelected={filtroSelected}
         searchFilterInitial={searchFilter}
-        hijosInitial={{
-          personajes,
-          episodios,
-          ubicaciones
-        }} />
+      />
+
     </>
   )
 }
