@@ -53,6 +53,7 @@ export function CardsPersonajes({
     origin,
     image: rutaImg
 }: PropsPerson) {
+
     return (
         <article
             className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12  sm:size-full mx-auto sm:mx-0 flex flex-col ${padding}`}
