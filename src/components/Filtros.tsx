@@ -1,7 +1,7 @@
 import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from '@/assets/Icons'
 import { sections } from '@/const/constantes'
 import Labels from '@components/sections/Labels'
-import React, { useState, type JSX } from 'react'
+import React, { useEffect, useState, type JSX } from 'react'
 import type { FiltroSelected } from '@/types/Filtros'
 import RenderFilter from '@/components/RenderFilter'
 
@@ -10,12 +10,23 @@ const { person, episode, ubi, all } = sections
 export default function Filtros(): JSX.Element {
   const [filtroSelected, setFiltroSelected] = useState<FiltroSelected>(all)
   const [searchFilter, setSearchFilter] = useState<string>('')
-
+  useEffect(() => {
+    const search = localStorage.getItem('search')
+    const filtro = localStorage.getItem('filtrado')
+    if (search) setSearchFilter(search)
+    if (filtro) setFiltroSelected(filtro)
+  }, [])
   const handlerLocalStates = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.name !== 'filtrado') {
-      setSearchFilter(event.target.value.trim())
+    if (event.target.name === 'filtrado') {
+      setFiltroSelected(() => {
+        localStorage.setItem('filtrado', event.target.value)
+        return event.target.value
+      })
     } else {
-      setFiltroSelected(event.target.value)
+      setSearchFilter(() => {
+        localStorage.setItem('search', event.target.value.trim())
+        return event.target.value.trim()
+      })
     }
   }
 
@@ -26,6 +37,7 @@ export default function Filtros(): JSX.Element {
           <input
             type='text'
             name='search'
+            value={searchFilter}
             autoComplete='on'
             onChange={handlerLocalStates}
             id='search'

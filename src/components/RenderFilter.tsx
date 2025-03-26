@@ -79,6 +79,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial }: { 
                     {
                         [1, 2, 3, 4, 5, 6, 7, 8,].map((_, i) => (
                             <p
+                                key={i}
                                 className={`bg-sky-400/90 min-h-96 w-full rounded-lg opacity-70 animate-pulse`}
                                 style={{ 'animationDelay': `${i}00ms` }}></p>
                         ))
@@ -87,6 +88,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial }: { 
             </section>
         )
     }
+
     if (filtroSelected === sections.all && arraySorted) {
         return arraySorted.map((section) => (
             <Suspense key={section?.context} fallback={<FallbackSection title={section?.context as FiltroSelected} />}>
