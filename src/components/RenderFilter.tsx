@@ -78,7 +78,9 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial }: { 
                 <article className={`min-h-20 grid ${widthClases.grande} place-content-center gap-4`}>
                     {
                         [1, 2, 3, 4, 5, 6, 7, 8,].map((_, i) => (
-                            <p className="bg-sky-400/90 min-h-80 w-full rounded-lg opacity-70 animate-pulse delay-75"></p>
+                            <p
+                                className={`bg-sky-400/90 min-h-96 w-full rounded-lg opacity-70 animate-pulse`}
+                                style={{ 'animationDelay': `${i}00ms` }}></p>
                         ))
                     }
                 </article>
