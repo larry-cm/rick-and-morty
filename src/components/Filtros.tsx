@@ -1,24 +1,33 @@
 import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from '@/assets/Icons'
 import { sections } from '@/const/constantes'
 import Labels from '@components/sections/Labels'
-import React, { useState, type JSX } from 'react'
-import type { FiltroSelected, RequestFilter } from '@/types/Filtros'
-import VistaFiltro from '@/components/VistaFiltro'
+import React, { useEffect, useState, type JSX } from 'react'
+import type { FiltroSelected } from '@/types/Filtros'
+import RenderFilter from '@/components/RenderFilter'
 
 const { person, episode, ubi, all } = sections
 
-export default function Filtros({ personajes, episodios, ubicaciones }: RequestFilter): JSX.Element {
+export default function Filtros(): JSX.Element {
   const [filtroSelected, setFiltroSelected] = useState<FiltroSelected>(all)
   const [searchFilter, setSearchFilter] = useState<string>('')
-
+  useEffect(() => {
+    const search = localStorage.getItem('search')
+    const filtro = localStorage.getItem('filtrado')
+    if (search) setSearchFilter(search)
+    if (filtro) setFiltroSelected(filtro)
+  }, [])
   const handlerLocalStates = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.name !== 'filtrado') {
+    if (event.target.name === 'filtrado') {
+      setFiltroSelected(() => {
+        localStorage.setItem('filtrado', event.target.value)
+        return event.target.value
+      })
+    } else {
       setSearchFilter(() => {
-        if (event.target.value.trim() !== undefined) return event.target.value
-        return ''
+        localStorage.setItem('search', event.target.value.trim())
+        return event.target.value.trim()
       })
     }
-    else setFiltroSelected(event.target.value)
   }
 
   return (
@@ -28,6 +37,7 @@ export default function Filtros({ personajes, episodios, ubicaciones }: RequestF
           <input
             type='text'
             name='search'
+            value={searchFilter}
             autoComplete='on'
             onChange={handlerLocalStates}
             id='search'
@@ -77,14 +87,9 @@ export default function Filtros({ personajes, episodios, ubicaciones }: RequestF
           </fieldset>
         </div>
       </form>
-      <VistaFiltro
-        filtroSelected={filtroSelected}
-        searchFilterInitial={searchFilter}
-        hijosInitial={{
-          personajes,
-          episodios,
-          ubicaciones
-        }} />
+
+      <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} />
+
     </>
   )
 }

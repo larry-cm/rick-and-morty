@@ -5,7 +5,7 @@ import type { JSX } from "react"
 export const FilterCollection = (collection: Collections, searchFilter: string): GroupResult[] => {
     const filterInclude = (collection: Collections, searchFilter: string) => collection.filter(e => e.name.toLowerCase().trim().match(searchFilter.toLowerCase()?.trim())) as GroupResult[]
 
-    if (collection.length > 0) {
+    if (collection?.length > 0) {
         let collectionUnify = filterInclude(collection, searchFilter)
         let collectionAllUnified: GroupResult[] = []
 
@@ -15,4 +15,4 @@ export const FilterCollection = (collection: Collections, searchFilter: string):
     return []
 }
 
-export const DefaultNotFound = (collection: Collections, searchFilterInitial: string, code: (collection: GroupResult[]) => JSX.Element[], fallback = <NotFound />) => FilterCollection(collection, searchFilterInitial).length !== 0 ? code(FilterCollection(collection, searchFilterInitial)) : fallback
+export const DefaultNotFound = (collection: Collections | undefined, searchFilterInitial: string, code: (collection: GroupResult[]) => JSX.Element[], fallback = <NotFound />) => collection && FilterCollection(collection, searchFilterInitial).length !== 0 ? code(FilterCollection(collection, searchFilterInitial)) : fallback

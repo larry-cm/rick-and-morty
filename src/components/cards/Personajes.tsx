@@ -1,21 +1,7 @@
-// personajes
-import BtnVerMas from '@/components/BtnVerMas'
-import { BtnFavoritos } from '@components/BtnFavoritos'
-import type { Location } from '@/types/Api'
-import { IcoVida, IcoAlien, IcoPlaneta } from '@/assets/Icons'
-
-const Desconocidos = (ori: string, text: string) => ori === 'unknown' ? `${text} desconocido` : ori
-const padding = 'p-3 sm:px-4 sm:py-3'
-
-interface PropsPerson {
-    id: number
-    name: string
-    status: string
-    species: string
-    origin: Location
-    image: string
-}
-
+import { IcoVida, IcoAlien, IcoPlaneta } from "@/assets/Icons";
+import { BtnFavoritos } from "@components/BtnFavoritos";
+import BtnVerMas from "@components/BtnVerMas";
+import { Desconocidos, padding, type PropsPerson } from "@components/cards/Cards";
 
 export default function CardsPersonajes({
     id,
@@ -25,14 +11,15 @@ export default function CardsPersonajes({
     origin,
     image: rutaImg
 }: PropsPerson) {
+
     return (
         <article
-            className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12  sm:size-full mx-auto sm:mx-0 flex flex-col ${padding}`}
+            className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12 sm:size-full mx-auto sm:mx-0 flex flex-col ${padding}`}
         >
             <img
                 width={500}
                 height={500}
-                loading='lazy'
+                loading='eager'//{id < 5 ? 'eager' : 'lazy'}
                 src={rutaImg ?? '/public/rick-logo.svg'}
                 alt='imagen de relleno'
                 className='rounded-xl object-cover '
@@ -40,12 +27,12 @@ export default function CardsPersonajes({
             <div className='min-h-44 max-h-52 flex flex-col justify-between'>
                 <header className='flex mt-4'>
                     <div className='*:*:*:text-base w-3/4 icons-cards truncate'>
-                        <span
+                        <strong
                             className='font-medium text-lg mb-2'
                             title={name ?? 'Nombre del personaje'}
                         >
                             {name ?? 'Nombre del personaje'}
-                        </span>
+                        </strong>
                         <div
                             className='space-y-1 flex flex-col *:space-x-2 *:flex *:items-center text-slate-100/90'>
                             <p>

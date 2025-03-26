@@ -1,23 +1,12 @@
 ---
-import type { APICharacter, APIEpisode, APILocation } from "@/types/Api";
 import Filtros from "@components/Filtros";
 import Landing from "@components/Landing.astro";
 import Layout from "@/layouts/Layout.astro";
-import { fetchApi } from "@services/fetch";
-
-const { results: personajes } = (await fetchApi("character")) as APICharacter;
-const { results: episodios } = (await fetchApi("episode")) as APIEpisode;
-const { results: ubicaciones } = (await fetchApi("location")) as APILocation;
 ---
 
 <Layout title="Pagina de inicio">
     <Landing slot="banner" />
     <section slot="main" class="w-full mt-7 pt-4 *:space-y-14">
-        <Filtros
-            personajes={personajes}
-            episodios={episodios}
-            ubicaciones={ubicaciones}
-            client:visible
-        />
+        <Filtros client:load />
     </section>
 </Layout>
