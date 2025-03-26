@@ -14,7 +14,7 @@ export default function CardsPersonajes({
 
     return (
         <article
-            className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12  sm:size-full mx-auto sm:mx-0 flex flex-col ${padding}`}
+            className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12 sm:size-full mx-auto sm:mx-0 flex flex-col ${padding}`}
         >
             <img
                 width={500}
@@ -27,12 +27,12 @@ export default function CardsPersonajes({
             <div className='min-h-44 max-h-52 flex flex-col justify-between'>
                 <header className='flex mt-4'>
                     <div className='*:*:*:text-base w-3/4 icons-cards truncate'>
-                        <span
+                        <strong
                             className='font-medium text-lg mb-2'
                             title={name ?? 'Nombre del personaje'}
                         >
                             {name ?? 'Nombre del personaje'}
-                        </span>
+                        </strong>
                         <div
                             className='space-y-1 flex flex-col *:space-x-2 *:flex *:items-center text-slate-100/90'>
                             <p>

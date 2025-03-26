@@ -3,7 +3,7 @@ import { sections } from '@/const/constantes'
 import Labels from '@components/sections/Labels'
 import React, { useState, type JSX } from 'react'
 import type { FiltroSelected } from '@/types/Filtros'
-import VistaFiltro from '@/components/VistaFiltro'
+import RenderFilter from '@/components/RenderFilter'
 
 const { person, episode, ubi, all } = sections
 
@@ -76,10 +76,7 @@ export default function Filtros(): JSX.Element {
         </div>
       </form>
 
-      <VistaFiltro
-        filtroSelected={filtroSelected}
-        searchFilterInitial={searchFilter}
-      />
+      <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} />
 
     </>
   )
