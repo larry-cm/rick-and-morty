@@ -2,7 +2,7 @@ import { FilterCollection } from "@/services/filtrado"
 import { sections, widthClases } from "@/const/constantes"
 import { lazy, Suspense, useEffect, useState } from "react"
 import { fetchApi } from '@/services/fetch'
-import { IcoTodos } from "@/assets/Icons";
+import { AreaTitle } from "./sections/MainArea";
 
 import type { APICharacter, APIEpisode, APILocation } from "@/types/Api";
 import type { Collections, FiltroSelected, RequestFilter } from "@/types/Filtros"
@@ -79,17 +79,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
 
     const FallbackSection = ({ title }: { title: FiltroSelected }) => (
         <section className="min-h-80">
-                <article className='flex space-x-4 sm:space-x-8 mb-8'>
-                    <h2 className='font-bold text-3xl'>{title ?? 'Personajes de ejemplo'}</h2>
-
-                    <button
-                        className='flex space-x-2 items-center text-base bg-slate-500/50 hover:bg-slate-500/80 hover:text-slate-300 group-hover:text-slate-300 text-slate-100/90 transition-colors px-4 py-1.5 rounded-3xl'
-                        type='button'
-                    >
-                        <i><IcoTodos className='size-5' /></i>
-                        <span>Ver todos</span>
-                    </button>
-                </article>
+            <AreaTitle title={title} />
                 <article className={`min-h-20 grid ${widthClases.grande} place-content-center gap-4`}>
                     {
                         [1, 2, 3, 4, 5, 6, 7, 8,].map((_, i) => (
