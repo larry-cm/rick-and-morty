@@ -1,4 +1,4 @@
-import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from '@/assets/Icons'
+import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos, IconVolverArriba } from '@/assets/Icons'
 import { sections } from '@/const/constantes'
 import Labels from '@components/sections/Labels'
 import React, { useEffect, useState, type JSX } from 'react'
@@ -7,20 +7,22 @@ import RenderFilter from '@/components/RenderFilter'
 
 const { person, episode, ubi, all } = sections
 
-export default function Filtros(): JSX.Element {
-  const [filtroSelected, setFiltroSelected] = useState<FiltroSelected>(all)
+export default function Filtros({ isFavorite }: { isFavorite?: boolean }): JSX.Element {
+  const [filtroSelected, setFiltroSelected] = useState<FiltroSelected>(all as FiltroSelected)
   const [searchFilter, setSearchFilter] = useState<string>('')
+
   useEffect(() => {
     const search = localStorage.getItem('search')
     const filtro = localStorage.getItem('filtrado')
     if (search) setSearchFilter(search)
-    if (filtro) setFiltroSelected(filtro)
+    if (filtro) setFiltroSelected(filtro as FiltroSelected)
   }, [])
+
   const handlerLocalStates = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.name === 'filtrado') {
       setFiltroSelected(() => {
         localStorage.setItem('filtrado', event.target.value)
-        return event.target.value
+        return event.target.value as FiltroSelected
       })
     } else {
       setSearchFilter(() => {
@@ -32,7 +34,7 @@ export default function Filtros(): JSX.Element {
 
   return (
     <>
-      <form className='flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-14'>
+      <form className='flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-14 bg-black/80 sticky top-0 z-50 px-2 py-4'>
         <div className='ps-0 flex w-full group lg:w-3/4'>
           <input
             type='text'
@@ -87,9 +89,7 @@ export default function Filtros(): JSX.Element {
           </fieldset>
         </div>
       </form>
-
-      <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} />
-
+      <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
     </>
   )
 }
