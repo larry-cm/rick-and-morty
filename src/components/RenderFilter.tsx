@@ -26,8 +26,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                     location: []
                 }
                 // metiendo los datos a los favoritos
-                favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]
-                    .push(parseInt(fav.split('-')[2])))
+                favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]?.push(parseInt(fav.split('-')[2])))
                 // por cada sección se hace un fetch para cada uno de los ids 
                 Promise.all(Object.values(sectionTypes).map((section, i) => {
                     return Promise.all(section.map(async (id) => {
