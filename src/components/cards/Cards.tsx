@@ -103,7 +103,7 @@ export function CardsEpisodios({ id, name, episode }: Base) {
 
 export function CardsUbicaciones({ id, name, dimension }: Base) {
     return (
-        <article className={`bg-slate-500/50 hover:bg-slate-500/80 transition-colors rounded-lg w-full flex flex-col h-52 relative mt-8 ${padding}`}>
+        <article className={`bg-slate-500/50 text-white hover:bg-slate-500/80 transition-colors rounded-lg w-full flex flex-col h-52 relative mt-8 ${padding}`}>
             <picture className='-top-9 right-0 mx-auto w-fit left-0 absolute'>
                 <IcoPlaneta className='size-14' />
             </picture>
@@ -113,7 +113,7 @@ export function CardsUbicaciones({ id, name, dimension }: Base) {
                 </strong>
                 <span
                     title={Desconocidos(dimension, 'Dimensión')}
-                    className='font-medium text-sky-400 h-12 flex items-center'
+                    className='font-medium text-sky-400 h-12 flex items-center justify-center'
                 >
                     {Desconocidos(dimension, 'Dimensión') ?? 'Dimensión del planeta '}
                 </span>

@@ -1,6 +1,6 @@
 import { FilterCollection } from "@/services/filtrado"
 import { sections, widthClases } from "@/const/constantes"
-import { lazy, Suspense, useEffect, useState } from "react"
+import { lazy, Suspense, useEffect, use, useState } from "react"
 import { fetchApi } from '@/services/fetch'
 import { AreaTitle } from "./sections/MainArea";
 
@@ -10,11 +10,43 @@ import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
 
 const ViewFilter = lazy(() => import('@components/ViewFilter.tsx'))
 
+const promisePersonajes = fetchApi("character")
+const promiseEpisodios = fetchApi("episode")
+const promiseUbicaciones = fetchApi("location")
+
+const fetchForOne = () => {
+    const favoritos = localStorage.getItem('favorito')
+    const favParse: string[] = JSON.parse(favoritos ?? '')
+    const sectionTypes: { character: number[]; episode: number[]; location: number[] } = {
+        character: [],
+        episode: [],
+        location: []
+    }
+    // metiendo los datos a los favoritos
+    favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]
+        ?.push(parseInt(fav.split('-')[2])))
+    // por cada sección se hace un fetch para cada uno de los ids 
+    return Promise.all(Object.values(sectionTypes).map((section, i) => Promise.all(section.map(async (id) => {
+        const typeFetch = Object.keys(sectionTypes)
+        return await fetchApi(typeFetch[i] as keyof typeof sectionTypes, id) as Result | ResultEpisode | ResultLocation
+    }))
+    ))
+}
 export default function RenderFilter({ filtroSelected, searchFilterInitial, isFavorite }: { filtroSelected: FiltroSelected, searchFilterInitial: string, isFavorite?: boolean }) {
-    const [hijosInitial, setHijosInitial] = useState<RequestFilter | null>(null)
+    const [hijosFavoritos, setHijosFavoritos] = useState<RequestFilter | null>(null)
     const [hijosState, setHijosState] = useState<RequestFilter>()
     const [arraySorted, setArraySorted] = useState<Collections[]>([])
     // pidiendo los datos
+    const { results: personajes } = use(promisePersonajes) as APICharacter
+    const { results: episodios } = use(promiseEpisodios) as APIEpisode
+    const { results: ubicaciones } = use(promiseUbicaciones) as APILocation
+    const hijosFor = { personajes, episodios, ubicaciones }
+
+
+    useEffect(() => {
+
+    }, [])
+
     useEffect(() => {
         if (isFavorite) {
             (async () => {
@@ -26,42 +58,33 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                     location: []
                 }
                 // metiendo los datos a los favoritos
-                favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]?.push(parseInt(fav.split('-')[2])))
+                favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]
+                    ?.push(parseInt(fav.split('-')[2])))
                 // por cada sección se hace un fetch para cada uno de los ids 
-                Promise.all(Object.values(sectionTypes).map((section, i) => {
-                    return Promise.all(section.map(async (id) => {
+                Promise.all(Object.values(sectionTypes).map((section, i) => Promise.all(section.map(async (id) => {
                         const typeFetch = Object.keys(sectionTypes)
                         return await fetchApi(typeFetch[i] as keyof typeof sectionTypes, id) as Result | ResultEpisode | ResultLocation
                     }))
-                })).then(res => setHijosInitial({ // actualizamos el estado cuando se terminen de cargar todos los datos
-                    personajes: res[0] as Result[],
-                    episodios: res[1] as ResultEpisode[],
-                    ubicaciones: res[2] as ResultLocation[]
-                }),
-                    (err) => console.error(err)) // mostramos en caso de error
+                )).then(res => // actualizamos el estado cuando se terminen de cargar todos los datos
+                    setHijosFavoritos({
+                        personajes: res[0] as Result[],
+                        episodios: res[1] as ResultEpisode[],
+                        ubicaciones: res[2] as ResultLocation[]
+                    }), (err) => console.error(err)) // mostramos en caso de error
             })()
         }
-        else {
-            (async () => {
-                const { results: personajes } = (await fetchApi("character")) as APICharacter
-                const { results: episodios } = (await fetchApi("episode")) as APIEpisode
-                const { results: ubicaciones } = (await fetchApi("location")) as APILocation
-                if (personajes && episodios && ubicaciones) setHijosInitial({ personajes, episodios, ubicaciones })
-            })()
-        }
-
     }, [])
     //filtrando los datos
     useEffect(() => {
-        if (hijosInitial) {
-            const hijosFiltered = { ...hijosInitial }
+
+        if (hijosFor) {
+            const hijosFiltered = { ...hijosFavoritos ?? hijosFor }
             for (const hijo in hijosFiltered) {
                 hijosFiltered[hijo as keyof typeof hijosFiltered] = FilterCollection(hijosFiltered[hijo as keyof typeof hijosFiltered], searchFilterInitial) as unknown as Result[] & ResultEpisode[] & ResultLocation[]
             }
             setHijosState(hijosFiltered)
         }
-
-    }, [searchFilterInitial, hijosInitial])
+    }, [searchFilterInitial, hijosFavoritos])
     // organizando los datos a mi manera
     useEffect(() => {
         const hijosFiltered = { ...hijosState }

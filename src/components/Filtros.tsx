@@ -14,8 +14,21 @@ export default function Filtros({ isFavorite }: { isFavorite?: boolean }): JSX.E
   useEffect(() => {
     const search = localStorage.getItem('search')
     const filtro = localStorage.getItem('filtrado')
-    if (search) setSearchFilter(search)
-    if (filtro) setFiltroSelected(filtro as FiltroSelected)
+    if (isFavorite) {
+      if (search) {
+        localStorage.removeItem('search')
+        setSearchFilter('')
+      }
+      if (filtro) {
+        localStorage.removeItem('filtrado')
+        setFiltroSelected('todos')
+      }
+
+    } else {
+      if (search) setSearchFilter(search)
+      if (filtro) setFiltroSelected(filtro as FiltroSelected)
+    }
+
   }, [])
 
   const handlerLocalStates = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,8 +47,8 @@ export default function Filtros({ isFavorite }: { isFavorite?: boolean }): JSX.E
 
   return (
     <>
-      <form className='flex flex-col lg:flex-row  mb-14 bg-black/90 rounded-lg sticky top-2 z-50 py-4 shadow-lg shadow-slate-950/50 gap-y-2 lg:gap-y-0'>
-        <div className='group ps-0 mx-2 flex min-w-80 max-w-full lg:w-2/5 md:mx-0 '>
+      <form className='flex flex-col lg:flex-row  mb-14 bg-black/90 sticky top-0 z-50 py-8 gap-y-2 lg:gap-y-0'>
+        <div className='group ps-0 flex min-w-80 max-w-full lg:w-2/5'>
           <input
             type='text'
             name='search'
@@ -44,7 +57,7 @@ export default function Filtros({ isFavorite }: { isFavorite?: boolean }): JSX.E
             onChange={handlerLocalStates}
             id='search'
             placeholder='Personajes. localizaciones, episodios y mucho más...'
-            className='border-none rounded-tl-3xl ps-4 h-9 rounded-bl-3xl transition-all bg-slate-500/50 group-hover:bg-slate-500/80 outline-none focus-visible:bg-slate-500/80 group-hover:placeholder:text-slate-300 peer w-[90%] placeholder:text-slate-100/90 placeholder:font-medium'
+            className='border-none rounded-tl-3xl ps-4 h-9 rounded-bl-3xl text-white transition-all bg-slate-500/50 group-hover:bg-slate-500/80 outline-none focus-visible:bg-slate-500/80 group-hover:placeholder:text-slate-300 peer w-[90%] placeholder:text-slate-100/90 placeholder:font-medium'
           />
           <label
             htmlFor='search'
@@ -56,9 +69,9 @@ export default function Filtros({ isFavorite }: { isFavorite?: boolean }): JSX.E
         </div>
         <div
           id='filtros'
-          className='flex flex-col md:flex-row px-2 md:items-start  items-start lg:space-x-2 gap-y-2 md:gap-y-0 space-x-1'
+          className='flex flex-col md:flex-row  md:items-start items-start lg:space-x-2 gap-y-2 md:gap-y-0 '
         >
-          <legend className='text-nowrap text-slate-200/80'> Filtrar por :</legend>
+          <legend className='text-nowrap py-1.5 px-4 text-slate-200/80'> Filtrar por :</legend>
           <fieldset
             className='flex flex-wrap gap-2 icons-cards *:*:cursor-pointer *:*:transition-all'
           >

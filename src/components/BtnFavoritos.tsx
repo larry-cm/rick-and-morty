@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react'
 
 export function BtnFavoritos ({ id, labelId, widthClase }: { id: number, labelId: string, widthClase?: string }) {
   const [favoriteState, setFavoriteState] = useState<string>()
-
   function sendFavorite(event: React.MouseEvent<HTMLDivElement>) {
     const target = event.currentTarget.previousElementSibling as HTMLInputElement
     setFavoriteState(() => {
       if (target) {
-        const favoritos = localStorage.getItem('favorito')
         const idEvent = target.id
+        const favoritos = localStorage.getItem('favorito')
+
         if (favoritos) {
           const arrayFavoritos = JSON.parse(favoritos)
           if (arrayFavoritos.includes(idEvent)) {
