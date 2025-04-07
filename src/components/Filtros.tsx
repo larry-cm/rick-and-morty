@@ -47,7 +47,7 @@ export default function Filtros({ isFavorite }: { isFavorite?: boolean }): JSX.E
 
   return (
     <>
-      <form className='flex flex-col lg:flex-row  mb-14 bg-black/90 sticky top-0 z-50 py-8 gap-y-2 lg:gap-y-0'>
+      <form className='flex flex-col lg:flex-row  mb-14 bg-black/75 backdrop-blur-sm sticky top-0 z-50 py-8 gap-y-2 lg:gap-y-0'>
         <div className='group ps-0 flex min-w-80 max-w-full lg:w-2/5'>
           <input
             type='text'
@@ -57,11 +57,11 @@ export default function Filtros({ isFavorite }: { isFavorite?: boolean }): JSX.E
             onChange={handlerLocalStates}
             id='search'
             placeholder='Personajes. localizaciones, episodios y mucho más...'
-            className='border-none rounded-tl-3xl ps-4 h-9 rounded-bl-3xl text-white transition-all bg-slate-500/50 group-hover:bg-slate-500/80 outline-none focus-visible:bg-slate-500/80 group-hover:placeholder:text-slate-300 peer w-[90%] placeholder:text-slate-100/90 placeholder:font-medium'
+            className='border-none rounded-tl-3xl ps-4 h-9 rounded-bl-3xl transition-all bg-slate-500/50 group-hover:bg-slate-500/80 outline-none focus-visible:bg-slate-500/80 group-hover:placeholder:text-slate-300 peer w-[90%] placeholder:text-slate-100/90 placeholder:font-medium'
           />
           <label
             htmlFor='search'
-            className='w-[10%] h-9 cursor-pointer flex items-center justify-center rounded-tr-3xl rounded-br-3xl bg-slate-500/50 group-hover:bg-slate-500/80 group-hover:text-slate-300 peer-focus:bg-slate-500/80 p-1.5 6px-2 lg:px-5 transition-all'
+            className='w-[10%]  h-9 cursor-pointer flex items-center justify-center rounded-tr-3xl rounded-br-3xl bg-slate-500/50 group-hover:bg-slate-500/80 text-slate-100/90 group-hover:text-slate-300 peer-focus:bg-slate-500/80 p-1.5 6px-2 lg:px-5 transition-all'
           >
             <span className='sr-only'>Lupa de búsqueda de los filtros</span>
             <IcoLupa className='size-5 min-w-5' />

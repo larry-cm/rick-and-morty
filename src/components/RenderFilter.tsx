@@ -15,23 +15,24 @@ const promiseEpisodios = fetchApi("episode")
 const promiseUbicaciones = fetchApi("location")
 
 const fetchForOne = () => {
-    const favoritos = localStorage.getItem('favorito')
-    const favParse: string[] = JSON.parse(favoritos ?? '')
+    if (typeof window === 'undefined') return Promise.resolve([]);
+    const favoritos = localStorage?.getItem('favorito');
+    const favParse: string[] = JSON.parse(favoritos ?? '[]');
     const sectionTypes: { character: number[]; episode: number[]; location: number[] } = {
         character: [],
         episode: [],
         location: []
-    }
+    };
     // metiendo los datos a los favoritos
     favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]
-        ?.push(parseInt(fav.split('-')[2])))
+        ?.push(parseInt(fav.split('-')[2])));
     // por cada sección se hace un fetch para cada uno de los ids 
     return Promise.all(Object.values(sectionTypes).map((section, i) => Promise.all(section.map(async (id) => {
-        const typeFetch = Object.keys(sectionTypes)
-        return await fetchApi(typeFetch[i] as keyof typeof sectionTypes, id) as Result | ResultEpisode | ResultLocation
-    }))
-    ))
+        const typeFetch = Object.keys(sectionTypes);
+        return await fetchApi(typeFetch[i] as keyof typeof sectionTypes, id) as Result | ResultEpisode | ResultLocation;
+    }))));
 }
+
 export default function RenderFilter({ filtroSelected, searchFilterInitial, isFavorite }: { filtroSelected: FiltroSelected, searchFilterInitial: string, isFavorite?: boolean }) {
     const [hijosFavoritos, setHijosFavoritos] = useState<RequestFilter | null>(null)
     const [hijosState, setHijosState] = useState<RequestFilter>()
@@ -41,7 +42,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
     const { results: episodios } = use(promiseEpisodios) as APIEpisode
     const { results: ubicaciones } = use(promiseUbicaciones) as APILocation
     const hijosFor = { personajes, episodios, ubicaciones }
-
+    // const hijosFavoritosFor = use(fetchForOne()) 
 
     useEffect(() => {
 
@@ -50,33 +51,33 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
     useEffect(() => {
         if (isFavorite) {
             (async () => {
-                const favoritos = localStorage.getItem('favorito')
-                const favParse: string[] = JSON.parse(favoritos ?? '')
-                const sectionTypes: { character: number[]; episode: number[]; location: number[] } = {
-                    character: [],
-                    episode: [],
-                    location: []
-                }
-                // metiendo los datos a los favoritos
-                favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]
-                    ?.push(parseInt(fav.split('-')[2])))
-                // por cada sección se hace un fetch para cada uno de los ids 
-                Promise.all(Object.values(sectionTypes).map((section, i) => Promise.all(section.map(async (id) => {
-                        const typeFetch = Object.keys(sectionTypes)
-                        return await fetchApi(typeFetch[i] as keyof typeof sectionTypes, id) as Result | ResultEpisode | ResultLocation
-                    }))
-                )).then(res => // actualizamos el estado cuando se terminen de cargar todos los datos
-                    setHijosFavoritos({
-                        personajes: res[0] as Result[],
-                        episodios: res[1] as ResultEpisode[],
-                        ubicaciones: res[2] as ResultLocation[]
-                    }), (err) => console.error(err)) // mostramos en caso de error
+                // const favoritos = localStorage.getItem('favorito')
+                // const favParse: string[] = JSON.parse(favoritos ?? '')
+                // const sectionTypes: { character: number[]; episode: number[]; location: number[] } = {
+                //     character: [],
+                //     episode: [],
+                //     location: []
+                // }
+                // // metiendo los datos a los favoritos
+                // favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]
+                //     ?.push(parseInt(fav.split('-')[2])))
+                // // por cada sección se hace un fetch para cada uno de los ids 
+                // Promise.all(Object.values(sectionTypes).map((section, i) => Promise.all(section.map(async (id) => {
+                //         const typeFetch = Object.keys(sectionTypes)
+                //         return await fetchApi(typeFetch[i] as keyof typeof sectionTypes, id) as Result | ResultEpisode | ResultLocation
+                //     }))
+                // )).then(res => // actualizamos el estado cuando se terminen de cargar todos los datos
+                //     setHijosFavoritos({
+                //         personajes: res[0] as Result[],
+                //         episodios: res[1] as ResultEpisode[],
+                //         ubicaciones: res[2] as ResultLocation[]
+                //     }), (err) => console.error(err)) // mostramos en caso de error
             })()
+            
         }
     }, [])
     //filtrando los datos
     useEffect(() => {
-
         if (hijosFor) {
             const hijosFiltered = { ...hijosFavoritos ?? hijosFor }
             for (const hijo in hijosFiltered) {
