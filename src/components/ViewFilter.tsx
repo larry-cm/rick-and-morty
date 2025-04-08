@@ -5,7 +5,7 @@ import { CardsEpisodios, CardsUbicaciones, CardsPersonajes } from "@components/c
 import { DefaultNotFound } from "@/services/filtrado";
 
 const { person, episode, ubi } = sections
-export default function viewFilter({ contexto, data, searchFilterInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string }) {
+export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void }) {
     const posibilidad = {
         personajes: (
             <MainArea key={person} title={person} widthGrid={widthClases.grande}>
@@ -19,7 +19,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial }: { co
                             species={species}
                             origin={origin}
                             image={image}
-                        />
+                            getDataFavoriteInitial={getDataFavoriteInitial} />
                     ))}
             </MainArea>
         ),
@@ -31,7 +31,8 @@ export default function viewFilter({ contexto, data, searchFilterInitial }: { co
                             id={id}
                             key={id}
                             name={name}
-                            episode={episode?.toString()} />
+                            episode={episode?.toString()}
+                            getDataFavoriteInitial={getDataFavoriteInitial} />
                     )))}
             </MainArea>
         ),
@@ -43,7 +44,8 @@ export default function viewFilter({ contexto, data, searchFilterInitial }: { co
                             id={id}
                             key={id}
                             name={name}
-                            dimension={dimension} />
+                            dimension={dimension}
+                            getDataFavoriteInitial={getDataFavoriteInitial} />
                     ))}
             </MainArea>
         )

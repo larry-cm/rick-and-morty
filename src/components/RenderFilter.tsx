@@ -16,46 +16,57 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
     const [hijosFavoritos, setHijosFavoritos] = useState<RequestFilter | null>(null)
     const [hijosState, setHijosState] = useState<RequestFilter>()
     const [arraySorted, setArraySorted] = useState<CollectionContexts[]>([])
-    // pidiendo los datos
+    const [arrayFav, setArrayFav] = useState<string[]>([''])
+
+    // pidiendo los datos con api use
     const { results: personajes } = use(promisePersonajes) as APICharacter
     const { results: episodios } = use(promiseEpisodios) as APIEpisode
     const { results: ubicaciones } = use(promiseUbicaciones) as APILocation
     const hijosFor = { personajes, episodios, ubicaciones }
 
+    //  pidiendo datos favoritos en local storage
+    function getDataFavorite() {
+        const favoritos = localStorage.getItem('favorito')
+        const favParse: string[] = JSON?.parse(favoritos ?? '[]')
+        if (favParse) setArrayFav(favParse)
+    }
+    //  pidiendo datos favoritos en local storage la primera ves que se entre y cada ves que den click a botón de favoritos
+    useEffect(() => getDataFavorite(), [])
+
+    // si es sección de favoritos pedimos los datos y actualizamos el estado
     useEffect(() => {
         if (isFavorite) {
-            fetchForOne()
+            const newArrayFav = arrayFav
+            fetchForOne(newArrayFav)
                 .then(data => setHijosFavoritos({
                     personajes: data[0],
                     episodios: data[1],
                     ubicaciones: data[2]
                 } as RequestFilter),
                     (error) => console.error(error))
-        } 
-
-    }, [isFavorite])
+        }
+    }, [isFavorite, arrayFav])
 
     //filtrando los datos
     useEffect(() => {
         setHijosState(() => {
         if (hijosFor) {
             const hijosFiltered = { ...hijosFavoritos ?? hijosFor }
-            return FilterElements(hijosFiltered, searchFilterInitial)        
+            return FilterElements(hijosFiltered, searchFilterInitial)
             }
             return hijosFor
         })
     }, [searchFilterInitial, hijosFavoritos])
 
     // organizando los datos a mi manera
-    useEffect(() => {
-        setArraySorted(SortedElements(hijosState))
-    }, [hijosState])
+    useEffect(() => setArraySorted(SortedElements(hijosState)), [hijosState])
 
     return filtroSelected === sections.all && arraySorted ?
-        arraySorted.map((section) => (
-            <Suspense key={section?.context} fallback={<FallbackSection title={section?.context as FiltroSelected} />}>
+        arraySorted.map(({ context }) => (
+            <Suspense key={context} fallback={<FallbackSection title={context as FiltroSelected} />}>
                 <ViewFilter
-                    contexto={section?.context as FiltroSelected}
+                    getDataFavoriteInitial={getDataFavorite}
+                    contexto={context as FiltroSelected}
                     data={hijosState}
                     searchFilterInitial={searchFilterInitial}
                 />
@@ -63,6 +74,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
         )) :
         <Suspense fallback={<FallbackSection title={filtroSelected} />}>
             <ViewFilter
+                getDataFavoriteInitial={getDataFavorite}
                 data={hijosState}
                 contexto={filtroSelected}
                 searchFilterInitial={searchFilterInitial} />

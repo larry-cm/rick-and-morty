@@ -5,6 +5,7 @@ import { IcoPlaneta } from '@/assets/Icons'
 import { Desconocidos, padding } from '@/const/constantes'
 import type { Base } from '@/types/Filtros'
 import type { Result } from '@/types/Api'
+type Cards = Base & { getDataFavoriteInitial: () => void }
 
 export function CardsPersonajes({
     id,
@@ -12,8 +13,9 @@ export function CardsPersonajes({
     status,
     species,
     origin,
-    image: rutaImg
-}: Result) {
+    image: rutaImg,
+    getDataFavoriteInitial
+}: Result & { getDataFavoriteInitial: () => void }) {
     return (
         <article
             className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12 sm:size-full mx-auto sm:mx-0 flex flex-col ${padding}`}
@@ -67,7 +69,7 @@ export function CardsPersonajes({
                         </div>
                     </div>
                     <aside className='w-1/3'>
-                        <BtnFavoritos id={id} labelId='character' widthClase='' />
+                        <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='character' widthClase='' />
                     </aside>
                 </header>
                 <footer className='flex flex-row-reverse w-full'>
@@ -78,7 +80,7 @@ export function CardsPersonajes({
     )
 }
 
-export function CardsEpisodios({ id, name, episode }: Base) {
+export function CardsEpisodios({ id, name, episode, getDataFavoriteInitial }: Cards) {
     return (
         <article className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg space-y-2 ${padding}`}>
             <header className='flex items-center gap-x-2'>
@@ -94,14 +96,14 @@ export function CardsEpisodios({ id, name, episode }: Base) {
             <footer className='flex items-center justify-between space-x-2'>
                 <BtnVerMas name={`el capitulo ${episode}`} />
                 <div className='w-fit'>
-                    <BtnFavoritos id={id} labelId='episode' widthClase='w-full' />
+                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='episode' widthClase='w-full' />
                 </div>
             </footer>
         </article>
     )
 }
 
-export function CardsUbicaciones({ id, name, dimension }: Base) {
+export function CardsUbicaciones({ id, name, dimension, getDataFavoriteInitial }: Cards) {
     return (
         <article className={`bg-slate-500/50 text-white hover:bg-slate-500/80 transition-colors rounded-lg w-full flex flex-col h-52 relative mt-8 ${padding}`}>
             <picture className='-top-9 right-0 mx-auto w-fit left-0 absolute'>
@@ -119,7 +121,7 @@ export function CardsUbicaciones({ id, name, dimension }: Base) {
                 </span>
                 <BtnVerMas name={`la dimensión ${name}`} claseMargin='mx-auto' />
                 <div className='w-full flex justify-center'>
-                    <BtnFavoritos id={id} labelId='location' widthClase='' />
+                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='location' widthClase='' />
                 </div>
             </footer>
         </article>
