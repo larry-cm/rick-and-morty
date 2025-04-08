@@ -9,7 +9,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial }: { co
     const posibilidad = {
         personajes: (
             <MainArea key={person} title={person} widthGrid={widthClases.grande}>
-                {DefaultNotFound(data?.personajes ?? [], searchFilterInitial, (collection) => collection
+                {DefaultNotFound(data?.personajes, searchFilterInitial, (collection) => collection
                     .map(({ id, name, status, species, origin, image }) =>
                         <CardsPersonajes
                             id={id}
@@ -25,7 +25,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial }: { co
         ),
         episodios: ( 
             <MainArea key={episode} title={episode} widthGrid={widthClases.mediano}>
-                {DefaultNotFound(data?.episodios ?? [], searchFilterInitial, (episodios) => episodios
+                {DefaultNotFound(data?.episodios, searchFilterInitial, (episodios) => episodios
                     .map(({ id, name, episode }) => (
                         <CardsEpisodios
                             id={id}
@@ -37,7 +37,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial }: { co
         ),
         ubicaciones: (
             <MainArea key={ubi} title={ubi} widthGrid={widthClases.pequeño}>
-                {DefaultNotFound(data?.ubicaciones ?? [], searchFilterInitial, (ubicaciones) => ubicaciones
+                {DefaultNotFound(data?.ubicaciones, searchFilterInitial, (ubicaciones) => ubicaciones
                     .map(({ id, name, dimension }) =>
                         <CardsUbicaciones
                             id={id}
