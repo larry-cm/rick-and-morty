@@ -12,7 +12,8 @@ export async function fetchApi(option?: 'character' | 'location' | 'episode', id
 export function fetchForOne(): Promise<(Result | ResultEpisode | ResultLocation)[][]> {
   try {
     const favoritos = localStorage.getItem('favorito')
-    const favParse: string[] = JSON.parse(favoritos ?? '')
+    const favParse: string[] = JSON?.parse(favoritos ?? '[]')
+    
     const sectionTypes: { character: number[]; episode: number[]; location: number[] } = {
       character: [],
       episode: [],
@@ -22,13 +23,16 @@ export function fetchForOne(): Promise<(Result | ResultEpisode | ResultLocation)
     favParse.forEach((fav) => sectionTypes[fav.split('-')[1] as keyof typeof sectionTypes]
       ?.push(parseInt(fav.split('-')[2])))
     // por cada sección se hace un fetch para cada uno de los ids 
-    return Promise.all(Object.values(sectionTypes)
+    const qrFavView = favParse.length > 0 ?
+     Promise.all(Object.values(sectionTypes)
       .map((section, i) =>
         Promise.all(section.map(async (id) => {
           const typeFetch = Object.keys(sectionTypes)
           return await fetchApi(typeFetch[i] as keyof typeof sectionTypes, id) as Result | ResultEpisode | ResultLocation
-        }))
-      ))
+        })) 
+      )):
+      Promise.resolve([])
+    return qrFavView
   } catch (er) {
     return Promise.reject(er)
   }
