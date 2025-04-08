@@ -3,12 +3,13 @@ import MainArea from "@components/sections/MainArea";
 import { sections, widthClases } from "@/const/constantes";
 import { CardsEpisodios, CardsUbicaciones, CardsPersonajes } from "@components/cards/Cards";
 import { DefaultNotFound } from "@/services/filtrado";
+
 const { person, episode, ubi } = sections
 export default function viewFilter({ contexto, data, searchFilterInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string }) {
     const posibilidad = {
         personajes: (
             <MainArea key={person} title={person} widthGrid={widthClases.grande}>
-                {DefaultNotFound(data?.personajes, searchFilterInitial, (personajes) => personajes
+                {DefaultNotFound(data?.personajes ?? [], searchFilterInitial, (collection) => collection
                     .map(({ id, name, status, species, origin, image }) =>
                         <CardsPersonajes
                             id={id}
@@ -17,13 +18,14 @@ export default function viewFilter({ contexto, data, searchFilterInitial }: { co
                             status={status}
                             species={species}
                             origin={origin}
-                            image={image} />
+                            image={image}
+                        />
                     ))}
             </MainArea>
         ),
         episodios: ( 
             <MainArea key={episode} title={episode} widthGrid={widthClases.mediano}>
-                {DefaultNotFound(data?.episodios, searchFilterInitial, (episodios) => episodios
+                {DefaultNotFound(data?.episodios ?? [], searchFilterInitial, (episodios) => episodios
                     .map(({ id, name, episode }) => (
                         <CardsEpisodios
                             id={id}
@@ -35,7 +37,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial }: { co
         ),
         ubicaciones: (
             <MainArea key={ubi} title={ubi} widthGrid={widthClases.pequeño}>
-                {DefaultNotFound(data?.ubicaciones, searchFilterInitial, (ubicaciones) => ubicaciones
+                {DefaultNotFound(data?.ubicaciones ?? [], searchFilterInitial, (ubicaciones) => ubicaciones
                     .map(({ id, name, dimension }) =>
                         <CardsUbicaciones
                             id={id}

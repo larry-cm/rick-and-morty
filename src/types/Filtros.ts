@@ -4,9 +4,11 @@ export type FiltroSelected = 'todos' | 'personajes' | 'episodios' | 'ubicaciones
 
 type Context = {context?:string}
 
-export type Collections = Result[] & Context | ResultEpisode[] & Context | ResultLocation[] & Context
+export interface GroupResult extends Result, Base{ }
 
-export interface GroupResult extends Result, Base{}
+export type CollectionContexts = Result[] & Context | ResultEpisode[] & Context | ResultLocation[] & Context
+
+export type Collection = Result[]  & ResultEpisode[]  & ResultLocation[] 
 
 export interface RequestFilter {
   personajes: Result[]

@@ -18,7 +18,7 @@ export function AreaTitle({ title }: { title: string }) {
 
 export default function MainArea({ title, widthGrid, children }: { title: string, widthGrid: string, children: React.ReactNode }) {
   return (
-    <section>
+    <section id={title}>
       <AreaTitle title={title} />
       <div className={`grid ${widthGrid ?? 'grid-cols-[repeat(auto-fill,minmax(200px,1fr))]'} gap-4`}>
         {

@@ -71,7 +71,7 @@ export function CardsPersonajes({
                     </aside>
                 </header>
                 <footer className='flex flex-row-reverse w-full'>
-                    <BtnVerMas ruta={`${name.toLowerCase()?.split(' ').join('-')}--${id}`} name={name} color />
+                    <BtnVerMas ruta={`${name.toLowerCase()?.split(' ').join('-')}-rank-${id}`} name={name} color />
                 </footer>
             </div>
         </article>

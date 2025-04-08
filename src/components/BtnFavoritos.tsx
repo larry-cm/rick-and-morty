@@ -35,6 +35,8 @@ export function BtnFavoritos ({ id, labelId, widthClase }: { id: number, labelId
     if (favoritos) setFavoriteState(favoritos)
   }, [])
 
+
+
   return (
     <label
       htmlFor={`favorito-${labelId}-${id}`}
