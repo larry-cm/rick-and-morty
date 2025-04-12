@@ -5,6 +5,7 @@ import { IcoPlaneta } from '@/assets/Icons'
 import { Desconocidos, padding } from '@/const/constantes'
 import type { Base } from '@/types/Filtros'
 import type { Result } from '@/types/Api'
+
 type Cards = Base & { getDataFavoriteInitial: () => void }
 
 export function CardsPersonajes({

@@ -41,7 +41,7 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
 
   return (
     <>
-      <form className='flex flex-col lg:flex-row  mb-14 bg-black/75 backdrop-blur-xs sticky top-0 z-50 py-8 gap-y-2 lg:gap-y-0'>
+      <form className='flex flex-col lg:flex-row bg-black/75 backdrop-blur-xs sticky top-0 z-50 py-4 mb-4 gap-y-2 lg:gap-y-0'>
         {/* barra de búsqueda */}
         <div className='group ps-0 flex min-w-80 max-w-full lg:w-2/5'>
           <input
@@ -98,7 +98,10 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
           </fieldset>
         </div>
       </form>
+      <div className='space-y-14'> 
       <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
+
+      </div>
     </>
   )
 }

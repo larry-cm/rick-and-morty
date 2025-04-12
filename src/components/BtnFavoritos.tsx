@@ -35,12 +35,11 @@ export function BtnFavoritos({ id, labelId, widthClase, getDataFavoriteInitial }
 
   useEffect(() => {
     const favoritos = localStorage.getItem('favorito')
-    if (favoritos) setFavoriteState(favoritos)
+    if (favoritos) {
+      setFavoriteState(favoritos)
+      getDataFavoriteInitial && getDataFavoriteInitial() // llamo a la función que trae los datos favoritos del local storage
+    }
   }, [])
-
-  useEffect(() => {
-    getDataFavoriteInitial && getDataFavoriteInitial() // llamo a la función que trae los datos favoritos del local storage
-  }, [favoriteState])
 
   return (
     <label

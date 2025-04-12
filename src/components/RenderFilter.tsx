@@ -35,33 +35,41 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
 
     // si es sección de favoritos pedimos los datos y actualizamos el estado
     useEffect(() => {
-        if (isFavorite) {
-            const newArrayFav = arrayFav
+        const newArrayFav = arrayFav
+        if (isFavorite && newArrayFav.length) {
             fetchForOne(newArrayFav)
-                .then(data => setHijosFavoritos({
-                    personajes: data[0],
-                    episodios: data[1],
-                    ubicaciones: data[2]
-                } as RequestFilter),
-                    (error) => console.error(error))
+                .then(data => {
+                    // if (data[0].length || data[1].length || data[2].length) {
+                    setHijosFavoritos({
+                        personajes: data[0],
+                        episodios: data[1],
+                        ubicaciones: data[2]
+                        } as RequestFilter)
+                    // }
+                })
+                .catch(error => console.error(error))
         }
+
     }, [isFavorite, arrayFav])
 
     //filtrando los datos
     useEffect(() => {
         setHijosState(() => {
-        if (hijosFor) {
-            const hijosFiltered = { ...hijosFavoritos ?? hijosFor }
+            const newCards = { ...hijosFor }
+            if (hijosFavoritos) {
+                const newFav = { ...hijosFavoritos }
+                const hijosFiltered = isFavorite ? newFav : newCards
+
             return FilterElements(hijosFiltered, searchFilterInitial)
             }
-            return hijosFor
+            return newCards ?? null
         })
     }, [searchFilterInitial, hijosFavoritos])
 
     // organizando los datos a mi manera
     useEffect(() => setArraySorted(SortedElements(hijosState)), [hijosState])
 
-    return filtroSelected === sections.all && arraySorted ?
+    return filtroSelected === sections.all && arraySorted.length ?
         arraySorted.map(({ context }) => (
             <Suspense key={context} fallback={<FallbackSection title={context as FiltroSelected} />}>
                 <ViewFilter

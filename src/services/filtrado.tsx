@@ -7,7 +7,7 @@ import type { JSX } from "react"
 export const FilterCollection = (collection: CollectionContexts, searchFilter: string): GroupResult[] => {
     const filterInclude = (collection: CollectionContexts, searchFilter: string) => collection.filter(e => e?.name.toLowerCase().trim().match(searchFilter.toLowerCase()?.trim())) as GroupResult[]
 
-    if (collection?.length > 0) {
+    if (collection?.length) {
         let collectionUnify = filterInclude(collection, searchFilter)
         let collectionAllUnified: GroupResult[] = []
 
@@ -17,14 +17,22 @@ export const FilterCollection = (collection: CollectionContexts, searchFilter: s
     return []
 }
 
-export const FilterElements = (hijosFilteredInitial: RequestFilter, searchFilterInitial: string) => {
-    for (const hijo in hijosFilteredInitial) {
-        hijosFilteredInitial[hijo as keyof typeof hijosFilteredInitial] = FilterCollection(hijosFilteredInitial[hijo as keyof typeof hijosFilteredInitial], searchFilterInitial) as Collection
+export const FilterElements = (hijosFilteredInitial: RequestFilter, searchFilterInitial: string): RequestFilter => {
+    for (const key in hijosFilteredInitial) {
+        const typeKey = key as keyof typeof hijosFilteredInitial
+        hijosFilteredInitial[typeKey] = FilterCollection(hijosFilteredInitial[typeKey], searchFilterInitial) as Collection
     }
+    // // Object.keys(hijosFilteredInitial).forEach(e => {
+
+    // // })
+    // console.log(
+    //     Object.keys(hijosFilteredInitial).map((object: string, i) =>
+    //         FilterCollection(hijosFilteredInitial[object], searchFilterInitial)
+    //     ))
     return hijosFilteredInitial as RequestFilter
 }
 
-export const SortedElements = (hijosStateInitial: RequestFilter | undefined) => {
+export const SortedElements = (hijosStateInitial: RequestFilter | undefined): CollectionContexts[] => {
     const hijosFiltered = { ...hijosStateInitial }
     const arraySon: CollectionContexts[] = Object.values(hijosFiltered)
     const arrayKeys: string[] = Object.keys(hijosFiltered)
@@ -36,7 +44,7 @@ export const SortedElements = (hijosStateInitial: RequestFilter | undefined) => 
         : sorted(arraySon)
 }
 
-export const FallbackSection = ({ title }: { title: FiltroSelected }) => (
+export const FallbackSection = ({ title }: { title: FiltroSelected }): JSX.Element => (
     <section className="min-h-80">
         <AreaTitle title={title} />
         <article className={`min-h-20 grid ${widthClases.grande} place-content-center gap-4`}>
@@ -52,4 +60,4 @@ export const FallbackSection = ({ title }: { title: FiltroSelected }) => (
     </section>
 )
 
-export const DefaultNotFound = (collection: CollectionContexts | undefined, searchFilterInitial: string, code: (collection: GroupResult[]) => JSX.Element[], fallback = <NotFound />) => collection && FilterCollection(collection, searchFilterInitial).length !== 0 ? code(FilterCollection(collection, searchFilterInitial)) : fallback
+export const DefaultNotFound = (collection: CollectionContexts | undefined, searchFilterInitial: string, code: (collection: GroupResult[]) => JSX.Element[], fallback = <NotFound />): JSX.Element | JSX.Element[] => collection && FilterCollection(collection, searchFilterInitial).length ? code(FilterCollection(collection, searchFilterInitial)) : fallback

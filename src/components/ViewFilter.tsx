@@ -8,7 +8,7 @@ const { person, episode, ubi } = sections
 export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void }) {
     const posibilidad = {
         personajes: (
-            <MainArea key={person} title={person} widthGrid={widthClases.grande}>
+            <MainArea key={person} title={person} widthGrid={widthClases.grande} updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.personajes, searchFilterInitial, (collection) => collection
                     .map(({ id, name, status, species, origin, image }) =>
                         <CardsPersonajes
