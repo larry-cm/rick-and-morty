@@ -14,15 +14,17 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
   useEffect(() => {
     const search = localStorage.getItem('search')
     const filtro = localStorage.getItem('filtrado')
+
     if (resetFilterLocal && (search || filtro)) {
       localStorage.removeItem('search')
-        localStorage.removeItem('filtrado')
+      localStorage.removeItem('filtrado')
       setSearchFilter('')
       setFiltroSelected('todos')
     } else {
       if (search) setSearchFilter(search)
       if (filtro) setFiltroSelected(filtro as FiltroSelected)
     }
+
   }, [])
 
   const handlerLocalStates = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +42,7 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
   }
 
   return (
-    <>
+    <> 
       <form className='flex flex-col lg:flex-row bg-black/75 backdrop-blur-xs sticky top-0 z-50 py-4 mb-4 gap-y-2 lg:gap-y-0'>
         {/* barra de búsqueda */}
         <div className='group ps-0 flex min-w-80 max-w-full lg:w-2/5'>
@@ -99,8 +101,7 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
         </div>
       </form>
       <div className='space-y-14'> 
-      <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
-
+        <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
       </div>
     </>
   )

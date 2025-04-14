@@ -5,6 +5,7 @@ import { fetchApi, fetchForOne } from '@/services/fetch'
 
 import type { APICharacter, APIEpisode, APILocation } from "@/types/Api";
 import type { CollectionContexts, FiltroSelected, RequestFilter } from "@/types/Filtros"
+import type { FullF } from "./BtnFavoritos";
 
 const ViewFilter = lazy(() => import('@components/ViewFilter.tsx'))
 
@@ -13,10 +14,10 @@ const promiseEpisodios = fetchApi("episode")
 const promiseUbicaciones = fetchApi("location")
 
 export default function RenderFilter({ filtroSelected, searchFilterInitial, isFavorite }: { filtroSelected: FiltroSelected, searchFilterInitial: string, isFavorite?: boolean }) {
+    const [arrayFav, setArrayFav] = useState<FullF | null>(null)
     const [hijosFavoritos, setHijosFavoritos] = useState<RequestFilter | null>(null)
     const [hijosState, setHijosState] = useState<RequestFilter>()
     const [arraySorted, setArraySorted] = useState<CollectionContexts[]>([])
-    const [arrayFav, setArrayFav] = useState<string[]>([''])
 
     // pidiendo los datos con api use
     const { results: personajes } = use(promisePersonajes) as APICharacter
@@ -27,7 +28,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
     //  pidiendo datos favoritos en local storage
     function getDataFavorite() {
         const favoritos = localStorage.getItem('favorito')
-        const favParse: string[] = JSON?.parse(favoritos ?? '[]')
+        const favParse: FullF = JSON?.parse(favoritos ? favoritos : '{}')
         if (favParse) setArrayFav(favParse)
     }
     //  pidiendo datos favoritos en local storage la primera ves que se entre y cada ves que den click a botón de favoritos
@@ -35,8 +36,8 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
 
     // si es sección de favoritos pedimos los datos y actualizamos el estado
     useEffect(() => {
-        const newArrayFav = arrayFav
-        if (isFavorite && newArrayFav.length) {
+        const newArrayFav = arrayFav && { ...arrayFav }
+        if (isFavorite) {
             fetchForOne(newArrayFav)
                 .then(data => {
                     // if (data[0].length || data[1].length || data[2].length) {
@@ -48,22 +49,18 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                     // }
                 })
                 .catch(error => console.error(error))
+            console.log(newArrayFav)
         }
 
     }, [isFavorite, arrayFav])
 
     //filtrando los datos
     useEffect(() => {
-        setHijosState(() => {
-            const newCards = { ...hijosFor }
-            if (hijosFavoritos) {
-                const newFav = { ...hijosFavoritos }
-                const hijosFiltered = isFavorite ? newFav : newCards
-
-            return FilterElements(hijosFiltered, searchFilterInitial)
-            }
-            return newCards ?? null
-        })
+        if (isFavorite) {
+            hijosFavoritos && setHijosState(FilterElements(hijosFavoritos, searchFilterInitial))
+        } else {
+            setHijosState(FilterElements(hijosFor, searchFilterInitial))
+        }
     }, [searchFilterInitial, hijosFavoritos])
 
     // organizando los datos a mi manera

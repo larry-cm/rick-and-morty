@@ -1,3 +1,4 @@
+import type { FullF } from '@/components/BtnFavoritos'
 import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
 export async function fetchApi(option?: 'character' | 'location' | 'episode', id?: number) {
   try {
@@ -13,44 +14,18 @@ export async function fetchApi(option?: 'character' | 'location' | 'episode', id
   }
 }
 
-export function fetchForOne(favParse:string[]): Promise<(Result | ResultEpisode | ResultLocation)[][]> {
+export function fetchForOne(favParse: FullF | null): Promise<(Result | ResultEpisode | ResultLocation)[][]> {
   try {
-    if (favParse.length) {
-      const sectionTypes: { character: number[]; episode: number[]; location: number[] } = {
-      character: [],
-      episode: [],
-      location: []
-      }
-      const errorsForSection = ['']
-
-    // metiendo los datos a los favoritos
-      favParse.forEach((fav) => {
-        const positionSplit = fav.split('-')
-        // dándole el limite a los favoritos
-        const sectionTurn = sectionTypes[positionSplit[1] as keyof typeof sectionTypes]
-        if (positionSplit[1]) {
-          if (sectionTurn?.length < 10) {
-            return sectionTurn?.push(parseInt(positionSplit[2]))
-          }
-          else {
-            console.error(errorsForSection)
-            return errorsForSection.push(`${positionSplit[1]}-${positionSplit[2]}`)
-          }
-
-        }
-      })
     // por cada sección se hace un fetch para cada uno de los ids 
-      return favParse.length ?
-     Promise.all(Object.values(sectionTypes)
+    return favParse ?
+      Promise.all(Object.values(favParse)
       .map((section, i) =>
-        Promise.all(section.map(async (id) => {
-          const typeFetch = Object.keys(sectionTypes)
-          return await fetchApi(typeFetch[i] as keyof typeof sectionTypes, id) as Result | ResultEpisode | ResultLocation
+        Promise.all(section?.map(async (id) => {
+          const typeFetch = Object.keys(favParse) as Array<'character' | 'location' | 'episode'>
+          return await fetchApi(typeFetch[i], parseInt(id)) //as Result | ResultEpisode | ResultLocation
         })) 
       )):
       Promise.resolve([])
-    }
-    return Promise.resolve([])
   } catch (er) {
     return Promise.reject(er)
   }

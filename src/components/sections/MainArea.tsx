@@ -3,11 +3,14 @@ import type React from 'react'
 
 export function AreaTitle({ title, updateFavorites }: { title: string, updateFavorites?: () => void }) {
   function removeFavorites() {
-    if (localStorage.getItem('favorito')) localStorage.removeItem('favorito')
+    if (localStorage.getItem('favorito') || localStorage.getItem('ErrorFavorito')) {
+      localStorage.removeItem('favorito');
+      localStorage.removeItem('ErrorFavorito');
+    }
     updateFavorites && updateFavorites()
   }
 
-  function Buttons({ children, onC }: { children: React.ReactNode, onC?: () => void, updateFavorites?: () => void }) {
+  function Buttons({ children, onC }: { children: React.ReactNode, onC?: () => void }) {
     return <button
       onClick={onC}
       className='flex cursor-pointer ease-in-out transition-colors items-center space-x-2 px-4 py-1.5 rounded-3xl shadow-md shadow-slate-500/25 bg-slate-500/50 text-slate-100/85 hover:text-slate-50 hover:shadow-slate-500/60 hover:bg-slate-500/80  hover:backdrop-brightness-150 h-9'

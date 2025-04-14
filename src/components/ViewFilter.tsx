@@ -24,7 +24,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
             </MainArea>
         ),
         episodios: ( 
-            <MainArea key={episode} title={episode} widthGrid={widthClases.mediano}>
+            <MainArea key={episode} title={episode} widthGrid={widthClases.mediano} updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.episodios, searchFilterInitial, (episodios) => episodios
                     .map(({ id, name, episode }) => (
                         <CardsEpisodios
@@ -37,7 +37,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
             </MainArea>
         ),
         ubicaciones: (
-            <MainArea key={ubi} title={ubi} widthGrid={widthClases.pequeño}>
+            <MainArea key={ubi} title={ubi} widthGrid={widthClases.pequeño} updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.ubicaciones, searchFilterInitial, (ubicaciones) => ubicaciones
                     .map(({ id, name, dimension }) =>
                         <CardsUbicaciones
