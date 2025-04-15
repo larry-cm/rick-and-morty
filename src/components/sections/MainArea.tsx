@@ -3,7 +3,7 @@ import type React from 'react'
 
 export function AreaTitle({ title, updateFavorites, numElements }: { title: string, updateFavorites?: () => void, numElements?: number }) {
   function removeFavorites() {
-    if (localStorage.getItem('favorito') || localStorage.getItem('ErrorFavorito')) {
+    if (localStorage.getItem('favorito')) {
       localStorage.removeItem('favorito');
     }
     updateFavorites && updateFavorites()

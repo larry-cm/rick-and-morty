@@ -27,7 +27,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
     //  pidiendo datos favoritos en local storage
     function getDataFavorite() {
         const favoritos = localStorage.getItem('favorito')
-        const favParse: FullF = JSON?.parse(favoritos ? favoritos : '{}')
+        const favParse: FullF = JSON.parse(favoritos ?? '{}')
         setArrayFav(prevArray => {
             if (JSON.stringify(prevArray) !== JSON.stringify(favParse)) {
                 return favParse

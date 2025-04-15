@@ -10,7 +10,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
         personajes: (
             <MainArea
                 key={person}
-                numElements={numElementsInitial?.personajes.length}
+                numElements={numElementsInitial?.personajes && numElementsInitial?.personajes.length}
                 title={person} widthGrid={widthClases.grande}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.personajes, searchFilterInitial, (collection) => collection
@@ -31,7 +31,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
             <MainArea
                 key={episode}
                 title={episode}
-                numElements={numElementsInitial?.episodios.length}
+                numElements={numElementsInitial?.episodios && numElementsInitial?.episodios.length}
                 widthGrid={widthClases.mediano}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.episodios, searchFilterInitial, (episodios) => episodios
@@ -49,7 +49,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
             <MainArea
                 key={ubi}
                 title={ubi}
-                numElements={numElementsInitial?.ubicaciones.length}
+                numElements={numElementsInitial?.ubicaciones && numElementsInitial?.ubicaciones.length}
                 widthGrid={widthClases.pequeño}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.ubicaciones, searchFilterInitial, (ubicaciones) => ubicaciones
