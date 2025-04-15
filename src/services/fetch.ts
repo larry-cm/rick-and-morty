@@ -19,15 +19,10 @@ export function fetchForOne(favParse: FullF | null): Promise<(Result | ResultEpi
     // por cada sección se hace un fetch para cada uno de los ids 
     return favParse ?
       Promise.all(Object.values(favParse)
-        .map((section, i) => {
-          if (section.length) {
-            return Promise.all(section.map(async (id) => {
+        .map((section, i) => Promise.all(section.map(async (id) => {
               const typeFetch = Object.keys(favParse) as Array<'character' | 'location' | 'episode'>
               return await fetchApi(typeFetch[i], parseInt(id)) //as Result | ResultEpisode | ResultLocation
-            }))  
-          }
-          return Promise.resolve([[]])
-        }
+        }))  
       )):
       Promise.resolve([])
   } catch (er) {
