@@ -1,7 +1,9 @@
 import { IcoHeart } from '@/assets/Icons'
+import { sections } from '@/const/constantes';
+import type { RequestFilter } from '@/types/Filtros';
 import { useEffect, useState } from 'react'
 export type FullF = { character: string[]; episode: string[]; location: string[] }
-export function BtnFavoritos({ id, labelId, getDataFavoriteInitial }: { id: number, labelId: string, getDataFavoriteInitial: () => void }) {
+export function BtnFavoritos({ id, labelId, getDataFavoriteInitial, numFavorites }: { id: number, labelId: string, getDataFavoriteInitial: () => void, numFavorites: RequestFilter | null }) {
 
   const [favoriteState, setFavoriteState] = useState<FullF | null>(null)
   const [error, setError] = useState(false)
@@ -63,42 +65,7 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial }: { id: numb
       })
     }
   }
-  // function sendFavorite(event: React.MouseEvent<HTMLDivElement>) {
-  //   const target = event.currentTarget.previousElementSibling as HTMLInputElement // seleccionamos el elemento anterior al div
-  //   if (target) {
-  //     setFavoriteState(() => {
-  //       const idEvent = target.id
-  //       const favoritos = localStorage.getItem('favorito')
-  //       const FullFavorites: FullF = {
-  //         character: [],
-  //         episode: [],
-  //         location: []
-  //       }
-  //       const idSeparate = (index?: number) => (idEvent.split('-')[index ?? 1])
-  //       const firstKey = idSeparate() as keyof typeof FullFavorites
-  //       if (favoritos) {
-  //         const parsedFavorites = JSON.parse(favoritos) as typeof FullFavorites
-  //         const arraySection = parsedFavorites[firstKey]
 
-  //         if (arraySection.includes(idSeparate(2))) {
-  //           parsedFavorites[firstKey] = arraySection.filter(item => item !== idSeparate(2))
-  //         } else if (arraySection.length < 10) {
-  //           arraySection.push(idSeparate(2))
-  //         } else {
-  //           localStorage.setItem('ErrorFavorito', `${idSeparate()}-${idSeparate(2)}`)
-  //         }
-
-  //         localStorage.setItem('favorito', JSON.stringify(parsedFavorites))
-
-  //         return parsedFavorites
-  //       } else {
-  //         FullFavorites[firstKey].push(idSeparate(2))
-  //         localStorage.setItem('favorito', JSON.stringify(FullFavorites))
-  //         return FullFavorites
-  //       }
-  //     })
-  //   }
-  // }
   function requestFormModal(event: React.MouseEvent<HTMLDialogElement>) {
     const dialogElement = event.currentTarget
     const subsEvent = () => {
@@ -107,9 +74,14 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial }: { id: numb
     }
     dialogElement.addEventListener('close', subsEvent)
   }
-  function includeFavoriteCard(labelId: string, id: string, favoriteStateInitial: FullF | null) {
-    return favoriteStateInitial && favoriteStateInitial[labelId as keyof typeof favoriteStateInitial] && favoriteStateInitial[labelId as keyof typeof favoriteStateInitial].includes(id)
+
+  function includeFavoriteCard(labelId: string, idOject: number) {
+    const { ubi, person, episode } = sections
+    const newLabelId = { character: person, episode: episode, location: ubi }
+    return numFavorites && numFavorites[newLabelId[labelId as keyof typeof newLabelId] as keyof typeof numFavorites]?.some(({ id }) => id === idOject)
   }
+
+
   useEffect(() => {
     // Sincroniza favoritos al montar
     setFavoriteState(() => {
@@ -131,7 +103,7 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial }: { id: numb
         commandfor={error ? 'view-modal' : 'none'}
         command='show-modal'
         id={`favorito-${labelId}-${id}`}
-        className={`${includeFavoriteCard(labelId, id.toString(), favoriteState) ? '*:text-red-500' : ''} h-fit bg-black/40 hover:bg-slate-800/80 py-2 px-2 rounded-full cursor-pointer`}
+        className={`${includeFavoriteCard(labelId, id) ? '*:text-red-500' : ''} h-fit bg-black/40 hover:bg-slate-800/80 py-2 px-2 rounded-full cursor-pointer`}
         onClick={sendFavorite}>
         <span className='sr-only'>icono de favorito</span>
         <IcoHeart

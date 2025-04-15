@@ -3,10 +3,10 @@ import BtnVerMas from '@/components/BtnVerMas'
 import { BtnFavoritos } from '@components//BtnFavoritos'
 import { IcoPlaneta } from '@/assets/Icons'
 import { Desconocidos, padding } from '@/const/constantes'
-import type { Base } from '@/types/Filtros'
+import type { Base, RequestFilter } from '@/types/Filtros'
 import type { Result } from '@/types/Api'
 
-type Cards = Base & { getDataFavoriteInitial: () => void }
+type Cards = Base & { getDataFavoriteInitial: () => void, numFavorites: RequestFilter | null }
 
 export function CardsPersonajes({
     id,
@@ -15,8 +15,9 @@ export function CardsPersonajes({
     species,
     origin,
     image: rutaImg,
-    getDataFavoriteInitial
-}: Result & { getDataFavoriteInitial: () => void }) {
+    getDataFavoriteInitial,
+    numFavorites
+}: Result & { getDataFavoriteInitial: () => void, numFavorites: RequestFilter | null }) {
     return (
         <article
             className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12 sm:size-full mx-auto sm:mx-0 flex flex-col ${padding} relative`}
@@ -70,7 +71,7 @@ export function CardsPersonajes({
                         </div>
                     </div>
                     <aside className='w-1/3 h-fit flex justify-end'>
-                        <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='character' />
+                        <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} numFavorites={numFavorites} id={id} labelId='character' />
                     </aside>
                 </header>
                 <footer className='flex flex-row-reverse w-full'>
@@ -81,7 +82,7 @@ export function CardsPersonajes({
     )
 }
 
-export function CardsEpisodios({ id, name, episode, getDataFavoriteInitial }: Cards) {
+export function CardsEpisodios({ id, name, episode, getDataFavoriteInitial, numFavorites }: Cards) {
     return (
         <article className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg space-y-2 ${padding}`}>
             <header className='flex items-center gap-x-2'>
@@ -97,14 +98,14 @@ export function CardsEpisodios({ id, name, episode, getDataFavoriteInitial }: Ca
             <footer className='flex items-center justify-between space-x-2 relative'>
                 <BtnVerMas name={`el capitulo ${episode}`} />
                 <div className='w-fit'>
-                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='episode' />
+                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} numFavorites={numFavorites} labelId='episode' />
                 </div>
             </footer>
         </article>
     )
 }
 
-export function CardsUbicaciones({ id, name, dimension, getDataFavoriteInitial }: Cards) {
+export function CardsUbicaciones({ id, name, dimension, getDataFavoriteInitial, numFavorites }: Cards) {
     return (
         <article className={`bg-slate-500/50 text-white hover:bg-slate-500/80 transition-colors rounded-lg w-full flex flex-col h-52 relative mt-8 ${padding} relative`}>
             <picture className='-top-9 right-0 mx-auto w-fit left-0 absolute'>
@@ -122,7 +123,7 @@ export function CardsUbicaciones({ id, name, dimension, getDataFavoriteInitial }
                 </span>
                 <BtnVerMas name={`la dimensión ${name}`} claseMargin='mx-auto' />
                 <div className='w-full flex justify-center'>
-                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='location' />
+                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} numFavorites={numFavorites} labelId='location' />
                 </div>
             </footer>
         </article>

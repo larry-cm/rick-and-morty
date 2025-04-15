@@ -4,7 +4,7 @@ import type React from 'react'
 export function AreaTitle({ title, updateFavorites, numElements }: { title: string, updateFavorites?: () => void, numElements?: number }) {
   function removeFavorites() {
     if (localStorage.getItem('favorito')) {
-      localStorage.removeItem('favorito');
+      localStorage.removeItem('favorito'); // en ves de quitarlo todo hago un set quitándole lo que quiera
     }
     updateFavorites && updateFavorites()
   }

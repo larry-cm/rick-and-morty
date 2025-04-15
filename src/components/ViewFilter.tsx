@@ -23,6 +23,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                             species={species}
                             origin={origin}
                             image={image}
+                            numFavorites={numElementsInitial ?? null}
                             getDataFavoriteInitial={getDataFavoriteInitial} />
                     ))}
             </MainArea>
@@ -41,6 +42,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                             key={id}
                             name={name}
                             episode={episode?.toString()}
+                            numFavorites={numElementsInitial ?? null}
                             getDataFavoriteInitial={getDataFavoriteInitial} />
                     )))}
             </MainArea>
@@ -59,6 +61,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                             key={id}
                             name={name}
                             dimension={dimension}
+                            numFavorites={numElementsInitial ?? null}
                             getDataFavoriteInitial={getDataFavoriteInitial} />
                     ))}
             </MainArea>
