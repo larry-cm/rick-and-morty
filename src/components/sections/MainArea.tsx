@@ -1,7 +1,5 @@
 import { BrokenHeart, IcoHeart, IcoTodos } from '@/assets/Icons'
 import type React from 'react'
-import { useEffect } from 'react';
-
 
 export function AreaTitle({ title, updateFavorites, numElements }: { title: string, updateFavorites?: () => void, numElements?: number }) {
   function removeFavorites() {

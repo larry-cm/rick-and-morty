@@ -108,7 +108,7 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial }: { id: numb
     dialogElement.addEventListener('close', subsEvent)
   }
   function includeFavoriteCard(labelId: string, id: string | number, favoriteStateInitial: FullF | null) {
-    return favoriteState && favoriteState[labelId as keyof typeof favoriteState].includes(id.toLocaleString())
+    return favoriteStateInitial && favoriteStateInitial[labelId as keyof typeof favoriteStateInitial].includes(id.toString())
   }
   useEffect(() => {
     // Sincroniza favoritos al montar
