@@ -24,47 +24,77 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
     const { results: episodios } = use(promiseEpisodios) as APIEpisode
     const { results: ubicaciones } = use(promiseUbicaciones) as APILocation
     const hijosFor = { personajes, episodios, ubicaciones }
-
     //  pidiendo datos favoritos en local storage
     function getDataFavorite() {
         const favoritos = localStorage.getItem('favorito')
         const favParse: FullF = JSON?.parse(favoritos ? favoritos : '{}')
-        if (favParse) setArrayFav(favParse)
+        setArrayFav(prevArray => {
+            if (JSON.stringify(prevArray) !== JSON.stringify(favParse)) {
+                return favParse
+            }
+            return prevArray
+        })
+
     }
-    //  pidiendo datos favoritos en local storage la primera ves que se entre y cada ves que den click a botón de favoritos
-    useEffect(() => getDataFavorite(), [])
-
-    // si es sección de favoritos pedimos los datos y actualizamos el estado
+    //  pidiendo datos favoritos en local storage la primera vez que se entra y cada vez que den click a botón de favoritos
     useEffect(() => {
-        const newArrayFav = arrayFav && { ...arrayFav }
-        if (isFavorite) {
-            fetchForOne(newArrayFav)
-                .then(data => {
-                    // if (data[0].length || data[1].length || data[2].length) {
-                    setHijosFavoritos({
-                        personajes: data[0],
-                        episodios: data[1],
-                        ubicaciones: data[2]
-                        } as RequestFilter)
-                    // }
-                })
-                .catch(error => console.error(error))
-            console.log(newArrayFav)
-        }
+        getDataFavorite()
+    }, [])
 
-    }, [isFavorite, arrayFav])
+    // si es sección de favoritos pedimos los datos y actualizamos el estado SOLO si arrayFav realmente cambió
+    useEffect(() => {
+        if (!arrayFav) return;
+        fetchForOne(arrayFav)
+            .then(data => {
+                const nuevo = {
+                    personajes: data[0],
+                    episodios: data[1],
+                    ubicaciones: data[2]
+                } as RequestFilter;
+                setHijosFavoritos(prev => {
+                    // Solo actualiza si realmente cambió
+                    if (JSON.stringify(prev) !== JSON.stringify(nuevo)) {
+                        return nuevo;
+                    }
+                    return prev;
+                });
+            })
+            .catch(error => console.error(error));
+    }, [arrayFav]);
 
-    //filtrando los datos
+    // Filtrando los datos solo si cambian los datos base
     useEffect(() => {
         if (isFavorite) {
-            hijosFavoritos && setHijosState(FilterElements(hijosFavoritos, searchFilterInitial))
+            if (hijosFavoritos) {
+                setHijosState(prev => {
+                    const filtrado = FilterElements(hijosFavoritos, searchFilterInitial);
+                    if (JSON.stringify(prev) !== JSON.stringify(filtrado)) {
+                        return filtrado;
+                    }
+                    return prev;
+                });
+            }
         } else {
-            setHijosState(FilterElements(hijosFor, searchFilterInitial))
+            setHijosState(prev => {
+                const filtrado = FilterElements(hijosFor, searchFilterInitial);
+                if (JSON.stringify(prev) !== JSON.stringify(filtrado)) {
+                    return filtrado;
+                }
+                return prev;
+            });
         }
-    }, [searchFilterInitial, hijosFavoritos])
+    }, [searchFilterInitial, hijosFavoritos, isFavorite]);
 
-    // organizando los datos a mi manera
-    useEffect(() => setArraySorted(SortedElements(hijosState)), [hijosState])
+    // organizando los datos a mi manera solo si hijosState cambia
+    useEffect(() => {
+        setArraySorted(prev => {
+            const ordenado = SortedElements(hijosState);
+            if (JSON.stringify(prev) !== JSON.stringify(ordenado)) {
+                return ordenado;
+            }
+            return prev;
+        });
+    }, [hijosState]);
 
     return filtroSelected === sections.all && arraySorted.length ?
         arraySorted.map(({ context }) => (
@@ -73,6 +103,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                     getDataFavoriteInitial={getDataFavorite}
                     contexto={context as FiltroSelected}
                     data={hijosState}
+                    numElementsInitial={hijosFavoritos}
                     searchFilterInitial={searchFilterInitial}
                 />
             </Suspense>
@@ -82,6 +113,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                 getDataFavoriteInitial={getDataFavorite}
                 data={hijosState}
                 contexto={filtroSelected}
+                numElementsInitial={hijosFavoritos}
                 searchFilterInitial={searchFilterInitial} />
         </Suspense>
 

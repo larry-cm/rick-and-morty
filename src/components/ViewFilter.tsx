@@ -5,10 +5,14 @@ import { CardsEpisodios, CardsUbicaciones, CardsPersonajes } from "@components/c
 import { DefaultNotFound } from "@/services/filtrado";
 
 const { person, episode, ubi } = sections
-export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void }) {
+export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial, numElementsInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void, numElementsInitial?: RequestFilter | null }) {
     const posibilidad = {
         personajes: (
-            <MainArea key={person} title={person} widthGrid={widthClases.grande} updateFavorites={getDataFavoriteInitial}>
+            <MainArea
+                key={person}
+                numElements={numElementsInitial?.personajes.length}
+                title={person} widthGrid={widthClases.grande}
+                updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.personajes, searchFilterInitial, (collection) => collection
                     .map(({ id, name, status, species, origin, image }) =>
                         <CardsPersonajes
@@ -24,7 +28,12 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
             </MainArea>
         ),
         episodios: ( 
-            <MainArea key={episode} title={episode} widthGrid={widthClases.mediano} updateFavorites={getDataFavoriteInitial}>
+            <MainArea
+                key={episode}
+                title={episode}
+                numElements={numElementsInitial?.episodios.length}
+                widthGrid={widthClases.mediano}
+                updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.episodios, searchFilterInitial, (episodios) => episodios
                     .map(({ id, name, episode }) => (
                         <CardsEpisodios
@@ -37,7 +46,12 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
             </MainArea>
         ),
         ubicaciones: (
-            <MainArea key={ubi} title={ubi} widthGrid={widthClases.pequeño} updateFavorites={getDataFavoriteInitial}>
+            <MainArea
+                key={ubi}
+                title={ubi}
+                numElements={numElementsInitial?.ubicaciones.length}
+                widthGrid={widthClases.pequeño}
+                updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.ubicaciones, searchFilterInitial, (ubicaciones) => ubicaciones
                     .map(({ id, name, dimension }) =>
                         <CardsUbicaciones

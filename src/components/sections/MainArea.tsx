@@ -1,11 +1,12 @@
-import { BrokenHeart, IcoTodos } from '@/assets/Icons'
+import { BrokenHeart, IcoHeart, IcoTodos } from '@/assets/Icons'
 import type React from 'react'
+import { useEffect } from 'react';
 
-export function AreaTitle({ title, updateFavorites }: { title: string, updateFavorites?: () => void }) {
+
+export function AreaTitle({ title, updateFavorites, numElements }: { title: string, updateFavorites?: () => void, numElements?: number }) {
   function removeFavorites() {
     if (localStorage.getItem('favorito') || localStorage.getItem('ErrorFavorito')) {
       localStorage.removeItem('favorito');
-      localStorage.removeItem('ErrorFavorito');
     }
     updateFavorites && updateFavorites()
   }
@@ -20,6 +21,7 @@ export function AreaTitle({ title, updateFavorites }: { title: string, updateFav
     </button>
   }
 
+
   return (
     <article className='flex space-x-2 sm:space-x-4 space-y-2 sm:space-y-4 mb-8 text-nowrap flex-wrap'>
       <h2 className='font-bold text-white text-3xl'>{title ?? 'Personajes de ejemplo'}</h2>
@@ -32,14 +34,18 @@ export function AreaTitle({ title, updateFavorites }: { title: string, updateFav
         <i><BrokenHeart className='size-5' /></i>
         <span>Dejar de seguir todas </span>
       </Buttons>
+      <Buttons>
+        <i><IcoHeart className='size-5' /></i>
+        <span>Numero de favoritos :  <div className='ps-.5 inline-block'>{numElements ?? 0}</div></span>
+      </Buttons>
     </article>
   )
 }
 
-export default function MainArea({ title, widthGrid, children, updateFavorites }: { title: string, widthGrid: string, children: React.ReactNode, updateFavorites?: () => void }) {
+export default function MainArea({ title, widthGrid, children, updateFavorites, numElements }: { title: string, widthGrid: string, children: React.ReactNode, updateFavorites?: () => void, numElements?: number }) {
   return (
     <section id={title}>
-      <AreaTitle title={title} updateFavorites={updateFavorites} />
+      <AreaTitle title={title} numElements={numElements} updateFavorites={updateFavorites} />
       <div className={`grid ${widthGrid ?? 'grid-cols-[repeat(auto-fill,minmax(200px,1fr))]'} gap-4`}>
         {
           children

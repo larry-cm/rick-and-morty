@@ -19,7 +19,7 @@ export function CardsPersonajes({
 }: Result & { getDataFavoriteInitial: () => void }) {
     return (
         <article
-            className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12 sm:size-full mx-auto sm:mx-0 flex flex-col ${padding}`}
+            className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12 sm:size-full mx-auto sm:mx-0 flex flex-col ${padding} relative`}
         >
             <img
                 width={500}
@@ -29,7 +29,7 @@ export function CardsPersonajes({
                 alt='imagen de relleno'
                 className='rounded-xl object-cover '
             />
-            <div className='min-h-44 max-h-52 flex flex-col justify-between'>
+            <div className='min-h-44 max-h-52 flex flex-col justify-between '>
                 <header className='flex mt-4'>
                     <div className='*:*:*:text-base w-3/4 icons-cards truncate'>
                         <strong
@@ -69,8 +69,8 @@ export function CardsPersonajes({
                             </p>
                         </div>
                     </div>
-                    <aside className='w-1/3'>
-                        <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='character' widthClase='' />
+                    <aside className='w-1/3 h-fit flex justify-end'>
+                        <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='character' />
                     </aside>
                 </header>
                 <footer className='flex flex-row-reverse w-full'>
@@ -94,10 +94,10 @@ export function CardsEpisodios({ id, name, episode, getDataFavoriteInitial }: Ca
                     <span>{episode ?? 'S10E10'}</span>
                 </div>
             </header>
-            <footer className='flex items-center justify-between space-x-2'>
+            <footer className='flex items-center justify-between space-x-2 relative'>
                 <BtnVerMas name={`el capitulo ${episode}`} />
                 <div className='w-fit'>
-                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='episode' widthClase='w-full' />
+                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='episode' />
                 </div>
             </footer>
         </article>
@@ -106,7 +106,7 @@ export function CardsEpisodios({ id, name, episode, getDataFavoriteInitial }: Ca
 
 export function CardsUbicaciones({ id, name, dimension, getDataFavoriteInitial }: Cards) {
     return (
-        <article className={`bg-slate-500/50 text-white hover:bg-slate-500/80 transition-colors rounded-lg w-full flex flex-col h-52 relative mt-8 ${padding}`}>
+        <article className={`bg-slate-500/50 text-white hover:bg-slate-500/80 transition-colors rounded-lg w-full flex flex-col h-52 relative mt-8 ${padding} relative`}>
             <picture className='-top-9 right-0 mx-auto w-fit left-0 absolute'>
                 <IcoPlaneta className='size-14' />
             </picture>
@@ -122,7 +122,7 @@ export function CardsUbicaciones({ id, name, dimension, getDataFavoriteInitial }
                 </span>
                 <BtnVerMas name={`la dimensión ${name}`} claseMargin='mx-auto' />
                 <div className='w-full flex justify-center'>
-                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='location' widthClase='' />
+                    <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} id={id} labelId='location' />
                 </div>
             </footer>
         </article>
