@@ -107,8 +107,8 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial }: { id: numb
     }
     dialogElement.addEventListener('close', subsEvent)
   }
-  function includeFavoriteCard(labelId: string, id: string | number, favoriteStateInitial: FullF | null) {
-    return favoriteStateInitial && favoriteStateInitial[labelId as keyof typeof favoriteStateInitial].includes(id.toString())
+  function includeFavoriteCard(labelId: string, id: string, favoriteStateInitial: FullF | null) {
+    return favoriteStateInitial && favoriteStateInitial[labelId as keyof typeof favoriteStateInitial] && favoriteStateInitial[labelId as keyof typeof favoriteStateInitial].includes(id)
   }
   useEffect(() => {
     // Sincroniza favoritos al montar
@@ -131,7 +131,7 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial }: { id: numb
         commandfor={error ? 'view-modal' : 'none'}
         command='show-modal'
         id={`favorito-${labelId}-${id}`}
-        className={`${includeFavoriteCard(labelId, id, favoriteState) && '*:text-red-500'} h-fit bg-black/40 hover:bg-slate-800/80 py-2 px-2 rounded-full cursor-pointer`}
+        className={`${includeFavoriteCard(labelId, id.toString(), favoriteState) ? '*:text-red-500' : ''} h-fit bg-black/40 hover:bg-slate-800/80 py-2 px-2 rounded-full cursor-pointer`}
         onClick={sendFavorite}>
         <span className='sr-only'>icono de favorito</span>
         <IcoHeart
