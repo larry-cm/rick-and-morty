@@ -21,7 +21,7 @@ export function fetchForOne(favParse: FullF | null): Promise<(Result | ResultEpi
       Promise.all(Object.values(favParse)
         .map((section, i) => {
           if (section.length) {
-            return Promise.all(section?.map(async (id) => {
+            return Promise.all(section.map(async (id) => {
               const typeFetch = Object.keys(favParse) as Array<'character' | 'location' | 'episode'>
               return await fetchApi(typeFetch[i], parseInt(id)) //as Result | ResultEpisode | ResultLocation
             }))  
