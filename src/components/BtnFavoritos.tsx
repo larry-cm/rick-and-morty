@@ -11,8 +11,9 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial, numFavorites
   function sendFavorite(event: React.MouseEvent<HTMLButtonElement>) {
     // Obtiene el elemento `<input>` anterior al `<div>` presionado
     const target = event.currentTarget as HTMLInputElement
+    const dialog = document.getElementById('view-modal') as HTMLDialogElement
+
     if (target) {
-      // Actualiza el estado de favoritos
       setFavoriteState(() => {
         // Obtiene el `id` del elemento `<input>`
         const idEvent = target.id
@@ -28,6 +29,7 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial, numFavorites
         const [_, sectionId, numberId] = idEvent.split('-')
         // Obtiene la clave principal (character, episode, location) del `id`
         const firstKey = sectionId as keyof typeof FullFavorites
+        let updatedFavorites; // creando la variable para guardar los datos actualizados
         if (favoritos) {
           // Si hay datos en `localStorage`, los analiza como JSON
           const parsedFavorites = JSON.parse(favoritos) as typeof FullFavorites
@@ -37,31 +39,31 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial, numFavorites
           if (arraySection.includes(numberId)) {
             // Si está, lo elimina de la lista
             parsedFavorites[firstKey] = arraySection.filter(item => item !== numberId)
-            // Si había error y ya no hay 10 elementos, limpia el error
-            if (arraySection.length <= 10) {
-              setError(false);
-            }
+            localStorage.setItem('error', JSON.stringify(false))
+            setError(false)
           } else if (arraySection.length < 10) {
             // Si no está y hay menos de 10 elementos, lo agrega
             arraySection.push(numberId)
-            setError(false);
+            localStorage.setItem('error', JSON.stringify(false))
+            setError(false)
           } else {
-            // Si ya hay 10 elementos, guarda un error en `localStorage`
-            setError(true);
+            // Si ya hay 10 elementos, muestra el diálogo y guarda el error
+            dialog && dialog.showModal()
+            localStorage.setItem('error', JSON.stringify(true))
+            setError(true)
+            return parsedFavorites // Return early to prevent updates when max limit reached
           }
-          // Actualiza los datos de favoritos en `localStorage`
-          localStorage.setItem('favorito', JSON.stringify(parsedFavorites))
-          // Retorna los datos actualizados
-          return parsedFavorites
+          updatedFavorites = parsedFavorites
         } else {
           // Si no hay datos previos en `localStorage`, inicializa la estructura
           FullFavorites[firstKey].push(numberId)
-          // Guarda los datos inicializados en `localStorage`
-          localStorage.setItem('favorito', JSON.stringify(FullFavorites))
-          setError(false);
-          // Retorna los datos inicializados
-          return FullFavorites
+          updatedFavorites = FullFavorites
+          setError(false)
         }
+
+        // Actualiza los datos de favoritos en `localStorage`
+        localStorage.setItem('favorito', JSON.stringify(updatedFavorites))
+        return updatedFavorites
       })
     }
   }
@@ -81,16 +83,17 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial, numFavorites
     return numFavorites && numFavorites[newLabelId[labelId as keyof typeof newLabelId] as keyof typeof numFavorites]?.some(({ id }) => id === idOject)
   }
 
-
   useEffect(() => {
     // Sincroniza favoritos al montar
     setFavoriteState(() => {
       const favoritos = localStorage.getItem('favorito')
       return favoritos && JSON.parse(favoritos)
     })
-    // Al montar, reviso el navegador para ver que modal usar
-    // console.log(window.navigator.userAgent);
-
+    // Al montar, carga el estado de error si existe
+    setError(() => {
+      const error = localStorage.getItem('error')
+      return error && JSON.parse(error)
+    })
   }, [])
 
   useEffect(() => {
@@ -102,8 +105,6 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial, numFavorites
   return (
     <>
       <button
-        commandfor={error ? 'view-modal' : 'none'}
-        command='show-modal'
         id={`favorito-${labelId}-${id}`}
         className={`${includeFavoriteCard(labelId, id) ? '*:text-red-500' : ''} h-fit bg-black/40 hover:bg-slate-800/80 py-2 px-2 rounded-full cursor-pointer`}
         onClick={sendFavorite}>
@@ -113,15 +114,15 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial, numFavorites
         /> 
       </button>
 
-      <dialog id='view-modal' closedby='any' onClick={requestFormModal}>
-        <p className='flex flex-col'>
+      <dialog id='view-modal' closedby='any' onClick={requestFormModal} className='min-w-xs'> {/* closedby sirve solo en unos navegadores */}
+        <p className='flex flex-col text-pretty  font-semibold'>
           No puedes suscribirte a mas de 10 favoritos si no tienes una cuenta.
-          <span>¡Que esperas regístrate con nosotros!</span>
+          <span className='pt-2 font-bold after:content-["!"] after:text-sky-400 after:ps-0.5 before:content-["¡"] before:text-sky-400 before:pe-0.5'>Que esperas regístrate con nosotros</span>
 
         </p>
-        <form method="dialog" className='flex space-x-24 pt-4'>
-          <button>close</button>
-          <button value='registrar'>registrarme ahora</button>
+        <form method="dialog" className='flex w-full justify-between pt-4  font-semibold '>
+          <button className='min-w-[100px] text-nowrap flex items-center justify-center py-1.5 px-3 sm:px-4 w-fit rounded-3xl transition-colors hover:shadow-md shadow-slate-800 space-x-2 bg-black/40 hover:bg-sky-400 text-slate-300 hover:text-white group font-medium duration-150'>Cancelar</button>
+          <button value='registrar' className=' min-w-[100px] text-nowrap flex items-center justify-center py-1.5 px-3 sm:px-4 w-fit rounded-3xl transition-colors hover:shadow-md shadow-slate-800 space-x-2 bg-black/40 hover:bg-sky-400 text-slate-300 hover:text-white group font-medium duration-150'>Registrarme ahora</button>
         </form>
       </dialog>
     </>
