@@ -1,10 +1,23 @@
 import { BrokenHeart, IcoHeart, IcoTodos } from '@/assets/Icons'
 import type React from 'react'
+import type { FullF } from '../BtnFavoritos'
 
 export function AreaTitle({ title, updateFavorites, numElements }: { title: string, updateFavorites?: () => void, numElements?: number }) {
   function removeFavorites() {
-    if (localStorage.getItem('favorito')) {
+    const favoritos = localStorage.getItem('favorito')
+    if (favoritos) {
+      const favoriteTransform = {
+        personajes: 'character',
+        ubicaciones: 'location',
+        episodios: 'episode'
+      }
+      const favoritosParse = JSON.parse(favoritos) as FullF
+      const key = favoriteTransform[title as keyof typeof favoriteTransform]
+      favoritosParse[key as keyof typeof favoritosParse] = []
+    // console.log(favoritosParse);
       localStorage.removeItem('favorito'); // en ves de quitarlo todo hago un set quitándole lo que quiera
+      localStorage.setItem('favorito', JSON.stringify(favoritosParse))
+
     }
     updateFavorites && updateFavorites()
   }
@@ -18,7 +31,6 @@ export function AreaTitle({ title, updateFavorites, numElements }: { title: stri
       {children}
     </button>
   }
-
 
   return (
     <article className='flex space-x-2 sm:space-x-4 space-y-2 sm:space-y-4 mb-8 text-nowrap flex-wrap'>
