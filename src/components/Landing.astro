@@ -4,10 +4,10 @@ import { Icon } from "astro-icon/components";
 
 <section
     id="banner"
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 pt-12 h-fit md:h-screen"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 pt-12 h-screen"
 >
     <article
-        class="row-start-1 z-20 md:col-start-1 md:col-end-2 flex flex-col md:space-y-28"
+        class="row-start-1 z-20 md:col-start-1 md:col-end-2 flex flex-col justify-between relative"
     >
         <a href="/" title="inicio de mi pagina" class="w-36 sm:w-40 h-auto">
             <Icon
@@ -17,15 +17,15 @@ import { Icon } from "astro-icon/components";
             />
         </a>
 
-        <div class="text-white size-fit space-y-24 md:space-y-12 md:mt-0">
+        <div class="text-white size-fit md:space-y-14">
             <h1
-                class="font-extrabold mt-20 md:mt-0 text-3xl inline-block md:text-4xl lg:text-6xl w-56 md:w-96 lg:w-[30rem] after:text-sky-500 after:content-['.'] after:absolute"
+                class="font-extrabold text-3xl inline-block md:text-4xl lg:text-6xl w-3xs sm:w-2xs md:w-96 lg:w-[30rem] after:text-sky-500 after:content-['.'] after:absolute absolute top-30 sm:relative sm:top-0"
             >
                 Vamos a nuestro universo
             </h1>
 
             <div
-                class="flex space-x-4 *:min-w-[150px] *:justify-center size-fit *:text-nowrap"
+                class="flex space-x-4 *:min-w-[150px] *:justify-center size-fit *:text-nowrap relative top-20 flex-col space-y-4 sm:space-y-0 sm:flex-row sm:top-0"
             >
                 <a
                     href="/#explorar"
@@ -43,14 +43,15 @@ import { Icon } from "astro-icon/components";
                 </a>
             </div>
         </div>
+
         <div
-            class="mt-20 mb-5 md:mt-0 md:mb-0 space-y-4 md:space-y-8 w-80 md:w-96 lg:w-[30rem] pb-4"
+            class="relative -top-8 space-y-4 sm:space-y-8 w-80 sm:w-96 lg:w-[30rem] pb-4"
         >
             <p class="text-base sm:text-xl text-slate-100/85">
                 Personajes, localizaciones, episodios y mucho más.
             </p>
             <span
-                class="text-sky-400 brightness-125 text-sm md:text-lg capitalize"
+                class="text-sky-400 brightness-125 text-sm sm:text-lg capitalize"
             >
                 Wubba Lubba Dub Dub!
             </span>
@@ -58,7 +59,7 @@ import { Icon } from "astro-icon/components";
     </article>
 
     <article
-        class="row-start-1 col-span-1 md:col-span-2 flex flex-col space-y-5"
+        class="row-start-1 col-span-1 md:col-span-2 flex flex-col space-y-[50%] md:space-y-5"
     >
         <div class="w-full flex flex-row-reverse">
             <a
