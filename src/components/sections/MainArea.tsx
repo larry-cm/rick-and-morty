@@ -42,7 +42,7 @@ export function AreaTitle({ title, updateFavorites, numElements }: { title: stri
       </Buttons>
       <Buttons onC={removeFavorites}>
         <i><BrokenHeart className='size-5' /></i>
-        <span>Dejar de seguir todas </span>
+        <span>Dejar de seguir la sección </span>
       </Buttons>
       <Buttons>
         <i><IcoHeart className='size-5' /></i>
