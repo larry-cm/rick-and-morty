@@ -32,7 +32,7 @@ export function CardsPersonajes({
             />
             <div className='min-h-44 max-h-52 flex flex-col justify-between '>
                 <header className='flex mt-4'>
-                    <div className='*:*:*:text-base w-3/4 icons-cards truncate'>
+                    <div className='*:*:*:text-base w-11/12 icons-cards truncate'>
                         <strong
                             className='font-medium text-lg mb-2'
                             title={name ?? 'Nombre del personaje'}
@@ -70,7 +70,7 @@ export function CardsPersonajes({
                             </p>
                         </div>
                     </div>
-                    <aside className='w-1/3 h-fit flex justify-end'>
+                    <aside className='size-fit flex justify-end'>
                         <BtnFavoritos getDataFavoriteInitial={getDataFavoriteInitial} numFavorites={numFavorites} id={id} labelId='character' />
                     </aside>
                 </header>

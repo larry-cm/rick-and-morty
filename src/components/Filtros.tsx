@@ -100,7 +100,7 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
           </fieldset>
         </div>
       </form>
-      <div className='space-y-14'> 
+      <div className='space-y-8'> 
         <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
       </div>
     </>
