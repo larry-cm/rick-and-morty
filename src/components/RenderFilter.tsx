@@ -35,7 +35,6 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
             }
             return prevArray
         })
-
     }
     //  pidiendo datos favoritos en local storage la primera vez que se entra y cada vez que den click a botón de favoritos
     useEffect(() => {

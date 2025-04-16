@@ -69,14 +69,21 @@ import Image from "astro/components/Image.astro";
         </div>
         <div class="w-full">
             <picture class="w-full block">
-                <Image
+                <!-- <Image
+                
+                loading="eager"
+                src="/fondo-rick.webp"
+                class="w-full h-[60vh] md:h-[90vh] object-cover object-left-bottom sm:object-center"
+                width={400}
+                height={400}
+                alt="rick de fondo"
+            /> -->
+                <img
                     id="fondo-rick"
                     loading="eager"
-                    src="/fondo-rick.svg"
                     class="w-full h-[40vh] md:h-[80vh] object-cover object-left-bottom sm:object-center"
-                    width={200}
-                    height={200}
-                    alt="rick de fondo"
+                    src="/fondo-rick.webp"
+                    alt="rick de fondo personaje principal usado para el fondo de la pagina web"
                 />
             </picture>
         </div>

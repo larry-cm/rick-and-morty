@@ -88,7 +88,9 @@ export function BtnFavoritos({ id, labelId, getDataFavoriteInitial, numFavorites
       const favoritos = localStorage.getItem('favorito')
       return favoritos && JSON.parse(favoritos)
     })
-    // Al montar, sincroniza el error con localStorage
+    // Al montar, reviso el navegador para ver que modal usar
+    // console.log(window.navigator.userAgent);
+
   }, [])
 
   useEffect(() => {
