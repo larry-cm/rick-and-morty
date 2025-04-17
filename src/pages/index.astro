@@ -6,7 +6,7 @@ import Layout from "@/layouts/Layout.astro";
 
 <Layout title="Pagina de inicio">
     <Landing slot="banner" />
-    <section slot="main" class="w-full">
+    <div slot="main" class="w-full">
         <Filtros resetFilterLocal client:load />
-    </section>
+    </div>
 </Layout>

@@ -1,8 +1,8 @@
-import type { FullF } from '@/components/BtnFavoritos'
+import { type FullF } from '@/types/Filtros'
 import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
 export async function fetchApi(option?: 'character' | 'location' | 'episode', id?: number) {
   try {
-    const data = await fetch(`https://rickandmortyapi.com/api/${option}/${id ?? ''}`)
+    const data = await fetch(`https://rickandmortyapi.com/api/${option??''}/${id ?? ''}`)
     if (!data.ok) {
       console.error(new Error(`Error al obtener los datos ${data.statusText}`))
       return Promise.resolve([])

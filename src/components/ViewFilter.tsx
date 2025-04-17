@@ -1,16 +1,16 @@
-import type { FiltroSelected, RequestFilter } from "@/types/Filtros";
+import type { FiltroSelected, RequestFilter, FullF } from "@/types/Filtros";
 import MainArea from "@components/sections/MainArea";
 import { sections, widthClases } from "@/const/constantes";
 import { CardsEpisodios, CardsUbicaciones, CardsPersonajes } from "@components/cards/Cards";
 import { DefaultNotFound } from "@/services/filtrado";
 
 const { person, episode, ubi } = sections
-export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial, numElementsInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void, numElementsInitial?: RequestFilter | null }) {
+export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial, numElementsInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void, numElementsInitial?: FullF | null }) {
     const posibilidad = {
         personajes: (
             <MainArea
                 key={person}
-                numElements={numElementsInitial?.personajes && numElementsInitial?.personajes.length}
+                numElements={numElementsInitial?.character && numElementsInitial?.character.length}
                 title={person} widthGrid={widthClases.grande}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.personajes, searchFilterInitial, (collection) => collection
@@ -23,16 +23,16 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                             species={species}
                             origin={origin}
                             image={image}
-                            numFavorites={numElementsInitial ?? null}
+                            numFavorites={numElementsInitial?.character ?? null}
                             getDataFavoriteInitial={getDataFavoriteInitial} />
                     ))}
             </MainArea>
         ),
-        episodios: ( 
+        episodios: (
             <MainArea
                 key={episode}
                 title={episode}
-                numElements={numElementsInitial?.episodios && numElementsInitial?.episodios.length}
+                numElements={numElementsInitial?.episode && numElementsInitial?.episode.length}
                 widthGrid={widthClases.mediano}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.episodios, searchFilterInitial, (episodios) => episodios
@@ -42,7 +42,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                             key={id}
                             name={name}
                             episode={episode?.toString()}
-                            numFavorites={numElementsInitial ?? null}
+                            numFavorites={numElementsInitial?.episode ?? null}
                             getDataFavoriteInitial={getDataFavoriteInitial} />
                     )))}
             </MainArea>
@@ -51,7 +51,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
             <MainArea
                 key={ubi}
                 title={ubi}
-                numElements={numElementsInitial?.ubicaciones && numElementsInitial?.ubicaciones.length}
+                numElements={numElementsInitial?.location && numElementsInitial?.location.length}
                 widthGrid={widthClases.pequeño}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.ubicaciones, searchFilterInitial, (ubicaciones) => ubicaciones
@@ -61,7 +61,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                             key={id}
                             name={name}
                             dimension={dimension}
-                            numFavorites={numElementsInitial ?? null}
+                            numFavorites={numElementsInitial?.location ?? null}
                             getDataFavoriteInitial={getDataFavoriteInitial} />
                     ))}
             </MainArea>

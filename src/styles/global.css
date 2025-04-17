@@ -1,5 +1,31 @@
 @import "tailwindcss";
-dialog {
+html,
+body {
+    margin: 0;
+    width: 100%;
+    font-family: "Baloo 2 Variable";
+    color-scheme: dark light;
+    scroll-behavior: smooth;
+}
+
+*::selection {
+    background-color: rgb(125, 198, 240);
+    color: rgb(16, 32, 49);
+}
+
+@media (min-width: 1405px) and (max-width: 1500px) {
+    #filtros {
+        align-items: center;
+    }
+}
+
+@media (min-width: 950px) and (max-width: 1024px) {
+    #filtros {
+        align-items: center;
+    }
+}
+
+dialog.dialog {
     display: none;
     flex-direction: column;
     justify-content: center;
@@ -45,7 +71,7 @@ dialog {
 }
 
 @starting-style {
-    dialog {
+    dialog.dialog {
         &:open {
             opacity: 0;
 

@@ -1,4 +1,4 @@
-import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos, IconVolverArriba } from '@/assets/Icons'
+import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from '@/assets/Icons'
 import { sections } from '@/const/constantes'
 import Labels from '@components/sections/Labels'
 import React, { useEffect, useState, type JSX } from 'react'
@@ -24,6 +24,8 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
       if (search) setSearchFilter(search)
       if (filtro) setFiltroSelected(filtro as FiltroSelected)
     }
+
+    console.log(Object.entries('s'));
 
   }, [])
 
@@ -100,9 +102,7 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
           </fieldset>
         </div>
       </form>
-      <div className='space-y-8'> 
-        <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
-      </div>
+      <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
     </>
   )
 }

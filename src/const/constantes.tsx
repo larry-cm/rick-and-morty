@@ -1,3 +1,8 @@
+export const structureFavorites = {
+  character: Array<string>(),
+  episode: Array<string>(),
+  location: Array<string>()
+}
 
 export const sections = {
   person: 'personajes',
@@ -5,6 +10,13 @@ export const sections = {
   ubi: 'ubicaciones',
   all: 'todos'
 }
+const [p, e, u] = Object.keys(structureFavorites)
+
+export const sectionToFavoriteMap = {
+  [sections.person]: p,
+  [sections.episode]: e,
+  [sections.ubi]: u
+} as const;
 
 export const widthClases = {
   grande: 'grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]',

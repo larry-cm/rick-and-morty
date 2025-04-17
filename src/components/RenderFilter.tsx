@@ -4,8 +4,7 @@ import { lazy, Suspense, useEffect, use, useState } from "react"
 import { fetchApi, fetchForOne } from '@/services/fetch'
 
 import type { APICharacter, APIEpisode, APILocation } from "@/types/Api";
-import type { CollectionContexts, FiltroSelected, RequestFilter } from "@/types/Filtros"
-import type { FullF } from "./BtnFavoritos";
+import type { CollectionContexts, FiltroSelected, RequestFilter, FullF } from "@/types/Filtros"
 
 const ViewFilter = lazy(() => import('@components/ViewFilter.tsx'))
 
@@ -60,6 +59,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                 });
             })
             .catch(error => console.error(error));
+
     }, [arrayFav]);
 
     // Filtrando los datos solo si cambian los datos base
@@ -97,23 +97,26 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
     }, [hijosState]);
 
     return filtroSelected === sections.all && arraySorted.length ?
-        arraySorted.map(({ context }) => (
-            <Suspense key={context} fallback={<FallbackSection title={context as FiltroSelected} />}>
-                <ViewFilter
-                    getDataFavoriteInitial={getDataFavorite}
-                    contexto={context as FiltroSelected}
-                    data={hijosState}
-                    numElementsInitial={hijosFavoritos}
-                    searchFilterInitial={searchFilterInitial}
-                />
-            </Suspense>
-        )) :
+        <div className="space-y-12">
+            {
+                arraySorted.map(({ context }) => (
+                    <Suspense key={context} fallback={<FallbackSection title={context as FiltroSelected} />}>
+                        <ViewFilter
+                            getDataFavoriteInitial={getDataFavorite}
+                            contexto={context as FiltroSelected}
+                            data={hijosState}
+                            numElementsInitial={arrayFav}
+                            searchFilterInitial={searchFilterInitial}
+                        />
+                    </Suspense>
+                ))}
+        </div> :
         <Suspense fallback={<FallbackSection title={filtroSelected} />}>
             <ViewFilter
                 getDataFavoriteInitial={getDataFavorite}
                 data={hijosState}
                 contexto={filtroSelected}
-                numElementsInitial={hijosFavoritos}
+                numElementsInitial={arrayFav}
                 searchFilterInitial={searchFilterInitial} />
         </Suspense>
 

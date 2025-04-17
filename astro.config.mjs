@@ -16,7 +16,6 @@ export default defineConfig({
     imageService: true,
     devImageService: 'sharp'
   }),
-
   image: {
     domains: ['https://rickandmortyapi.com/api/character/avatar/'],
     remotePatterns: [{ protocol: 'https', hostname: 'rickandmortyapi.com' }]

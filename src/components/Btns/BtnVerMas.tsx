@@ -13,7 +13,7 @@ export default function BtnVerMas({ name, ruta, color: booleanColor, children, c
     <a
       href={ruta ?? '#mas'}
       title={`saber mas sobre ${name?.toLowerCase()}`}
-      className={`flex items-center justify-center py-1.5 px-3 sm:px-4 w-fit rounded-3xl transition-colors hover:shadow-md shadow-slate-800 space-x-2 bg-black/40 hover:bg-sky-400 text-slate-300 hover:text-slate-800/90 group font-medium ${claseMargin}`}
+      className={`flex items-center justify-center py-1.5 px-3 sm:px-4 w-fit rounded-3xl transition-colors drop-shadow-sm drop-shadow-slate-950  space-x-2 bg-black/40 hover:bg-sky-400 text-slate-300 hover:text-slate-800/90 group font-medium ${claseMargin}`}
     >
       {
         children ?? (

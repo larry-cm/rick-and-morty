@@ -1,7 +1,7 @@
 import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
-
 export type FiltroSelected = 'todos' | 'personajes' | 'episodios' | 'ubicaciones' 
 
+export type FullF = { character: string[]; episode: string[]; location: string[] }
 type Context = {context?:string}
 
 export interface GroupResult extends Result, Base{ }

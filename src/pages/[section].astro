@@ -1,0 +1,23 @@
+---
+import type { GetStaticPaths } from "astro";
+export const prerender = true;
+import Layout from "@/layouts/Layout.astro";
+import { fetchApi } from "@/services/fetch";
+
+export const getStaticPaths = (async () => {
+    const data = await fetchApi();
+    if (data) {
+        return Object.keys(data).map((section) => ({
+            params: { section },
+            props: { title: { section } },
+        }));
+    }
+    return [{ params: { section: "se" } }];
+}) satisfies GetStaticPaths;
+interface Props {
+    title: string;
+}
+const { title } = Astro.props;
+---
+
+<Layout title={`Pagina de visualización completa de ${title} `} />

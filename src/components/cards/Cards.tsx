@@ -1,12 +1,12 @@
-import { IcoAlien, IcoEpisodios, IcoVida } from '@/assets/Icons'
-import BtnVerMas from '@/components/BtnVerMas'
-import { BtnFavoritos } from '@components//BtnFavoritos'
+import { IcoAlien, IcoEpisodios, IcoHeart, IcoVida } from '@/assets/Icons'
+import BtnVerMas from '@/components/Btns/BtnVerMas'
+import { BtnFavoritos } from '@/components/Btns/BtnFavoritos'
 import { IcoPlaneta } from '@/assets/Icons'
 import { Desconocidos, padding } from '@/const/constantes'
-import type { Base, RequestFilter } from '@/types/Filtros'
+import type { Base } from '@/types/Filtros'
 import type { Result } from '@/types/Api'
 
-type Cards = Base & { getDataFavoriteInitial: () => void, numFavorites: RequestFilter | null }
+type Cards = Base & { getDataFavoriteInitial: () => void, numFavorites: string[] | null }
 
 export function CardsPersonajes({
     id,
@@ -17,11 +17,20 @@ export function CardsPersonajes({
     image: rutaImg,
     getDataFavoriteInitial,
     numFavorites
-}: Result & { getDataFavoriteInitial: () => void, numFavorites: RequestFilter | null }) {
+}: Result & { getDataFavoriteInitial: () => void, numFavorites: string[] | null }) {
     return (
         <article
             className={`text-white bg-slate-500/50 hover:bg-slate-500/80 transition-all rounded-lg w-11/12 sm:size-full mx-auto sm:mx-0 flex flex-col ${padding} relative`}
         >
+            {
+                numFavorites?.includes(id.toString()) &&
+                <picture className='absolute top-5 right-6'>
+                    <IcoHeart
+                        className='text-red-500 size-5  drop-shadow-red-400/50 drop-shadow  '
+                    />
+                </picture>
+            }
+
             <img
                 width={500}
                 height={500}

@@ -1,23 +1,17 @@
 import { BrokenHeart, IcoHeart, IcoTodos } from '@/assets/Icons'
 import type React from 'react'
-import type { FullF } from '../BtnFavoritos'
+import { type FullF } from '@/types/Filtros'
+import { sectionToFavoriteMap } from '@/const/constantes'
 
 export function AreaTitle({ title, updateFavorites, numElements }: { title: string, updateFavorites?: () => void, numElements?: number }) {
   function removeFavorites() {
     const favoritos = localStorage.getItem('favorito')
     if (favoritos) {
-      const favoriteTransform = {
-        personajes: 'character',
-        ubicaciones: 'location',
-        episodios: 'episode'
-      }
       const favoritosParse = JSON.parse(favoritos) as FullF
-      const key = favoriteTransform[title as keyof typeof favoriteTransform]
+      const key = sectionToFavoriteMap[title as keyof typeof sectionToFavoriteMap]
       favoritosParse[key as keyof typeof favoritosParse] = []
-    // console.log(favoritosParse);
-      localStorage.removeItem('favorito'); // en ves de quitarlo todo hago un set quitándole lo que quiera
+      localStorage.removeItem('favorito')
       localStorage.setItem('favorito', JSON.stringify(favoritosParse))
-
     }
     updateFavorites && updateFavorites()
   }
@@ -33,13 +27,15 @@ export function AreaTitle({ title, updateFavorites, numElements }: { title: stri
   }
 
   return (
-    <article className='flex space-x-4 sm:space-x-8 space-y-4 sm:space-y-8 mb-8 text-nowrap flex-wrap'>
+    <fieldset className='flex space-x-4 sm:space-x-4 space-y-4 sm:space-y-4 mb-8 text-nowrap flex-wrap'>
       <h2 className='font-bold text-white text-3xl'>{title ?? 'Personajes de ejemplo'}</h2>
 
-      <Buttons>
+      <a
+        className='flex cursor-pointer ease-in-out transition-colors items-center space-x-2 px-4 py-1.5 rounded-3xl shadow-md shadow-slate-500/25 bg-slate-500/50 text-slate-100/85 hover:text-slate-50 hover:shadow-slate-500/60 hover:bg-slate-500/80  hover:backdrop-brightness-150 h-9'
+        href={sectionToFavoriteMap[title as keyof typeof sectionToFavoriteMap]?.concat('s')}>
         <i><IcoTodos className='size-5' /></i>
         <span>Ver todos</span>
-      </Buttons>
+      </a>
       <Buttons onC={removeFavorites}>
         <i><BrokenHeart className='size-5' /></i>
         <span>Dejar de seguir la sección </span>
@@ -48,7 +44,7 @@ export function AreaTitle({ title, updateFavorites, numElements }: { title: stri
         <i><IcoHeart className='size-5' /></i>
         <span>Numero de favoritos :  <div className='ps-.5 inline-block'>{numElements ?? 0}</div></span>
       </Buttons>
-    </article>
+    </fieldset>
   )
 }
 
