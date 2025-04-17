@@ -71,7 +71,7 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
         >
           <legend className='text-nowrap py-1.5 px-4 text-slate-200/80'> Filtrar por :</legend>
           <fieldset
-            className='flex flex-wrap gap-2 icons-cards *:*:cursor-pointer *:*:transition-all'
+            className='flex flex-wrap gap-4 icons-cards *:*:cursor-pointer *:*:transition-all'
           >
             <Labels id={all} manejoEstado={{ filtroSelected, handlerLocalStates }}>
               <>

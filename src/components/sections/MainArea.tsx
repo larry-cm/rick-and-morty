@@ -33,7 +33,7 @@ export function AreaTitle({ title, updateFavorites, numElements }: { title: stri
   }
 
   return (
-    <article className='flex space-x-2 sm:space-x-4 space-y-2 sm:space-y-4 mb-8 text-nowrap flex-wrap'>
+    <article className='flex space-x-4 sm:space-x-8 space-y-4 sm:space-y-8 mb-8 text-nowrap flex-wrap'>
       <h2 className='font-bold text-white text-3xl'>{title ?? 'Personajes de ejemplo'}</h2>
 
       <Buttons>
