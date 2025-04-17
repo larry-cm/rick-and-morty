@@ -45,7 +45,7 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
 
   return (
     <> 
-      <form className='flex flex-col lg:flex-row bg-black/75 backdrop-blur-xs sticky top-0 z-50 py-4 mb-4 gap-y-2 lg:gap-y-0'>
+      <form className='flex flex-col lg:flex-row bg-black/75 backdrop-blur-xs sticky top-0 z-50 py-4 gap-y-4 lg:gap-y-0'>
         {/* barra de búsqueda */}
         <div className='group ps-0 flex min-w-80 max-w-full lg:w-2/5'>
           <input
@@ -67,40 +67,29 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
           </label>
         </div>
         {/* secciones */}
-        <div
+
+        <fieldset
           id='filtros'
-          className='flex flex-col md:flex-row  md:items-start items-start lg:space-x-2 gap-y-2 md:gap-y-0 '
+          className='flex flex-wrap gap-4 md:items-start items-start icons-cards *:*:cursor-pointer *:*:transition-all'
         >
-          <legend className='text-nowrap py-1.5 px-4 text-slate-200/80'> Filtrar por :</legend>
-          <fieldset
-            className='flex flex-wrap gap-4 icons-cards *:*:cursor-pointer *:*:transition-all'
-          >
-            <Labels id={all} manejoEstado={{ filtroSelected, handlerLocalStates }}>
-              <>
+          <b className='inline-block text-nowrap text-xl py-1.5 pe-4 lg:ps-4 text-slate-100/90'> Filtrar por :</b>
+          <Labels id={all} manejoEstado={{ filtroSelected, handlerLocalStates }}>
                 <i><IcoTodos className='size-5' /></i>
-                <span>Todos</span>
-              </>
+            <span>Todos</span>
             </Labels>
-            <Labels id={person} manejoEstado={{ filtroSelected, handlerLocalStates }}>
-              <>
+          <Labels id={person} manejoEstado={{ filtroSelected, handlerLocalStates }}>
                 <i><IcoPersonaje className='size-5' /></i>
-                <span>Personajes</span>
-              </>
+            <span>Personajes</span>
             </Labels>
-            <Labels id={episode} manejoEstado={{ filtroSelected, handlerLocalStates }}>
-              <>
+          <Labels id={episode} manejoEstado={{ filtroSelected, handlerLocalStates }}>
                 <i><IcoEpisodios className='size-5' /></i>
-                <span>Episodios</span>
-              </>
+            <span>Episodios</span>
             </Labels>
-            <Labels id={ubi} manejoEstado={{ filtroSelected, handlerLocalStates }}>
-              <>
+          <Labels id={ubi} manejoEstado={{ filtroSelected, handlerLocalStates }}>
                 <i><IcoPlaneta className='size-5' /></i>
-                <span>Localizaciones</span>
-              </>
+            <span>Localizaciones</span>
             </Labels>
-          </fieldset>
-        </div>
+        </fieldset>
       </form>
       <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
     </>

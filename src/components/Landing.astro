@@ -58,9 +58,7 @@ import { Icon } from "astro-icon/components";
         </div>
     </article>
 
-    <article
-        class="row-start-1 col-span-1 md:col-span-2 flex flex-col space-y-[50%] md:space-y-0"
-    >
+    <article class="row-start-1 col-span-1 md:col-span-2 flex flex-col">
         <div class="w-full flex flex-row-reverse">
             <a
                 href="/favoritos"
@@ -72,15 +70,11 @@ import { Icon } from "astro-icon/components";
             </a>
         </div>
         <div class="w-full">
-            <picture class="w-full block">
-                <img
-                    id="fondo-rick"
-                    loading="eager"
-                    class="w-full h-[40vh] md:h-[80vh] object-cover object-left-bottom sm:object-center"
-                    src="/fondo-rick.webp"
-                    alt="rick de fondo personaje principal usado para el fondo de la pagina web"
-                />
-            </picture>
+            <div
+                class="w-full min-w-[200px] sm:min-w-0 h-[40vh] sm:h-[80vh] bg-[url('/fondo-rick.webp')] bg-fixed bg-no-repeat bg-cover bg-position-[center_6rem] scale-100 sm:bg-position-[-4rem_5rem]"
+                style="mask-image: linear-gradient(rgb(15, 15, 15) 50%, transparent);"
+            >
+            </div>
         </div>
     </article>
 </section>

@@ -28,7 +28,7 @@ export function AreaTitle({ title, updateFavorites, numElements }: { title: stri
 
   return (
     <fieldset className='flex space-x-4 sm:space-x-4 space-y-4 sm:space-y-4 mb-8 text-nowrap flex-wrap'>
-      <h2 className='font-bold text-white text-3xl'>{title ?? 'Personajes de ejemplo'}</h2>
+      <h2 className='font-bold text-slate-100/90 text-3xl'>{title ?? 'Personajes de ejemplo'}</h2>
 
       <a
         className='flex cursor-pointer ease-in-out transition-colors items-center space-x-2 px-4 py-1.5 rounded-3xl shadow-md shadow-slate-500/25 bg-slate-500/50 text-slate-100/85 hover:text-slate-50 hover:shadow-slate-500/60 hover:bg-slate-500/80  hover:backdrop-brightness-150 h-9'
