@@ -1,58 +1,139 @@
-import { BrokenHeart, IcoHeart, IcoTodos } from '@/assets/Icons'
-import type React from 'react'
+import { IconBrokenHeart, IcoHeart, IcoTodos } from '@/assets/Icons'
+import React, { useEffect, useState } from 'react'
 import { type FullF } from '@/types/Filtros'
-import { sectionToFavoriteMap } from '@/const/constantes'
+import { reformatSections, sections } from '@/const/constantes'
 
-export function AreaTitle({ title, updateFavorites, numElements }: { title: string, updateFavorites?: () => void, numElements?: number }) {
+export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { title: string, btnFilter: (e: React.MouseEvent<HTMLButtonElement | HTMLLIElement>) => void, updateFavorites?: () => void, numElements?: number }) {
   function removeFavorites() {
     const favoritos = localStorage.getItem('favorito')
     if (favoritos) {
       const favoritosParse = JSON.parse(favoritos) as FullF
-      const key = sectionToFavoriteMap[title as keyof typeof sectionToFavoriteMap]
-      favoritosParse[key as keyof typeof favoritosParse] = []
-      localStorage.removeItem('favorito')
-      localStorage.setItem('favorito', JSON.stringify(favoritosParse))
+      const key = reformatSections[title as keyof typeof reformatSections]
+      if (favoritosParse[key as keyof typeof favoritosParse].length) {
+        favoritosParse[key as keyof typeof favoritosParse] = []
+        localStorage.removeItem('favorito')
+        localStorage.setItem('favorito', JSON.stringify(favoritosParse))
+      }
     }
     updateFavorites && updateFavorites()
   }
 
-  function Buttons({ children, onC }: { children: React.ReactNode, onC?: () => void }) {
+  function Buttons({ children, notColorBtn, onC }: { children: React.ReactNode, notColorBtn?: boolean, onC?: (() => void) | ((e: any) => void) }) {
     return <button
       onClick={onC}
-      className='flex cursor-pointer ease-in-out transition-colors items-center space-x-2 px-4 py-1.5 rounded-3xl shadow-md shadow-slate-500/25 bg-slate-500/50 text-slate-100/85 hover:text-slate-50 hover:shadow-slate-500/60 hover:bg-slate-500/80  hover:backdrop-brightness-150 h-9'
       type='button'
+      data-title={title}
+      // onBlur={closeClick} toca mirar si hace click fuera del target.
+      id={`btn-filter-${title}`}
+      className={`flex ease-in-out transition-colors items-center space-x-2 px-4 py-1.5 rounded-3xl shadow-md shadow-slate-500/25 text-slate-100/85 hover:text-slate-50  hover:backdrop-brightness-150 h-9 
+  ${notColorBtn ? 'bg-sky-400/80 *:hover:cursor-text' : 'bg-slate-500/50 hover:bg-slate-500/80 hover:shadow-slate-500/60 cursor-pointer'}`}
     >
       {children}
     </button>
   }
 
-  return (
-    <fieldset className='flex space-x-4 sm:space-x-4 space-y-4 sm:space-y-4 mb-8 text-nowrap flex-wrap'>
-      <h2 className='font-bold text-slate-100/90 text-3xl'>{title ?? 'Personajes de ejemplo'}</h2>
 
-      <a
-        className='flex cursor-pointer ease-in-out transition-colors items-center space-x-2 px-4 py-1.5 rounded-3xl shadow-md shadow-slate-500/25 bg-slate-500/50 text-slate-100/85 hover:text-slate-50 hover:shadow-slate-500/60 hover:bg-slate-500/80  hover:backdrop-brightness-150 h-9'
-        href={sectionToFavoriteMap[title as keyof typeof sectionToFavoriteMap]?.concat('s')}>
-        <i><IcoTodos className='size-5' /></i>
-        <span>Ver todos</span>
-      </a>
-      <Buttons onC={removeFavorites}>
-        <i><BrokenHeart className='size-5' /></i>
-        <span>Dejar de seguir la sección </span>
-      </Buttons>
-      <Buttons>
-        <i><IcoHeart className='size-5' /></i>
-        <span>Numero de favoritos :  <div className='ps-.5 inline-block'>{numElements ?? 0}</div></span>
-      </Buttons>
-    </fieldset>
+  const [option, setOptions] = useState<{ personajes: boolean, episodios: boolean, ubicaciones: boolean }>({ personajes: false, episodios: false, ubicaciones: false })
+  const closeClick = () => setOptions({ personajes: false, episodios: false, ubicaciones: false })
+
+  const listaOptions = {
+    personajes: (
+      <>
+        <li onClick={(e) => {
+          btnFilter(e)
+          closeClick()
+        }} data-title={title} data-value={'Alive'} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Alive</li>
+        <li onClick={(e) => {
+          btnFilter(e)
+          closeClick()
+        }} data-title={title} data-value={'Dead'} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Death</li>
+        <li onClick={(e) => {
+          btnFilter(e)
+          closeClick()
+        }} data-title={title} data-value={sections.all} className='cursor-pointer rounded-full hover:bg-sky-500/80'>All</li>
+      </>
+    ),
+    episodios: (
+      <>
+        <li onClick={closeClick} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Capitulo</li>
+        <li onClick={closeClick} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Temporada</li>
+      </>
+    ),
+    ubicaciones: (
+      <>
+        <li onClick={closeClick} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Dimension</li>
+        <li onClick={closeClick} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Futuro</li>
+      </>
+    )
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const button = document.getElementById(`btn-filter-${title}`);
+      const menu = button?.nextElementSibling as HTMLElement;
+
+      if (button && menu && !button.contains(event.target as Node) && !menu.contains(event.target as Node)) {
+        closeClick();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [title]);
+
+  return (
+    <>
+      <fieldset className='flex flex-wrap mb-8 space-x-4 space-y-4 sm:space-x-4 sm:space-y-4 text-nowrap'>
+        <h2 className='text-3xl font-bold text-slate-100/90'>{title ?? 'Personajes de ejemplo'}</h2>
+        <a
+          className='flex cursor-pointer ease-in-out transition-colors items-center space-x-2 px-4 py-1.5 rounded-3xl shadow-md shadow-slate-500/25 bg-slate-500/50 text-slate-100/85 hover:text-slate-50 hover:shadow-slate-500/60 hover:bg-slate-500/80  hover:backdrop-brightness-150 h-9'
+          href={reformatSections[title as keyof typeof reformatSections]?.concat('s')}>
+          <i><IcoTodos className='size-5' /></i>
+          <span>Ver todos</span>
+        </a>
+        <div className='relative'>
+          <Buttons onC={() => setOptions((prev) => {
+            const posiblesR = {
+              personajes: { ...prev, personajes: prev.personajes === true ? false : true },
+              episodios: { ...prev, episodios: prev.episodios === true ? false : true },
+              ubicaciones: { ...prev, ubicaciones: prev.ubicaciones === true ? false : true }
+            }
+            return posiblesR[title as keyof typeof posiblesR]
+          })}>
+            <i data-title={title} className='bg-[url(filter.svg)] object-cover bg-position-[0rem_-0.1rem] size-6 bg-no-repeat'></i>
+            <span data-title={title}>Filtrar </span>
+          </Buttons>
+          {option[title as keyof typeof option] && (
+            <ul
+
+              onMouseLeave={() => setOptions({ personajes: false, episodios: false, ubicaciones: false })}
+              className='absolute min-w-40 z-20 -left-8 top-14 flex flex-col drop-shadow-slate-950 drop-shadow-xl text-slate-100/90 bg-slate-600/70 gap-4 rounded-lg py-3 px-4 *:px-4 *:py-1.5 *:transition-colors'>
+              {listaOptions[title as keyof typeof listaOptions]}
+            </ul>)}
+        </div>
+        <Buttons onC={removeFavorites}>
+          <i><IconBrokenHeart className='size-5' /></i>
+          <span>Dejar de seguir la sección </span>
+        </Buttons>
+        <Buttons notColorBtn>
+          <i><IcoHeart className={`size-5 ${numElements && 'text-red-500 drop-shadow drop-shadow-red-400/50'}`} /></i>
+          <span>Numero de favoritos :  <div className='ps-.5 inline-block'>{numElements ?? 0}</div></span>
+        </Buttons>
+      </fieldset>
+
+
+    </>
   )
 }
 
-export default function MainArea({ title, widthGrid, children, updateFavorites, numElements }: { title: string, widthGrid: string, children: React.ReactNode, updateFavorites?: () => void, numElements?: number }) {
+export default function MainArea({ title, widthGrid, children, updateFavorites, numElements, btnFilter }: { title: string, widthGrid: string, children: React.ReactNode, btnFilter: (e: React.MouseEvent<HTMLButtonElement | HTMLLIElement>) => void, updateFavorites?: () => void, numElements?: number }) {
+
   return (
     <section id={title}>
-      <AreaTitle title={title} numElements={numElements} updateFavorites={updateFavorites} />
-      <div className={`grid ${widthGrid ?? 'grid-cols-[repeat(auto-fill,minmax(200px,1fr))]'} gap-4`}>
+      <AreaTitle title={title} numElements={numElements} updateFavorites={updateFavorites} btnFilter={btnFilter} />
+      <div className={`grid ${widthGrid ?? "grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"} gap-4`}>
         {
           children
         }
@@ -60,3 +141,6 @@ export default function MainArea({ title, widthGrid, children, updateFavorites, 
     </section>
   )
 }
+
+
+

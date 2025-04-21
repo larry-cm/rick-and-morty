@@ -25,7 +25,6 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
       if (filtro) setFiltroSelected(filtro as FiltroSelected)
     }
 
-    console.log(Object.entries('s'));
 
   }, [])
 
@@ -45,22 +44,30 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
 
   return (
     <> 
-      <form className='flex flex-col lg:flex-row bg-black/75 backdrop-blur-xs sticky top-0 z-50 py-4 gap-y-4 lg:gap-y-0'>
+      <form className='flex sticky top-0 z-50 space-y-4 gap-4 py-4 bg-black/75 backdrop-blur-xs lg:gap-y-0'>
         {/* barra de búsqueda */}
-        <div className='group ps-0 flex min-w-80 max-w-full lg:w-2/5'>
+        <div className='flex relative h-9 rounded-3xl group ps-0 w-full lg:w-4/12 focus-within:shadow-xs focus-within:shadow-sky-400 focus-within:ring-1 focus-within:ring-sky-400'>
           <input
-            type='text'
+            type='search'
             name='search'
             value={searchFilter}
-            autoComplete='on'
+            autoComplete='off'
             onChange={handlerLocalStates}
             id='search'
-            placeholder='Personajes. localizaciones, episodios y mucho más...'
-            className='border-none rounded-tl-3xl text-slate-100 ps-4 h-9 rounded-bl-3xl transition-all bg-slate-500/50 group-hover:bg-slate-500/80 outline-none focus-visible:bg-slate-500/80 group-hover:placeholder:text-slate-300 peer w-[90%] placeholder:text-slate-100/90 placeholder:font-medium'
+            placeholder='Búsqueda...'
+            style={{}}
+            className='w-full h-9 rounded-tl-3xl rounded-bl-3xl border-none transition-all appearance-none outline-none ps-4 text-slate-100 bg-slate-500/50 group-hover:bg-slate-500/80 focus-visible:bg-slate-500/80 group-hover:text-slate-300 group-hover:placeholder:text-slate-300 placeholder:text-slate-100/90 placeholder:font-medium group-focus-within:bg-slate-500/80'
           />
+          {searchFilter &&
+            <button
+              type='button'
+              onClick={() => setSearchFilter('')}
+              className='absolute group-hover:text-slate-300 transition-all text-slate-100 cursor-pointer top-2 left-[88%] lg:left-9/12'>
+              ✖
+            </button>}
           <label
             htmlFor='search'
-            className='w-[10%]  h-9 cursor-pointer flex items-center justify-center rounded-tr-3xl rounded-br-3xl bg-slate-500/50 group-hover:bg-slate-500/80 text-slate-100/90 group-hover:text-slate-300 peer-focus:bg-slate-500/80 p-1.5 6px-2 lg:px-5 transition-all'
+            className='w-1/12 h-9 cursor-pointer flex items-center justify-center rounded-tr-3xl rounded-br-3xl  text-slate-100 bg-slate-500/50 group-hover:bg-slate-500/80 focus-visible:bg-slate-500/80 group-hover:text-slate-300 group-focus-within:bg-slate-500/80 p-1.5 6px-2 lg:px-5 transition-all'
           >
             <span className='sr-only'>Lupa de búsqueda de los filtros</span>
             <IcoLupa className='size-5 min-w-5' />
@@ -69,10 +76,10 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
         {/* secciones */}
 
         <fieldset
-          id='filtros'
           className='flex flex-wrap gap-4 md:items-start items-start icons-cards *:*:cursor-pointer *:*:transition-all'
+          id='filtros'
         >
-          <b className='inline-block text-nowrap text-xl py-1.5 pe-4 lg:ps-4 text-slate-100/90'> Filtrar por :</b>
+          {/* <b className='inline-block text-nowrap text-xl py-1.5 text-slate-100/90'> Filtrar por :</b> */}
           <Labels id={all} manejoEstado={{ filtroSelected, handlerLocalStates }}>
                 <i><IcoTodos className='size-5' /></i>
             <span>Todos</span>

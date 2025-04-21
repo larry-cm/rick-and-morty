@@ -5,11 +5,12 @@ import { CardsEpisodios, CardsUbicaciones, CardsPersonajes } from "@components/c
 import { DefaultNotFound } from "@/services/filtrado";
 
 const { person, episode, ubi } = sections
-export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial, numElementsInitial }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void, numElementsInitial?: FullF | null }) {
+export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial, numElementsInitial, btnFilter }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void, btnFilter: (e: React.MouseEvent<HTMLButtonElement | HTMLLIElement>) => void, numElementsInitial?: FullF | null }) {
     const posibilidad = {
         personajes: (
             <MainArea
                 key={person}
+                btnFilter={btnFilter}
                 numElements={numElementsInitial?.character && numElementsInitial?.character.length}
                 title={person} widthGrid={widthClases.grande}
                 updateFavorites={getDataFavoriteInitial}>
@@ -31,6 +32,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
         episodios: (
             <MainArea
                 key={episode}
+                btnFilter={btnFilter}
                 title={episode}
                 numElements={numElementsInitial?.episode && numElementsInitial?.episode.length}
                 widthGrid={widthClases.mediano}
@@ -50,6 +52,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
         ubicaciones: (
             <MainArea
                 key={ubi}
+                btnFilter={btnFilter}
                 title={ubi}
                 numElements={numElementsInitial?.location && numElementsInitial?.location.length}
                 widthGrid={widthClases.pequeño}

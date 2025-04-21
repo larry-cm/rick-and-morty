@@ -1,9 +1,9 @@
 import { FallbackSection, FilterElements, SortedElements } from "@/services/filtrado"
-import { sections } from "@/const/constantes"
+import { reformatSections, sections } from "@/const/constantes"
 import { lazy, Suspense, useEffect, use, useState } from "react"
 import { fetchApi, fetchForOne } from '@/services/fetch'
 
-import type { APICharacter, APIEpisode, APILocation } from "@/types/Api";
+import type { APICharacter, APIEpisode, APILocation, Result, ResultEpisode, ResultLocation } from "@/types/Api";
 import type { CollectionContexts, FiltroSelected, RequestFilter, FullF } from "@/types/Filtros"
 
 const ViewFilter = lazy(() => import('@components/ViewFilter.tsx'))
@@ -13,7 +13,7 @@ const promiseEpisodios = fetchApi("episode")
 const promiseUbicaciones = fetchApi("location")
 
 export default function RenderFilter({ filtroSelected, searchFilterInitial, isFavorite }: { filtroSelected: FiltroSelected, searchFilterInitial: string, isFavorite?: boolean }) {
-    const [arrayFav, setArrayFav] = useState<FullF | null>(null)
+    const [arrayInitial, setArrayInitial] = useState<FullF | null>(null)
     const [hijosFavoritos, setHijosFavoritos] = useState<RequestFilter | null>(null)
     const [hijosState, setHijosState] = useState<RequestFilter>()
     const [arraySorted, setArraySorted] = useState<CollectionContexts[]>([])
@@ -28,22 +28,70 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
         const favoritos = localStorage.getItem('favorito')
         const favParse: FullF = JSON.parse(favoritos ?? '{"character":[], "episode": [],"location": []}')
 
-        setArrayFav(prevArray => {
+        setArrayInitial(prevArray => {
             if (JSON.stringify(prevArray) !== JSON.stringify(favParse)) {
                 return favParse
             }
             return prevArray
         })
     }
+
+    function filterButton(event: React.MouseEvent<HTMLButtonElement | HTMLLIElement>) {
+        const target = event?.target as HTMLButtonElement
+        const dataTitle = target.getAttribute('data-title')
+        const dataValue = target.getAttribute('data-value')
+        if (target && dataTitle && dataValue) {
+            setHijosState(prev => {
+                const dataBase = isFavorite ? hijosFavoritos : hijosFor
+                if (dataBase) {
+                    const filtrado = FilterElements(dataBase, searchFilterInitial);
+                    const key = dataTitle as keyof typeof filtrado
+                    const sec = filtrado[key]
+
+                    const useForSec = {
+                        personajes: sec.filter((item) => {
+                            if ('status' in item) {
+                                if (dataValue === 'todos') return true
+                                return (item as Result).status.match(dataValue);
+                            }
+                            return false;
+                        }),
+                        episodios: sec.filter((item) => {
+                            if ('air_date' in item) {
+                                return (item as ResultEpisode).air_date === 'December 20, 2017';
+                            }
+                            return false;
+                        }),
+                        ubicaciones: sec.filter((item) => {
+                            if ('dimension' in item) {
+                                return (item as ResultLocation).dimension.match('Earth') ||
+                                    (item as ResultLocation).dimension.match('Citadel');
+                            }
+                            return false; // Add missing return
+                        })
+                    }
+
+                    const newFiltrado = {
+                        ...filtrado,
+                        [key]: useForSec[key]
+                    }
+                    return newFiltrado
+                }
+                return prev
+            })
+        }
+    }
+
     //  pidiendo datos favoritos en local storage la primera vez que se entra y cada vez que den click a botón de favoritos
     useEffect(() => {
         getDataFavorite()
+
+
     }, [])
 
-    // si es sección de favoritos pedimos los datos y actualizamos el estado SOLO si arrayFav realmente cambió
     useEffect(() => {
-        if (!arrayFav) return;
-        fetchForOne(arrayFav)
+        if (!arrayInitial) return;
+        fetchForOne(arrayInitial)
             .then(data => {
                 const nuevo = {
                     personajes: data[0],
@@ -60,7 +108,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
             })
             .catch(error => console.error(error));
 
-    }, [arrayFav]);
+    }, [arrayInitial]);
 
     // Filtrando los datos solo si cambian los datos base
     useEffect(() => {
@@ -75,6 +123,12 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                 });
             }
         } else {
+            // async function pet() {
+            //     const data = await fetchApi('character', 0, 2)
+            //     console.log(data);
+
+            // }
+            // pet()
             setHijosState(prev => {
                 const filtrado = FilterElements(hijosFor, searchFilterInitial);
                 if (JSON.stringify(prev) !== JSON.stringify(filtrado)) {
@@ -102,10 +156,11 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                 arraySorted.map(({ context }) => (
                     <Suspense key={context} fallback={<FallbackSection title={context as FiltroSelected} />}>
                         <ViewFilter
+                            btnFilter={filterButton}
                             getDataFavoriteInitial={getDataFavorite}
                             contexto={context as FiltroSelected}
                             data={hijosState}
-                            numElementsInitial={arrayFav}
+                            numElementsInitial={arrayInitial}
                             searchFilterInitial={searchFilterInitial}
                         />
                     </Suspense>
@@ -113,10 +168,11 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
         </div> :
         <Suspense fallback={<FallbackSection title={filtroSelected} />}>
             <ViewFilter
+                btnFilter={filterButton}
                 getDataFavoriteInitial={getDataFavorite}
                 data={hijosState}
                 contexto={filtroSelected}
-                numElementsInitial={arrayFav}
+                numElementsInitial={arrayInitial}
                 searchFilterInitial={searchFilterInitial} />
         </Suspense>
 

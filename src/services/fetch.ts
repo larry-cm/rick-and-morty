@@ -1,8 +1,8 @@
 import { type FullF } from '@/types/Filtros'
 import type { Result, ResultEpisode, ResultLocation } from '@/types/Api'
-export async function fetchApi(option?: 'character' | 'location' | 'episode', id?: number) {
+export async function fetchApi(option?: 'character' | 'location' | 'episode', id?: number,page?:number) {
   try {
-    const data = await fetch(`https://rickandmortyapi.com/api/${option??''}/${id ?? ''}`)
+    const data = await fetch(`https://rickandmortyapi.com/api/${ option ?? ''}${id === 0 ? `?page=${page}` : `/${id?? ''}` }`)
     if (!data.ok) {
       console.error(new Error(`Error al obtener los datos ${data.statusText}`))
       return Promise.resolve([])

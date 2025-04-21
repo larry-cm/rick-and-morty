@@ -91,7 +91,7 @@ export const IconVolverArriba = (props) => (
   </svg>
 )
 
-export const BrokenHeart = (props) => <svg viewBox="0 0 24 24" {...props}>
+export const IconBrokenHeart = (props) => <svg viewBox="0 0 24 24" {...props}>
   <path stroke="currentColor" d="M17.452,2.044c-2.343,0-4.455,1.411-5.403,3.485c-0.96-2.1-3.056-3.485-5.443-3.485c-3.306,0-5.996,2.69-5.996,5.996
 	c0,9.016,10.667,13.619,11.284,13.877c0.001,0,0.001,0,0.001,0c0.005,0.002,0.014,0.007,0.018,0.008
 	c0.049,0.021,0.102,0.031,0.153,0.031s0.104-0.011,0.151-0.03c0.112-0.046,11.174-4.686,11.174-13.943
@@ -104,3 +104,14 @@ export const BrokenHeart = (props) => <svg viewBox="0 0 24 24" {...props}>
 	c0.045-0.049,0.07-0.107,0.086-0.167c0.001-0.006,0.007-0.008,0.008-0.014c0.519-2.326,2.626-4.014,5.011-4.014
 	c2.833,0,5.138,2.305,5.138,5.138C22.59,15.94,13.802,20.325,12.186,21.063z"/>
 </svg>
+
+export const IconFilter = (props) => (
+  <svg
+    fill="none"
+    stroke="currentColor"
+    {...props}
+  >
+    <path stroke="none" d="M0 0h24v24H0z" />
+    <path d="M4 10a2 2 0 1 0 4 0 2 2 0 0 0-4 0M6 4v4M6 12v8M10 16a2 2 0 1 0 4 0 2 2 0 0 0-4 0M12 4v10M12 18v2M16 7a2 2 0 1 0 4 0 2 2 0 0 0-4 0M18 4v1M18 9v11" />
+  </svg >
+)
