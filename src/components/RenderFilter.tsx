@@ -3,7 +3,7 @@ import { reformatSections, sections } from "@/const/constantes"
 import { lazy, Suspense, useEffect, use, useState } from "react"
 import { fetchApi, fetchForOne } from '@/services/fetch'
 
-import type { APICharacter, APIEpisode, APILocation, Result, ResultEpisode, ResultLocation } from "@/types/Api";
+import type { APICharacter, APIEpisode, APILocation, Result, ResultEpisode, ResultLocation } from "@/types/Api"
 import type { CollectionContexts, FiltroSelected, RequestFilter, FullF } from "@/types/Filtros"
 
 const ViewFilter = lazy(() => import('@components/ViewFilter.tsx'))
@@ -44,30 +44,31 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
             setHijosState(prev => {
                 const dataBase = isFavorite ? hijosFavoritos : hijosFor
                 if (dataBase) {
-                    const filtrado = FilterElements(dataBase, searchFilterInitial);
+                    const filtrado = FilterElements(dataBase, searchFilterInitial)
                     const key = dataTitle as keyof typeof filtrado
                     const sec = filtrado[key]
+
 
                     const useForSec = {
                         personajes: sec.filter((item) => {
                             if ('status' in item) {
                                 if (dataValue === 'todos') return true
-                                return (item as Result).status.match(dataValue);
+                                return (item as Result).status.match(dataValue)
                             }
-                            return false;
+                            return false
                         }),
                         episodios: sec.filter((item) => {
                             if ('air_date' in item) {
-                                return (item as ResultEpisode).air_date === 'December 20, 2017';
+                                return (item as ResultEpisode).air_date === 'December 20, 2017'
                             }
-                            return false;
+                            return false
                         }),
                         ubicaciones: sec.filter((item) => {
                             if ('dimension' in item) {
-                                return (item as ResultLocation).dimension.match('Earth') ||
-                                    (item as ResultLocation).dimension.match('Citadel');
-                            }
-                            return false; // Add missing return
+                                return (item as ResultLocation).name.match('Earth') ||
+                                    (item as ResultLocation).name.match('Citadel')
+                            } 
+                            return false 
                         })
                     }
 
@@ -75,6 +76,7 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
                         ...filtrado,
                         [key]: useForSec[key]
                     }
+
                     return newFiltrado
                 }
                 return prev
@@ -85,70 +87,62 @@ export default function RenderFilter({ filtroSelected, searchFilterInitial, isFa
     //  pidiendo datos favoritos en local storage la primera vez que se entra y cada vez que den click a botón de favoritos
     useEffect(() => {
         getDataFavorite()
-
-
     }, [])
 
     useEffect(() => {
-        if (!arrayInitial) return;
+        if (!arrayInitial) return
         fetchForOne(arrayInitial)
             .then(data => {
                 const nuevo = {
                     personajes: data[0],
                     episodios: data[1],
                     ubicaciones: data[2]
-                } as RequestFilter;
+                } as RequestFilter
                 setHijosFavoritos(prev => {
                     // Solo actualiza si realmente cambió
                     if (JSON.stringify(prev) !== JSON.stringify(nuevo)) {
-                        return nuevo;
+                        return nuevo
                     }
-                    return prev;
-                });
+                    return prev
+                })
             })
-            .catch(error => console.error(error));
+            .catch(error => console.error(error))
 
-    }, [arrayInitial]);
+    }, [arrayInitial])
 
     // Filtrando los datos solo si cambian los datos base
     useEffect(() => {
         if (isFavorite) {
             if (hijosFavoritos) {
                 setHijosState(prev => {
-                    const filtrado = FilterElements(hijosFavoritos, searchFilterInitial);
+                    const filtrado = FilterElements(hijosFavoritos, searchFilterInitial)
                     if (JSON.stringify(prev) !== JSON.stringify(filtrado)) {
-                        return filtrado;
+                        return filtrado
                     }
-                    return prev;
-                });
+                    return prev
+                })
             }
         } else {
-            // async function pet() {
-            //     const data = await fetchApi('character', 0, 2)
-            //     console.log(data);
-
-            // }
-            // pet()
             setHijosState(prev => {
-                const filtrado = FilterElements(hijosFor, searchFilterInitial);
+                const filtrado = FilterElements(hijosFor, searchFilterInitial)
                 if (JSON.stringify(prev) !== JSON.stringify(filtrado)) {
-                    return filtrado;
+                    return filtrado
                 }
-                return prev;
-            });
+                return prev
+            })
         }
-    }, [searchFilterInitial, hijosFavoritos, isFavorite]);
+    }, [searchFilterInitial, hijosFavoritos, isFavorite])
 
     // organizando los datos a mi manera solo si hijosState cambia
     useEffect(() => {
         setArraySorted(prev => {
-            const ordenado = SortedElements(hijosState);
+            const ordenado = SortedElements(hijosState)
             if (JSON.stringify(prev) !== JSON.stringify(ordenado)) {
-                return ordenado;
+                return ordenado
             }
-            return prev;
-        });
-    }, [hijosState]);
+            return prev
+        })
+    }, [hijosState])
 
     return filtroSelected === sections.all && arraySorted.length ?
         <div className="space-y-12">

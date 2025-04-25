@@ -44,7 +44,7 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
 
   return (
     <> 
-      <form className='flex sticky top-0 z-50 space-y-4 gap-4 py-4 bg-black/75 backdrop-blur-xs lg:gap-y-0'>
+      <form className='flex flex-col sm:flex-row sticky top-0 z-50 space-y-4 gap-4 py-4 bg-black/75 backdrop-blur-xs lg:gap-y-0'>
         {/* barra de búsqueda */}
         <div className='flex relative h-9 rounded-3xl group ps-0 w-full lg:w-4/12 focus-within:shadow-xs focus-within:shadow-sky-400 focus-within:ring-1 focus-within:ring-sky-400'>
           <input

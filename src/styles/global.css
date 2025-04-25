@@ -11,6 +11,26 @@ body::selection {
     color: rgb(16, 32, 49);
 }
 
+.details {
+    height: fit-content;
+
+    &::details-content {
+        block-size: 0;
+        overflow: hidden;
+        transition-property: block-size, content-visibility;
+        transition-duration: 0.2s;
+        transition-behavior: allow-discrete;
+    }
+
+    &[open]::details-content {
+        block-size: auto;
+        block-size: calc-size(auto, size);
+    }
+
+    &[open] .details__summary::before {
+        transform: rotate(90deg);
+    }
+}
 dialog.dialog {
     display: none;
     flex-direction: column;

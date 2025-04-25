@@ -18,12 +18,15 @@ export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { 
     updateFavorites && updateFavorites()
   }
 
+  function closeClick() {
+    setOptions({ personajes: false, episodios: false, ubicaciones: false })
+  }
+
   function Buttons({ children, notColorBtn, onC }: { children: React.ReactNode, notColorBtn?: boolean, onC?: (() => void) | ((e: any) => void) }) {
     return <button
       onClick={onC}
       type='button'
       data-title={title}
-      // onBlur={closeClick} toca mirar si hace click fuera del target.
       id={`btn-filter-${title}`}
       className={`flex ease-in-out transition-colors items-center space-x-2 px-4 py-1.5 rounded-3xl shadow-md shadow-slate-500/25 text-slate-100/85 hover:text-slate-50  hover:backdrop-brightness-150 h-9 
   ${notColorBtn ? 'bg-sky-400/80 *:hover:cursor-text' : 'bg-slate-500/50 hover:bg-slate-500/80 hover:shadow-slate-500/60 cursor-pointer'}`}
@@ -34,23 +37,44 @@ export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { 
 
 
   const [option, setOptions] = useState<{ personajes: boolean, episodios: boolean, ubicaciones: boolean }>({ personajes: false, episodios: false, ubicaciones: false })
-  const closeClick = () => setOptions({ personajes: false, episodios: false, ubicaciones: false })
+  const OptionPerson = () => {
+    return (
+      <>
+        <details className='details' name={`detalle-${title}`}>
+          <summary>Estado</summary>
+          <ul>
+            <li onClick={btnFilter} data-title={title} data-value={'Alive'} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Alive</li>
+            <li onClick={btnFilter} data-title={title} data-value={'Dead'} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Death</li>
+            <li onClick={btnFilter} data-title={title} data-value={sections.all} className='cursor-pointer rounded-full hover:bg-sky-500/80'>All</li>
+          </ul>
+        </details>
+        <details className='details' name={`detalle-${title}`}>
+          <summary>Especie</summary>
+          <ul>
+            <li>h </li>
+            <li>e</li>
+            <li>32</li>
+
+          </ul>
+        </details>
+        <details className='details' name={`detalle-${title}`}>
+          <summary>Origen</summary>
+          <ul>
+            <li>a</li>
+            <li>o </li>
+            <li>33</li>
+          </ul>
+        </details>
+      </>
+    )
+
+  }
 
   const listaOptions = {
     personajes: (
       <>
-        <li onClick={(e) => {
-          btnFilter(e)
-          closeClick()
-        }} data-title={title} data-value={'Alive'} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Alive</li>
-        <li onClick={(e) => {
-          btnFilter(e)
-          closeClick()
-        }} data-title={title} data-value={'Dead'} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Death</li>
-        <li onClick={(e) => {
-          btnFilter(e)
-          closeClick()
-        }} data-title={title} data-value={sections.all} className='cursor-pointer rounded-full hover:bg-sky-500/80'>All</li>
+        <OptionPerson />
+
       </>
     ),
     episodios: (
@@ -61,11 +85,17 @@ export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { 
     ),
     ubicaciones: (
       <>
-        <li onClick={closeClick} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Dimension</li>
+        <li onClick={(e) => {
+          btnFilter(e)
+          closeClick()
+        }}
+          data-title={title} data-value='dimension'
+          className='cursor-pointer rounded-full hover:bg-sky-500/80'>Dimension</li>
         <li onClick={closeClick} className='cursor-pointer rounded-full hover:bg-sky-500/80'>Futuro</li>
       </>
     )
   }
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -73,15 +103,15 @@ export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { 
       const menu = button?.nextElementSibling as HTMLElement;
 
       if (button && menu && !button.contains(event.target as Node) && !menu.contains(event.target as Node)) {
-        closeClick();
+        closeClick()
       }
-    };
+    }
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside)
     };
-  }, [title]);
+  }, [title])
 
   return (
     <>
@@ -94,24 +124,19 @@ export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { 
           <span>Ver todos</span>
         </a>
         <div className='relative'>
-          <Buttons onC={() => setOptions((prev) => {
-            const posiblesR = {
-              personajes: { ...prev, personajes: prev.personajes === true ? false : true },
-              episodios: { ...prev, episodios: prev.episodios === true ? false : true },
-              ubicaciones: { ...prev, ubicaciones: prev.ubicaciones === true ? false : true }
-            }
-            return posiblesR[title as keyof typeof posiblesR]
-          })}>
+          <Buttons onC={() => setOptions((prev) => ({ ...prev, [title as keyof typeof prev]: !prev[title as keyof typeof prev] }))}>
             <i data-title={title} className='bg-[url(filter.svg)] object-cover bg-position-[0rem_-0.1rem] size-6 bg-no-repeat'></i>
-            <span data-title={title}>Filtrar </span>
+            <span data-title={title}>Ordenar por </span>
           </Buttons>
-          {option[title as keyof typeof option] && (
+          {
+            option[title as keyof typeof option] && (
             <ul
-
-              onMouseLeave={() => setOptions({ personajes: false, episodios: false, ubicaciones: false })}
-              className='absolute min-w-40 z-20 -left-8 top-14 flex flex-col drop-shadow-slate-950 drop-shadow-xl text-slate-100/90 bg-slate-600/70 gap-4 rounded-lg py-3 px-4 *:px-4 *:py-1.5 *:transition-colors'>
+                onMouseLeave={closeClick}
+                className='absolute min-w-40 z-20 -left-8 top-14 flex flex-col drop-shadow-slate-950 drop-shadow-xl text-slate-100/90 bg-slate-600/70 gap-2 rounded-lg py-2 px-4 *:bg-slate-700/50 *:px-4 *:py-1.5 *:transition-colors'>
               {listaOptions[title as keyof typeof listaOptions]}
-            </ul>)}
+              </ul>
+            )
+          }
         </div>
         <Buttons onC={removeFavorites}>
           <i><IconBrokenHeart className='size-5' /></i>
