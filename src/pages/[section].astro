@@ -5,6 +5,7 @@ import Layout from "@/layouts/Layout.astro";
 import { fetchApi } from "@/services/fetch";
 import { sectionToDP } from "@/const/constantes";
 import Filtros from "@/components/Filtros.tsx";
+import { Suspense } from "react";
 export const getStaticPaths = (async () => {
     const data = await fetchApi();
 
@@ -81,7 +82,7 @@ const nameSection = sectionToDP[section];
         <div
             class="sm:ps-4 sm:w-2/3 bg-transparent sm:overflow-auto sm:max-h-[42rem]"
         >
-            <Filtros resetFilterLocal client:load />
+            <Filtros client:load />
             <!-- <article class="w-full h-32 bg-slate-300"></article> -->
         </div>
     </section>

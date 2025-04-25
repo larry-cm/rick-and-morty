@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { type FullF } from '@/types/Filtros'
 import { reformatSections, sections } from '@/const/constantes'
 
-export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { title: string, btnFilter: (e: React.MouseEvent<HTMLButtonElement | HTMLLIElement>) => void, updateFavorites?: () => void, numElements?: number }) {
+export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { title: string, btnFilter?: (e: React.MouseEvent<HTMLButtonElement | HTMLLIElement>) => void, updateFavorites?: () => void, numElements?: number }) {
   function removeFavorites() {
     const favoritos = localStorage.getItem('favorito')
     if (favoritos) {
@@ -86,7 +86,7 @@ export function AreaTitle({ title, updateFavorites, numElements, btnFilter }: { 
     ubicaciones: (
       <>
         <li onClick={(e) => {
-          btnFilter(e)
+          btnFilter && btnFilter(e)
           closeClick()
         }}
           data-title={title} data-value='dimension'

@@ -22,13 +22,7 @@ export const FilterElements = (hijosFilteredInitial: RequestFilter, searchFilter
         const typeKey = key as keyof typeof hijosFilteredInitial
         hijosFilteredInitial[typeKey] = FilterCollection(hijosFilteredInitial[typeKey], searchFilterInitial) as Collection
     }
-    // // Object.keys(hijosFilteredInitial).forEach(e => {
 
-    // // })
-    // console.log(
-    //     Object.keys(hijosFilteredInitial).map((object: string, i) =>
-    //         FilterCollection(hijosFilteredInitial[object], searchFilterInitial)
-    //     ))
     return hijosFilteredInitial as RequestFilter
 }
 

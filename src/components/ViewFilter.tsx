@@ -3,6 +3,7 @@ import MainArea from "@components/sections/MainArea";
 import { sections, widthClases } from "@/const/constantes";
 import { CardsEpisodios, CardsUbicaciones, CardsPersonajes } from "@components/cards/Cards";
 import { DefaultNotFound } from "@/services/filtrado";
+import type React from "react";
 
 const { person, episode, ubi } = sections
 export default function viewFilter({ contexto, data, searchFilterInitial, getDataFavoriteInitial, numElementsInitial, btnFilter }: { contexto: FiltroSelected, data: RequestFilter | undefined, searchFilterInitial: string, getDataFavoriteInitial: () => void, btnFilter: (e: React.MouseEvent<HTMLButtonElement | HTMLLIElement>) => void, numElementsInitial?: FullF | null }) {
@@ -15,7 +16,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                 title={person} widthGrid={widthClases.grande}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.personajes, searchFilterInitial, (collection) => collection
-                    .map(({ id, name, status, species, origin, image }) =>
+                    .flatMap(({ id, name, status, species, origin, image }) =>
                         <CardsPersonajes
                             id={id}
                             key={id}
@@ -38,7 +39,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                 widthGrid={widthClases.mediano}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.episodios, searchFilterInitial, (episodios) => episodios
-                    .map(({ id, name, episode }) => (
+                    .flatMap(({ id, name, episode }) => (
                         <CardsEpisodios
                             id={id}
                             key={id}
@@ -58,7 +59,7 @@ export default function viewFilter({ contexto, data, searchFilterInitial, getDat
                 widthGrid={widthClases.pequeño}
                 updateFavorites={getDataFavoriteInitial}>
                 {DefaultNotFound(data?.ubicaciones, searchFilterInitial, (ubicaciones) => ubicaciones
-                    .map(({ id, name, dimension }) =>
+                    .flatMap(({ id, name, dimension }) =>
                         <CardsUbicaciones
                             id={id}
                             key={id}

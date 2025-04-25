@@ -1,34 +1,94 @@
 import { IcoEpisodios, IcoPersonaje, IcoLupa, IcoPlaneta, IcoTodos } from '@/assets/Icons'
 import { sections } from '@/const/constantes'
 import Labels from '@components/sections/Labels'
-import React, { useEffect, useState, type JSX } from 'react'
-import type { FiltroSelected } from '@/types/Filtros'
+import React, { Children, use, useEffect, useState, type JSX } from 'react'
+import type { CollectionContexts, FiltroSelected, FullF, RequestFilter } from '@/types/Filtros'
 import RenderFilter from '@/components/RenderFilter'
+import { fetchApi, fetchForOne } from '@/services/fetch'
+import { FilterElements, SortedElements } from '@/services/filtrado'
+import type { APICharacter, APIEpisode, APILocation, Result, ResultEpisode, ResultLocation } from '@/types/Api'
 
 const { person, episode, ubi, all } = sections
+const promisePersonajes = fetchApi("character")
+const promiseEpisodios = fetchApi("episode")
+const promiseUbicaciones = fetchApi("location")
 
-export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?: boolean, resetFilterLocal?: boolean }): JSX.Element {
+export default function Filtros({ isFavorite }: { isFavorite?: boolean }): JSX.Element {
   const [filtroSelected, setFiltroSelected] = useState<FiltroSelected>(all as FiltroSelected)
   const [searchFilter, setSearchFilter] = useState<string>('')
 
-  useEffect(() => {
-    const search = localStorage.getItem('search')
-    const filtro = localStorage.getItem('filtrado')
+  const [arrayInitial, setArrayInitial] = useState<FullF | null>(null)
+  const [hijosFavoritos, setHijosFavoritos] = useState<RequestFilter | null>(null)
+  const [hijosState, setHijosState] = useState<RequestFilter>()
+  const [arraySorted, setArraySorted] = useState<CollectionContexts[]>([])
 
-    if (resetFilterLocal && (search || filtro)) {
-      localStorage.removeItem('search')
-      localStorage.removeItem('filtrado')
-      setSearchFilter('')
-      setFiltroSelected('todos')
-    } else {
-      if (search) setSearchFilter(search)
-      if (filtro) setFiltroSelected(filtro as FiltroSelected)
+  // pidiendo los datos con api use
+  const { results: personajes } = use(promisePersonajes) as APICharacter
+  const { results: episodios } = use(promiseEpisodios) as APIEpisode
+  const { results: ubicaciones } = use(promiseUbicaciones) as APILocation
+  const hijosFor = { personajes, episodios, ubicaciones }
+  //  pidiendo datos favoritos en local storage
+  function getDataFavorite() {
+    const favoritos = localStorage.getItem('favorito')
+    const favParse: FullF = JSON.parse(favoritos ?? '{"character":[], "episode": [],"location": []}')
+
+    setArrayInitial(prevArray => {
+      if (JSON.stringify(prevArray) !== JSON.stringify(favParse)) {
+        return favParse
+      }
+      return prevArray
+    })
+  }
+
+  function filterButton(event: React.MouseEvent<HTMLButtonElement | HTMLLIElement>) {
+    const target = event?.target as HTMLButtonElement
+    const dataTitle = target.getAttribute('data-title')
+    const dataValue = target.getAttribute('data-value')
+    if (target && dataTitle && dataValue) {
+      setHijosState(prev => {
+        const dataBase = isFavorite ? hijosFavoritos : hijosFor
+        if (dataBase) {
+          const filtrado = FilterElements(dataBase, searchFilter)
+          const key = dataTitle as keyof typeof filtrado
+          const sec = filtrado[key]
+
+
+          const useForSec = {
+            personajes: sec.filter((item) => {
+              if ('status' in item) {
+                if (dataValue === 'todos') return true
+                return (item as Result).status.match(dataValue)
+              }
+              return false
+            }),
+            episodios: sec.filter((item) => {
+              if ('air_date' in item) {
+                return (item as ResultEpisode).air_date === 'December 20, 2017'
+              }
+              return false
+            }),
+            ubicaciones: sec.filter((item) => {
+              if ('dimension' in item) {
+                return (item as ResultLocation).name.match('Earth') ||
+                  (item as ResultLocation).name.match('Citadel')
+              }
+              return false
+            })
+          }
+
+          const newFiltrado = {
+            ...filtrado,
+            [key]: useForSec[key]
+          }
+
+          return newFiltrado
+        }
+        return prev
+      })
     }
+  }
 
-
-  }, [])
-
-  const handlerLocalStates = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handlerLocalStates(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.name === 'filtrado') {
       setFiltroSelected(() => {
         localStorage.setItem('filtrado', event.target.value)
@@ -41,6 +101,66 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
       })
     }
   }
+
+  //  pidiendo datos favoritos en local storage la primera vez que se entra y cada vez que den click a botón de favoritos
+  useEffect(() => {
+    getDataFavorite()
+  }, [])
+
+  useEffect(() => {
+    if (!arrayInitial) return
+    fetchForOne(arrayInitial)
+      .then(data => {
+        const nuevo = {
+          personajes: data[0],
+          episodios: data[1],
+          ubicaciones: data[2]
+        } as RequestFilter
+        setHijosFavoritos(prev => {
+          // Solo actualiza si realmente cambió
+          if (JSON.stringify(prev) !== JSON.stringify(nuevo)) {
+            return nuevo
+          }
+          return prev
+        })
+      })
+      .catch(error => console.error(error))
+
+  }, [arrayInitial])
+
+  // Filtrando los datos solo si cambian los datos base
+  useEffect(() => {
+    if (isFavorite) {
+      if (hijosFavoritos) {
+        setHijosState(prev => {
+          const filtrado = FilterElements(hijosFavoritos, searchFilter)
+          if (JSON.stringify(prev) !== JSON.stringify(filtrado)) {
+            return filtrado
+          }
+          return prev
+        })
+      }
+    } else {
+      setHijosState(prev => {
+        const filtrado = FilterElements(hijosFor, searchFilter)
+        if (JSON.stringify(prev) !== JSON.stringify(filtrado)) {
+          return filtrado
+        }
+        return prev
+      })
+    }
+  }, [searchFilter, hijosFavoritos, isFavorite])
+
+  // organizando los datos a mi manera solo si hijosState cambia
+  useEffect(() => {
+    setArraySorted(prev => {
+      const ordenado = SortedElements(hijosState)
+      if (JSON.stringify(prev) !== JSON.stringify(ordenado)) {
+        return ordenado
+      }
+      return prev
+    })
+  }, [hijosState])
 
   return (
     <> 
@@ -98,7 +218,8 @@ export default function Filtros({ isFavorite, resetFilterLocal }: { isFavorite?:
             </Labels>
         </fieldset>
       </form>
-      <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} isFavorite={isFavorite} />
+
+      <RenderFilter filtroSelected={filtroSelected} searchFilterInitial={searchFilter} filterButton={filterButton} getDataFavorite={getDataFavorite} hijosState={hijosState} arraySorted={arraySorted} arrayInitial={arrayInitial} />
     </>
   )
 }
