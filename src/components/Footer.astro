@@ -2,19 +2,18 @@
 import { Icon } from "astro-icon/components";
 ---
 
-<footer role="contentinfo" class="pb-4">
+<footer role="contentinfo" class="pb-4 text-white">
     <div class="flex items-center justify-between my-6 sm:mt-10 sm:mb-14">
-        <Icon
-            name="rick-logo"
-            class="w-24 sm:w-36 h-auto contrast-150 brightness-105"
-        />
+        <a href="/" class="w-24 sm:w-36 h-auto contrast-150 brightness-105">
+            <Icon name="rick-logo" class="size-full" />
+        </a>
         <div>
             <a
-                href="#home"
-                title="volver al inicio"
+                href="#explorar"
+                title="volver a arriba"
                 class="flex items-center space-x-2"
             >
-                <span class="text-base sm:text-lg">Volver al inicio </span>
+                <span class="text-base sm:text-lg">Volver arriba</span>
                 <Icon
                     name="volver-arriba"
                     class="text-white text-xl sm:text-2xl"
@@ -33,7 +32,7 @@ import { Icon } from "astro-icon/components";
             >
                 {`< >`}
             </span>
-            <span>
+            <span class="">
                 Desarrollado por
                 <b class="text-sky-400 brightness-110 font-medium"
                     >Larry Ceballos</b

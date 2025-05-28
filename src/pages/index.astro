@@ -5,8 +5,32 @@ import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="Pagina de inicio">
+    <div id="barra-progress"></div>
     <Landing slot="banner" />
-    <section slot="main" class="w-full mt-7 pt-4 *:space-y-14">
+    <div slot="main" class="w-full">
         <Filtros client:load />
-    </section>
+    </div>
 </Layout>
+<style>
+    #barra-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        width: 0%;
+        height: 0.5rem;
+        background: rgb(0, 195, 255);
+
+        animation: progress auto linear;
+        animation-timeline: scroll(root block);
+    }
+
+    @keyframes progress {
+        from {
+            width: 0%;
+        }
+        to {
+            width: 100%;
+        }
+    }
+</style>

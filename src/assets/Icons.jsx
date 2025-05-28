@@ -14,7 +14,6 @@ export const IcoPersonaje = (props) => (
     />
   </svg>
 )
-
 export const IcoEpisodios = (props) => (
   <svg viewBox='0 0 20 19' fill='none' {...props}>
     <path
@@ -23,7 +22,6 @@ export const IcoEpisodios = (props) => (
     />
   </svg>
 )
-
 export const IcoPlaneta = (props) => (
   <svg viewBox='0 0 16 12' fill='none' {...props}>
     <path
@@ -51,7 +49,6 @@ export const IcoInfo = (props) => (
 export const IcoVida = (props) => (
   <svg {...props} fill='none'><path fill='#BFDE42' d='M14 6a.5.5 0 0 1-.5.5h-1.691l-2.361 4.724A.5.5 0 0 1 9 11.5h-.025a.5.5 0 0 1-.442-.321L4.959 1.798 2.955 6.207A.5.5 0 0 1 2.5 6.5h-2a.5.5 0 0 1 0-1h1.678L4.545.293a.5.5 0 0 1 .923.029l3.594 9.437 1.99-3.981A.5.5 0 0 1 11.5 5.5h2a.5.5 0 0 1 .5.5' /></svg>
 )
-
 export const IcoAlien = (props) => (
   <svg viewBox='0 0 12 14' fill='none' {...props}>
     <path
@@ -60,7 +57,6 @@ export const IcoAlien = (props) => (
     />
   </svg>
 )
-
 export const IcoHeart = (props) => (
   <svg viewBox='0 0 36 32' fill='none' {...props}>
     <path
@@ -87,3 +83,35 @@ export const IcoNotFound = (props) => {
     </svg>
   )
 }
+export const IconVolverArriba = (props) => (
+  <svg viewBox="0 0 32 32" fill="none" {...props}>
+    <path d="M16 31C24.2843 31 31 24.2843 31 16C31 7.71573 24.2843 1 16 1C7.71573 1 1 7.71573 1 16C1 24.2843 7.71573 31 16 31Z" stroke={props?.stroke ?? "#E4F4F4"} stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M10.7031 15.0469L16 9.75L21.2969 15.0469" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M16 22.25V9.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+)
+
+export const IconBrokenHeart = (props) => <svg viewBox="0 0 24 24" {...props}>
+  <path stroke="currentColor" d="M17.452,2.044c-2.343,0-4.455,1.411-5.403,3.485c-0.96-2.1-3.056-3.485-5.443-3.485c-3.306,0-5.996,2.69-5.996,5.996
+	c0,9.016,10.667,13.619,11.284,13.877c0.001,0,0.001,0,0.001,0c0.005,0.002,0.014,0.007,0.018,0.008
+	c0.049,0.021,0.102,0.031,0.153,0.031s0.104-0.011,0.151-0.03c0.112-0.046,11.174-4.686,11.174-13.943
+	C23.391,4.708,20.727,2.044,17.452,2.044z M1.41,8.04c0-2.865,2.33-5.195,5.195-5.195c2.359,0,4.379,1.567,4.995,3.829L9.745,8.732
+	C9.662,8.824,9.626,8.95,9.648,9.072C9.671,9.195,9.749,9.3,9.86,9.356l3.356,1.714l-3.42,2.655
+	c-0.109,0.085-0.167,0.22-0.152,0.357c0.014,0.138,0.098,0.258,0.222,0.318l3.341,1.634l-3.41,2.649
+	c-0.085,0.065-0.14,0.161-0.152,0.268c-0.013,0.105,0.018,0.213,0.084,0.296l0.913,1.153C7.643,18.762,1.41,14.568,1.41,8.04z
+	 M12.186,21.063l-1.579-1.995l3.598-2.795c0.109-0.084,0.167-0.219,0.152-0.356c-0.014-0.138-0.098-0.258-0.222-0.318l-3.341-1.634
+	l3.41-2.648c0.108-0.084,0.166-0.218,0.153-0.354c-0.013-0.137-0.095-0.257-0.217-0.319l-3.452-1.763l1.659-1.842
+	c0.045-0.049,0.07-0.107,0.086-0.167c0.001-0.006,0.007-0.008,0.008-0.014c0.519-2.326,2.626-4.014,5.011-4.014
+	c2.833,0,5.138,2.305,5.138,5.138C22.59,15.94,13.802,20.325,12.186,21.063z"/>
+</svg>
+
+export const IconFilter = (props) => (
+  <svg
+    fill="none"
+    stroke="currentColor"
+    {...props}
+  >
+    <path stroke="none" d="M0 0h24v24H0z" />
+    <path d="M4 10a2 2 0 1 0 4 0 2 2 0 0 0-4 0M6 4v4M6 12v8M10 16a2 2 0 1 0 4 0 2 2 0 0 0-4 0M12 4v10M12 18v2M16 7a2 2 0 1 0 4 0 2 2 0 0 0-4 0M18 4v1M18 9v11" />
+  </svg >
+)
