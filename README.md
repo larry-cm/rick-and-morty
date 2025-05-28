@@ -9,7 +9,7 @@ Bienvenido/a al proyecto **Universo de Rick y Morty**, una aplicación web inspi
 
 ## 📸 Vista previa
 
-![../public/fondo-rick.webp]()
+![imagen principal](https://raw.githubusercontent.com/larry-cm/rick-and-morty/refs/heads/main/public/fondo-rick.webp)
 
 ## 📋 Descripción
 
