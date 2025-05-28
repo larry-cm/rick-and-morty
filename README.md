@@ -7,6 +7,10 @@ Bienvenido/a al proyecto **Universo de Rick y Morty**, una aplicación web inspi
 - **Sitio web en producción:**  
   [universo-de-rick-y-morty](https://universo-de-rick-y-morty.vercel.app/)
 
+## 📸 Vista previa
+
+![imagen principal](https://res.cloudinary.com/dff1ezjpd/image/upload/gh_n8zsyo.png)
+
 ## 📋 Descripción
 
 Este proyecto fue desarrollado para practicar y experimentar con tecnologías modernas, tomando como base la temática del universo de Rick y Morty. El objetivo principal es ofrecer una fuente de consulta entretenida y visualmente agradable para fans y curiosos.
