@@ -5,7 +5,7 @@ Bienvenido/a al proyecto **Universo de Rick y Morty**, una aplicación web inspi
 ## 🚀 Acceso Rápido
 
 - **Sitio web en producción:**  
-  [universo-de-rick-y-morty.vercel.app](https://universo-de-rick-y-morty.vercel.app/)
+  [universo-de-rick-y-morty](https://universo-de-rick-y-morty.vercel.app/)
 
 ## 📋 Descripción
 
